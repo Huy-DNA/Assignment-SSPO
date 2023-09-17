@@ -1,0 +1,20 @@
+{
+    "extends": [
+        "eslint:recommended",
+        "plugin:react/recommended",
+        "plugin:jsdoc/recommended",
+        "airbnb"
+    ],
+    "plugins": [
+        "jsdoc",
+        "react"
+    ],
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": "latest"
+    },
+    "rules": {
+        "no-restricted-syntax": "off",
+        "no-unused-vars": "warn"
+    }
+}
