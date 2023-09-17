@@ -1,9 +1,7 @@
-import createError from 'http-errors';
 import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-import process from 'process';
 import { fileURLToPath } from 'url';
 
 // eslint-disable-next-line no-underscore-dangle
@@ -24,6 +22,7 @@ app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, '../frontend')));
 
 // Delegate routing to the frontend
+// eslint-disable-next-line no-unused-vars
 app.use((req, res, next) => {
   res.render('index');
 });
