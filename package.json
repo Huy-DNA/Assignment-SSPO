@@ -12,9 +12,10 @@
     "start": "node ./.dist/backend/bin/www.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "watch:backend": "watch \"copyfiles backend/**/* .dist && copyfiles ./index.ejs .dist\" ./backend",
+    "watch:backend": "nodemon --watch ./backend --exec \"copyfiles backend/**/* .dist && copyfiles ./index.ejs .dist\"",
     "watch:frontend": "webpack --watch",
-    "watch": "concurrently \"npx yarn watch:backend\" \"npx yarn watch:frontend\""
+    "watch:start": "nodemon --watch .dist --exec \"npx yarn start\"",
+    "dev": "concurrently \"npx yarn watch:backend\" \"npx yarn watch:frontend\" \"npx yarn watch:start\""
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "http-errors": "^2.0.0",
     "http-server": "^14.1.1",
     "morgan": "^1.10.0",
+    "nodemon": "^3.0.1",
     "path": "^0.12.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -60,7 +62,6 @@
     "eslint-plugin-jsx-a11y": "^6.7.1",
     "eslint-plugin-react": "^7.33.2",
     "jest": "^29.7.0",
-    "watch": "^1.0.2",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4"
   }

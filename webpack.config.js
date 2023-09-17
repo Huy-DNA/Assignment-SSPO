@@ -9,14 +9,15 @@ export default [
       filename: 'index.js',
     },
     mode: 'development',
+    resolve: {
+      extensions: ['*', '.js', '.jsx'],
+    },
     module: {
       rules: [
         {
-          test: /^frontend\\.*\.(js|jsx)$/,
-          exclude: /frontend\\tests/,
-          use: {
-            loader: 'babel-loader',
-          },
+          test: /\.(js|jsx)$/,
+          exclude: /tests/,
+          use: ['babel-loader'],
         },
       ],
     },
