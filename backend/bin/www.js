@@ -17,10 +17,6 @@ import console from 'console';
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-console.log(
-`Available on:
-  http://127.0.0.1:${port}`
-);
 
 /**
  * Create HTTP server.
