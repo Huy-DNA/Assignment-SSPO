@@ -1,0 +1,106 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id      String    @id
+  role    UserRole
+  name    String
+  manager Manager?
+  student Student?
+  session Session[]
+}
+
+model Manager {
+  id   String @id
+  user User   @relation(fields: [id], references: [id])
+}
+
+model Student {
+  id          String        @id
+  user        User          @relation(fields: [id], references: [id])
+  paperNo     Int           @default(0)
+  file        File[]
+  Transaction Transaction[]
+  PrinterJob  PrinterJob[]
+}
+
+model Session {
+  id     String @id
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
+}
+
+model File {
+  id         String       @id
+  userId     String
+  user       Student      @relation(fields: [userId], references: [id])
+  name       String
+  uploadedAt DateTime     @default(now())
+  content    String
+  PrinterJob PrinterJob[]
+}
+
+model Printer {
+  id       String       @id
+  location String
+  jobs     PrinterJob[]
+}
+
+model PrinterJob {
+  id            String           @id
+  printerId     String
+  printer       Printer          @relation(fields: [printerId], references: [id])
+  userId        String
+  user          Student          @relation(fields: [userId], references: [id])
+  fileId        String
+  file          File             @relation(fields: [fileId], references: [id])
+  report        Report?          @relation(fields: [reportId], references: [id])
+  reportId      String?
+  status        PrinterJobStatus
+  estimatedTime Float
+  createdAt     Float
+  copiesNo      Int
+  startPage     Int
+  endPage       Int
+}
+
+model Transaction {
+  id        String   @id
+  userId    String
+  user      Student  @relation(fields: [userId], references: [id])
+  paperNo   Int
+  price     Float
+  createdAt DateTime
+  report    Report?  @relation(fields: [reportId], references: [id])
+  reportId  String?
+  success   Boolean
+}
+
+model Report {
+  id           String        @id
+  week         Int?
+  year         Int
+  transactions Transaction[]
+  printer_jobs PrinterJob[]
+}
+
+enum UserRole {
+  Manager
+  Student
+}
+
+enum PrinterJobStatus {
+  Waiting
+  Printing
+  Done
+  Aborted
+}
