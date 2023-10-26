@@ -19,6 +19,14 @@ export default [
           exclude: /tests/,
           use: ['babel-loader'],
         },
+        {
+          test: /\.(png|jpeg|gif|jpg)$/,
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]',
+            outputPath: 'assets/images',
+          },
+        },
       ],
     },
   },
