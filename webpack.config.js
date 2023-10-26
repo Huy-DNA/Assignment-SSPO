@@ -27,6 +27,19 @@ export default [
             outputPath: 'assets/images',
           },
         },
+        {
+          test: /\.scss$/,
+          use: [
+            'style-loader',
+            {
+              loader: 'css-loader',
+              options: {
+                importLoaders: 1,
+              },
+            },
+            'sass-loader',
+          ],
+        },
       ],
     },
   },
