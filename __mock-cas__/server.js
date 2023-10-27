@@ -54,7 +54,7 @@ app.post('/', (req, res) => {
   );
 
   if (record) {
-    res.cookie('CATSGC', record.CASTGC);
+    res.cookie('CASTGC', record.CASTGC);
     res.redirect(`${query.service}?ticket=${record.ticket}`);
   } else {
     res.render('login', { service: query.service });
