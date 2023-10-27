@@ -1,12 +1,15 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const path = require('path');
+const cors = require('cors');
 
 const db = require('./db.json');
 
 const app = express();
 app.set('views', __dirname);
 app.set('view engine', 'ejs');
+
+app.use(cors());
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
