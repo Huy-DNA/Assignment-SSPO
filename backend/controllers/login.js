@@ -1,5 +1,45 @@
 import axios from 'axios';
 import process from 'process';
+import { PrismaClient, UserRole } from '@prisma/client';
+
+const client = new PrismaClient();
+
+/**
+ * Inspect the userInfo to see if it's already in the database
+ * If not, add it to the database
+ * @param {{ name: string, isManager: boolean, id: string }} userInfo
+ */
+async function addIfNewUser(userInfo) {
+  const isInDb = (await client.user.findFirst({
+    where: {
+      id: userInfo.id,
+    },
+  })) !== null;
+  if (!isInDb) {
+    await client.user.create({
+      data: {
+        id: userInfo.id,
+        name: userInfo.name,
+        role: userInfo.isManager ? UserRole.Manager : UserRole.Student,
+      },
+    });
+
+    if (userInfo.isManager) {
+      await client.manager.create({
+        data: {
+          id: userInfo.id,
+        },
+      });
+    } else {
+      await client.student.create({
+        data: {
+          id: userInfo.id,
+          paperNo: 0,
+        },
+      });
+    }
+  }
+}
 
 /**
  * Controller for /login
@@ -16,8 +56,9 @@ export default async function LoginController(req, res) {
       res.clearCookie('CASTGC');
       res.redirect(`http://${process.env.CAS_PATH}?service=http://${process.env.HOSTNAME}:${process.env.PORT}/login/`);
     } else {
-      const { username, isManager, id } = userInfo.data;
-      res.cookie('name', username);
+      const { name, isManager, id } = userInfo.data;
+      addIfNewUser(userInfo.data);
+      res.cookie('name', name);
       res.cookie('isManager', isManager);
       res.cookie('id', id);
       res.redirect('/');
