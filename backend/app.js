@@ -5,8 +5,8 @@ import logger from 'morgan';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import LoginController from './controllers/login';
-import LogoutController from './controllers/logout';
+import LoginController from './controllers/login.js';
+import LogoutController from './controllers/logout.js';
 
 dotenv.config();
 
