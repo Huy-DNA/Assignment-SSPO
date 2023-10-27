@@ -16,6 +16,7 @@
     "watch:frontend": "webpack --watch",
     "watch:start": "nodemon --watch .dist --exec \"npx yarn start\"",
     "dev": "concurrently \"npx yarn watch:backend\" \"npx yarn watch:frontend\" \"npx yarn watch:start\"",
+    "migrate": "cd backend && npx prisma migrate dev",
     "prepare": "husky install"
   },
   "repository": {
