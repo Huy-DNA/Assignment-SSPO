@@ -1,0 +1,20 @@
+[
+  {
+    "CASTGC": "TGT-123456789",
+    "ticket": "ST-123456789",
+    "username": "Nguyen Van A",
+    "id": "2110391",
+    "casUsername": "nva.8686@hcmut.edu.vn",
+    "password": "12345",
+    "isManager": false
+  },
+  {
+    "CASTGC": "TGT-123429322",
+    "ticket": "ST-1234523232",
+    "username": "Ha Van Chau",
+    "id": "100000",
+    "casUsername": "hvc.100@hcmut.edu.vn",
+    "password": "12345",
+    "isManager": true
+  }
+]
