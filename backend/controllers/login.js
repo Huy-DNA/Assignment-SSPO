@@ -24,7 +24,10 @@ export default async function LoginController(req, res) {
       res.cookie('isManager', isManager);
       res.cookie('id', id);
       const sessionId = await getSessionId(id);
-      res.cookie('SESSION_ID', sessionId);
+      res.cookie('SESSION_ID', sessionId, {
+        httpOnly: true,
+        maxAge: 900000,
+      });
       res.redirect('/');
     }
 
