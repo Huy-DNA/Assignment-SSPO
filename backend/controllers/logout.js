@@ -5,6 +5,7 @@
  */
 export default function LogoutController(req, res) {
   res.clearCookie('CASTGC');
+  res.clearCookie('SESSION_ID');
   res.clearCookie('name');
   res.clearCookie('isManager');
   res.clearCookie('id');
