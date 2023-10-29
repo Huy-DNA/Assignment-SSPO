@@ -27,24 +27,16 @@
 }
 
 .action {
-  padding-right: 20px;
+  padding: 0 10px;
   height: 80px;
   display: flex;
   justify-content: center;
-}
-
-.login {
-  height: 100%;
-  padding: 0 30px;
-  display: flex;
-  justify-content: center;
   align-items: center;
-  border-radius: 5px;
 
-  &:hover {
-    cursor: pointer;
-    background: rgba(22, 24, 35, .03);
-  }
+  // &:hover {
+  //   cursor: pointer;
+  //   background: rgba(22, 24, 35, .03);
+  // }
 }
 
 .line {
