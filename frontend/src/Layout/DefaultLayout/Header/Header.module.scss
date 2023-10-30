@@ -2,12 +2,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  margin: 0 200px;
+  border-bottom: 1px solid #ccc;
 }
 
 .logo {
   padding: 0 20px;
   height: 80px;
-  width: 380px;
+  // width: 380px;
   display: flex;
 }
 
@@ -27,20 +29,55 @@
 }
 
 .action {
-  padding: 0 10px;
   height: 80px;
-  display: flex;
   justify-content: center;
   align-items: center;
+  display: flex;
+}
 
-  // &:hover {
-  //   cursor: pointer;
-  //   background: rgba(22, 24, 35, .03);
-  // }
+.management-printer,
+.management-account,
+.view-history,
+.view-report,
+.action  .view-rate {
+  padding: 0 20px;
+  height: 80px;
+  align-items: center;
+  display: flex;
+
+  &:hover {
+    cursor: pointer;
+    background: rgba(22, 24, 35, .03);
+  }
 }
 
 .line {
   height: 100%;
   width: 1px;
   background-color: var(--back-color);
+}
+
+.user {
+
+}
+
+.user-bell {
+  font-size: 24px;
+  align-items: center;
+  padding-right: 25px;
+  transform: translateY(-50%);
+}
+
+.user-avatar {
+  border-radius: 50%;
+  align-items: center;
+  margin-right: 30px;
+}
+
+.user-avatar,
+.user-bell {
+
+  &:hover {
+    cursor: pointer;
+  }
 }
