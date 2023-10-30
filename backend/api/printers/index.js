@@ -92,15 +92,24 @@ async function modifyPrinters(req, res) {
     return;
   }
 
-  res.send(await Promise.all(printerModifiers.map((modifier) => client.printer.upsert({
-    where: {
-      id: modifier.id,
+  res.send(
+    {
+      success: true,
+      data: {
+        count: (await Promise.all(
+          printerModifiers.map((modifier) => client.printer.update({
+            where: {
+              id: modifier.id,
+            },
+            data: {
+              ...modifier,
+              id: undefined,
+            },
+          }).then(() => 1).catch(() => 0)),
+        )).reduce((acc, cur) => acc + cur, 0),
+      },
     },
-    update: {
-      ...modifier,
-      id: undefined,
-    },
-  }))));
+  );
 }
 
 router.get('/', getPrinters);
