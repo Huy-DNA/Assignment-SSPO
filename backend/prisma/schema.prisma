@@ -11,7 +11,7 @@ datasource db {
 }
 
 model User {
-  id      String    @id
+  id      String    @id @default(uuid())
   role    UserRole
   name    String
   manager Manager?
@@ -40,7 +40,7 @@ model Session {
 }
 
 model File {
-  id         String       @id
+  id         String       @id @default(uuid())
   userId     String
   user       Student      @relation(fields: [userId], references: [id])
   name       String
@@ -50,13 +50,13 @@ model File {
 }
 
 model Printer {
-  id       String       @id
+  id       String       @id @default(uuid())
   location String
   jobs     PrinterJob[]
 }
 
 model PrinterJob {
-  id            String           @id
+  id            String           @id @default(uuid())
   printerId     String
   printer       Printer          @relation(fields: [printerId], references: [id])
   userId        String
@@ -74,7 +74,7 @@ model PrinterJob {
 }
 
 model Transaction {
-  id        String   @id
+  id        String   @id @default(uuid())
   userId    String
   user      Student  @relation(fields: [userId], references: [id])
   paperNo   Int
@@ -86,7 +86,7 @@ model Transaction {
 }
 
 model Report {
-  id           String        @id
+  id           String        @id @default(uuid())
   week         Int?
   year         Int
   transactions Transaction[]
