@@ -7,6 +7,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import LoginPlugin from './plugins/login.js';
 import LogoutPlugin from './plugins/logout.js';
+import API from './api/index.js';
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ app.use('/public', express.static(path.join(__dirname, '../frontend')));
 
 app.use(LoginPlugin);
 app.use(LogoutPlugin);
+app.use('/api', API);
 
 // Delegate routing to the frontend
 // eslint-disable-next-line no-unused-vars

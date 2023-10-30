@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 
 const router = Router();
 
@@ -16,6 +16,6 @@ function LogoutController(req, res) {
   res.redirect('/');
 }
 
-export default () => {
-  router.get('/logout', LogoutController);
-};
+router.get('/logout', LogoutController);
+
+export default router;

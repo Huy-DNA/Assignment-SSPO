@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Router } from 'express';
+import { Router, Request, Response } from 'express';
 import process from 'process';
 import addIfNewUser from '../utils/addIfNewUser.js';
 import getSessionId from '../utils/getSessionId.js';
@@ -56,6 +56,6 @@ async function LoginController(req, res) {
   res.redirect(`http://${process.env.CAS_PATH}?service=http://${process.env.HOSTNAME}:${process.env.PORT}/login/`);
 }
 
-export default () => {
-  router.get('/login', LoginController);
-};
+router.get('/login', LoginController);
+
+export default router;
