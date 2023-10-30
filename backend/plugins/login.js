@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Router, Request, Response } from 'express';
+import { Router } from 'express';
 import process from 'process';
 import addIfNewUser from '../utils/addIfNewUser.js';
 import getSessionId from '../utils/getSessionId.js';
