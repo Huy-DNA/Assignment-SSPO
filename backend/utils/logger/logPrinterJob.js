@@ -1,17 +1,34 @@
-import { PrismaClient} from '@prisma/client';
+import { PrismaClient, PrinterJobStatus } from '@prisma/client';
 
-const prisma = new PrismaClient()
-// use `prisma` in your application to read and write data in your DB
-// run inside `async` function
+const prisma = new PrismaClient();
 
 /**
- * function lưu thông tin về việc in ấn về database
- * @param {object} data object chứa thông tin về in ấn
- * 
+ * Log a printer job into the database
+ * @param {
+ *  { printerId: string,
+ *    userId: string,
+ *    fileId: string,
+ *    status: PrinterJobStatus,
+ *    estimatedTime: number,
+ *    createdAt: number,
+ *    copiesNo: number,
+ *    startPage: number,
+ *    endPage: number } } printerJobInfo - Information about the printer job
+ * @returns { { success: boolean, error?: any } } - whether the logging was successful
  */
-export default async function logPrinterJob (data) {
-    //create
-      const res = await prisma.printerJob.create({
-          data
-        });
+export default async function logPrinterJob(printerJobInfo) {
+  try {
+    const res = await prisma.printerJob.createMany({
+      data: [printerJobInfo],
+    });
+    return {
+      success: res.count > 0,
+      error: 'Unknown error while logging printer job',
+    };
+  } catch (e) {
+    return {
+      success: false,
+      error: e,
+    };
+  }
 }
