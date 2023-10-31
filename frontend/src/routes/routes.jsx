@@ -1,12 +1,13 @@
 import React from 'react';
 
-import Layout from '../Layout/Layout';
 import Home from '../pages/Home/Home';
-import Login from '../pages/Login/Login';
+import Logout from '../pages/Logout/Logout';
+import PrinterManagement from '../components/PrinterManagement/PrinterManagement';
 
 const publicRoutes = [
   { path: '/', component: Home },
-  { path: '/login', component: Login },
+  { path: '/manageprinter', component: PrinterManagement },
+  { path: '/logout', component: Logout },
 ];
 
 const privateRoutes = [

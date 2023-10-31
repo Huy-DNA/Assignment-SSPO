@@ -1,13 +1,12 @@
 import React from 'react';
-import hcmutImage from '../../../assets/images/hcmutlogo.jpg';
 
 function Home() {
   return (
     <div>
-      <h1>Đây là hình logo</h1>
-      <img src={hcmutImage} alt="Logo" />
+      <h1>Home page</h1>
     </div>
   );
 }
 
 export default Home;
+
