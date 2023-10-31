@@ -11,6 +11,8 @@
     "build": "npx yarn build:backend && npx yarn build:frontend",
     "start:cas": "node ./__mock-cas__/server.js",
     "start": "concurrently \"npx yarn start:cas\" \"node ./.dist/backend/bin/www.js\"",
+    "start:cas": "node ./__mock-cas__/server.js",
+    "start": "concurrently \"npx yarn start:cas\" \"node ./.dist/backend/bin/www.js\"",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "watch:backend": "nodemon --watch ./backend --exec \"copyfiles backend/**/* .dist && copyfiles ./index.ejs .dist\"",
