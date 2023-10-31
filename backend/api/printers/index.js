@@ -19,7 +19,7 @@ export async function getPrinters(req, res) {
 }
 
 /**
- * Return a list of available printers
+ * Return the printer with the specified id in the request param `id`
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
