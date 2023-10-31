@@ -52,6 +52,7 @@ model File {
 model Printer {
   id       String       @id @default(uuid())
   location String
+  enabled  Boolean
   jobs     PrinterJob[]
 }
 
