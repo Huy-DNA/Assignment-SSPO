@@ -2,7 +2,7 @@ import React from 'react';
 
 import Home from '../pages/Home/Home';
 import Logout from '../pages/Logout/Logout';
-import PrinterManagement from '../pages/Home/PrinterManagement/PrinterManagement';
+import PrinterManagement from '../components/PrinterManagement/PrinterManagement';
 
 const publicRoutes = [
   { path: '/', component: Home },
