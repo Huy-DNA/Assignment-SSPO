@@ -61,7 +61,7 @@ export async function getPrinter(req, res) {
 async function addPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
     location: Joi.string(),
-    enabled: Joi.boolean().disallow('yes', 'no'),
+    enabled: Joi.boolean().default(true),
   }));
 
   const { error, value: printersInfo } = schema.validate(req.body);
