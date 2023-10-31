@@ -22,7 +22,7 @@ async function LoginController(req, res) {
       res.redirect(`http://${process.env.CAS_PATH}?service=http://${process.env.HOSTNAME}:${process.env.PORT}/login/`);
     } else {
       const { name, isManager, id } = userInfo.data;
-      addIfNewUser(userInfo.data);
+      await addIfNewUser(userInfo.data);
       res.cookie('name', name);
       res.cookie('isManager', isManager);
       res.cookie('id', id);
