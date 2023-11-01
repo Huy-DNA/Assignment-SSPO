@@ -261,7 +261,7 @@ async function searchFiles(req, res) {
 }
 
 router.get('/', authUser, getFiles);
-router.get('/:id', authUser, getFile);
+router.get('/info/:id', authUser, getFile);
 router.post('/upload', authStudent, uploadFiles);
 router.post('/update', authStudent, modifyFiles);
 router.post('/delete', authStudent, deleteFiles);

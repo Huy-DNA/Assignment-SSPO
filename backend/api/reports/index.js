@@ -75,6 +75,6 @@ export async function getReport(req, res) {
 }
 
 router.get('/', authManager, getReports);
-router.get('/:id', authManager, getReports);
+router.get('/info/:id', authManager, getReports);
 
 export default router;
