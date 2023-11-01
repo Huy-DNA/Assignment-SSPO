@@ -51,6 +51,7 @@
     "http-errors": "^2.0.0",
     "http-server": "^14.1.1",
     "joi": "^17.11.0",
+    "migrate": "^2.0.0",
     "mini-css-extract-plugin": "^2.7.6",
     "morgan": "^1.10.0",
     "nodemon": "^3.0.1",
