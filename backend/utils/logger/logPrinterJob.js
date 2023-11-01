@@ -15,21 +15,15 @@ const prisma = new PrismaClient();
       startPage: number,
       endPage: number }
     } printerJobInfo - Information about the printer job
- * @returns { { success: boolean, error?: any } } - whether the logging was successful
+ * @returns { Promise<boolean> } - whether the logging was successful
  */
 export default async function logPrinterJob(printerJobInfo) {
   try {
-    const res = await prisma.printerJob.createMany({
+    await prisma.printerJob.createMany({
       data: [printerJobInfo],
     });
-    return {
-      success: res.count > 0,
-      error: 'Unknown error while logging printer job',
-    };
+    return true;
   } catch (e) {
-    return {
-      success: false,
-      error: e,
-    };
+    return false;
   }
 }

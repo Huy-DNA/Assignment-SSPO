@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import { authManager } from '../../middleware/auth.js';
+import ErrorCode from '../../../errorcodes.js';
 
 const router = Router();
 const client = new PrismaClient();
@@ -35,7 +36,10 @@ export async function getReport(req, res) {
   if (typeof id !== 'string') {
     res.send({
       success: false,
-      error: 'bad id',
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Bad id',
+      },
     });
     return;
   }
@@ -56,7 +60,10 @@ export async function getReport(req, res) {
   if (reportInfo === null) {
     res.send({
       success: false,
-      error: 'printer id not found',
+      error: {
+        code: ErrorCode.RESOURCE_NOT_FOUND,
+        message: 'Report not found',
+      },
     });
     return;
   }

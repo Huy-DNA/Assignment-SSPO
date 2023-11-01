@@ -3,6 +3,7 @@ import { Router } from 'express';
 import Joi from 'joi';
 import getUserFromSession from '../../utils/getUserFromSession.js';
 import { authStudent, authUser } from '../../middleware/auth.js';
+import ErrorCode from '../../../errorcodes.js';
 
 const router = Router();
 const client = new PrismaClient();
@@ -46,7 +47,10 @@ async function getFile(req, res) {
   if (typeof fileId !== 'string') {
     res.send({
       success: false,
-      error: 'bad id',
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Bad id',
+      },
     });
     return;
   }
@@ -71,7 +75,10 @@ async function getFile(req, res) {
   if (file === false) {
     res.send({
       success: false,
-      error: 'file not found',
+      error: {
+        code: ErrorCode.RESOURCE_NOT_FOUND,
+        message: 'File not found',
+      },
     });
     return;
   }
@@ -96,7 +103,10 @@ async function getFile(req, res) {
 
   res.send({
     success: false,
-    error: 'unauthorized',
+    error: {
+      code: ErrorCode.UNAUTHORIZED,
+      message: 'The user has not permission to access this file',
+    },
   });
 }
 
@@ -116,7 +126,10 @@ async function uploadFiles(req, res) {
   if (error) {
     res.send({
       success: false,
-      error,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.message,
+      },
     });
     return;
   }

@@ -11,21 +11,15 @@ const prisma = new PrismaClient();
       createdAt: string,
       success: boolean }
     } transaction - information about the transaction
- * @returns { { success: boolean, error?: any } } - whether the logging was successful
+ * @returns { Promise<boolean> } - whether the logging was successful
  */
 export default async function logTransaction(transaction) {
   try {
-    const res = await prisma.transaction.createMany({
+    await prisma.transaction.createMany({
       data: [transaction],
     });
-    return {
-      success: res.count > 0,
-      error: 'Unknown error while logging transaction',
-    };
+    return true;
   } catch (e) {
-    return {
-      success: false,
-      error: e,
-    };
+    return false;
   }
 }

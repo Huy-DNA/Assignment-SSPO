@@ -42,7 +42,7 @@ export default async function generateReport(year, week) {
     },
   });
 
-  return client.report.create({
+  await client.report.create({
     data: {
       year,
       week,

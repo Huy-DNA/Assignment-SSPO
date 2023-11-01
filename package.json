@@ -8,7 +8,7 @@
     "test": "jest --passWithNoTests",
     "build:backend": "copyfiles \"backend/**/*\" .dist",
     "build:frontend": "webpack",
-    "build": "npx yarn build:backend && npx yarn build:frontend",
+    "build": "npx yarn build:backend && npx yarn build:frontend && copyfiles ./errorcodes.js .dist",
     "start:cas": "node ./__mock-cas__/server.js",
     "start": "concurrently \"npx yarn start:cas\" \"node ./.dist/backend/bin/www.js\"",
     "lint": "eslint .",
