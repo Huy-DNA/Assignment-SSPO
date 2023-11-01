@@ -158,10 +158,41 @@ async function modifyPrinters(req, res) {
   );
 }
 
+/**
+ * Search printers
+ * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
+ * @param {Response<any, Record<string, any>, number>} res - Express response
+ */
+async function searchPrinters(req, res) {
+  const options = req.query;
+
+  const {
+    location,
+    name,
+  } = options;
+
+  const printers = await client.printer.findMany({
+    where: {
+      location: {
+        contains: location,
+      },
+      name: {
+        contains: name,
+      },
+    },
+  });
+
+  res.send({
+    success: true,
+    value: printers,
+  });
+}
+
 router.get('/', getPrinters);
-router.get('/:id', getPrinter);
+router.get('/search', searchPrinters);
 router.post('/add', authManager, addPrinters);
 router.post('/delete', authManager, deletePrinters);
 router.post('/update', authManager, modifyPrinters);
+router.get('/info/:id', getPrinter);
 
 export default router;
