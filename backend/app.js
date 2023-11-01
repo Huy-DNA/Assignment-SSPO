@@ -5,8 +5,8 @@ import logger from 'morgan';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
-import LoginPlugin from './plugins/login.js';
-import LogoutPlugin from './plugins/logout.js';
+import LoginRouter from './routers/login.js';
+import LogoutRouter from './routers/logout.js';
 import API from './api/index.js';
 
 dotenv.config();
@@ -30,8 +30,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use('/public', express.static(path.join(__dirname, '../frontend')));
 
-app.use(LoginPlugin);
-app.use(LogoutPlugin);
+app.use(LoginRouter);
+app.use(LogoutRouter);
 app.use('/api', API);
 
 // Delegate routing to the frontend
