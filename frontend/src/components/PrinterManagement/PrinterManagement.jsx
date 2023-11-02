@@ -8,7 +8,6 @@ import {
   faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
 import {
-  faSquare,
   faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons';
 
@@ -16,8 +15,8 @@ import styles from './PrinterManagement.module.scss';
 
 const cx = classNames.bind(styles);
 function PrinterManagement() {
-  const [checked, setChecked] = useState(true);
-  const [numberChecked, setNumberChecked] = useState(1);
+  const [numberChecked, setNumberChecked] = useState(0);
+  const [isAnyCheckboxChecked, setIsAnyCheckboxChecked] = useState(false);
   const url = 'http://localhost:3000/api/printers';
   const renderPrinter = (apiUrl) => {
     const [printers, setPrinters] = useState([]);
@@ -43,13 +42,12 @@ function PrinterManagement() {
       return <p>Đang tải...</p>;
     }
 
-    console.log(printers);
     return (
       <div>
         {printers.map((printer, index) => (
           <div className={(cx('body-content'))} key={index}>
             <div className={cx('content-select')}>
-              <FontAwesomeIcon icon={faSquare} className={cx('select-icon')} />
+              <input type="checkbox" className={cx('select-icon')} onChange={handleCheckboxChange} />
             </div>
             <div className={cx('content-id-printer')}>
               <h4 className={cx('content-text')}>{index}</h4>
@@ -68,10 +66,33 @@ function PrinterManagement() {
       </div>
     );
   };
+  const handleCheckboxChange = (e) => {
+    const checked = e.target.checked;
+    if (checked) {
+      setNumberChecked(numberChecked + 1);
+    }
+    else {
+      setNumberChecked(numberChecked - 1);
+    }
+    updateIsAnyCheckboxChecked(checked);
+  };
+  const updateIsAnyCheckboxChecked = (newChecked) => {
+    if (newChecked) {
+      setIsAnyCheckboxChecked(true);
+    } else {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const atLeastOneChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+      if (atLeastOneChecked) {
+        setIsAnyCheckboxChecked(true);
+      } else {
+        setIsAnyCheckboxChecked(false);
+      }
+    }
+  };
 
   return (
     <div className={cx('wrapper')}>
-      {checked ? (
+      {!isAnyCheckboxChecked ? (
         <div className={cx('search')}>
           <input className={cx('search__input')} placeholder="Tìm kiếm"></input>
           <button className={cx('search__btn')}>
@@ -93,7 +114,7 @@ function PrinterManagement() {
         <button className={cx('add-printer')}>Thêm máy in</button>
         <div className={cx('header-content')}>
           <div className={cx('content-select')}>
-            <FontAwesomeIcon icon={faSquare} className={cx('select-icon')} />
+            <input type="checkbox" className={cx('select-icon')} onChange={handleCheckboxChange} />
             <h4 className={cx('content-text')}>All</h4>
           </div>
           <div className={cx('content-id-printer')}>
