@@ -1,6 +1,5 @@
-import React from 'react';
 import axios from 'axios';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -10,13 +9,15 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faSquare,
+  faCircleXmark,
 } from '@fortawesome/free-regular-svg-icons';
 
 import styles from './PrinterManagement.module.scss';
 
 const cx = classNames.bind(styles);
 function PrinterManagement() {
-  const isChecked = false;
+  const [checked, setChecked] = useState(true);
+  const [numberChecked, setNumberChecked] = useState(1);
   const url = 'http://localhost:3000/api/printers';
   const renderPrinter = (apiUrl) => {
     const [printers, setPrinters] = useState([]);
@@ -28,7 +29,7 @@ function PrinterManagement() {
         .then((response) => {
           const data = response.data;
           const printerList = data.data;
-          
+
           setPrinters(printerList);
           setLoading(false);
         })
@@ -48,7 +49,7 @@ function PrinterManagement() {
         {printers.map((printer, index) => (
           <div className={(cx('body-content'))} key={index}>
             <div className={cx('content-select')}>
-              <FontAwesomeIcon icon={faSquare} className={cx('select-icon')}/>
+              <FontAwesomeIcon icon={faSquare} className={cx('select-icon')} />
             </div>
             <div className={cx('content-id-printer')}>
               <h4 className={cx('content-text')}>{index}</h4>
@@ -66,20 +67,33 @@ function PrinterManagement() {
         ))}
       </div>
     );
-  }
+  };
+
   return (
     <div className={cx('wrapper')}>
-      <div className={cx('search')}>
-        <input className={cx('search__input')} placeholder="Tìm kiếm"></input>
-        <button className={cx('search__btn')}>
-          <FontAwesomeIcon icon={faMagnifyingGlass} />
-        </button>
-      </div>
+      {checked ? (
+        <div className={cx('search')}>
+          <input className={cx('search__input')} placeholder="Tìm kiếm"></input>
+          <button className={cx('search__btn')}>
+            <FontAwesomeIcon icon={faMagnifyingGlass} />
+          </button>
+        </div>
+      ) : (
+        <div className={cx('printer-action')}>
+          <FontAwesomeIcon icon={faCircleXmark} className={cx('close-printer-action')}/>
+          {numberChecked} máy in đã được chọn.
+          <div className={cx('printer-action-list')}>
+            <button className={cx('delete-printer')}>Xóa máy in</button>
+            <button className={cx('edit-printer')}>Chỉnh sửa</button>
+            <button className={cx('active-printer')}>Tắt/Mở</button>
+          </div>
+        </div>
+      )}
       <div className={cx('content')}>
         <button className={cx('add-printer')}>Thêm máy in</button>
         <div className={cx('header-content')}>
           <div className={cx('content-select')}>
-            <FontAwesomeIcon icon={faSquare} className={cx('select-icon')}/>
+            <FontAwesomeIcon icon={faSquare} className={cx('select-icon')} />
             <h4 className={cx('content-text')}>All</h4>
           </div>
           <div className={cx('content-id-printer')}>
@@ -96,12 +110,14 @@ function PrinterManagement() {
           </div>
         </div>
         {renderPrinter(url)}
-        <div className={cx('action-printer')}>
-          <div className={cx('action-text')}>
-            1-9 of 1/10
+        <div className={cx('printer-view')}>
+          <div className={cx('printer-view-action')}>
+            <div className={cx('printer-view-text')}>
+              1 - 9 of 1/10
+            </div>
+            <FontAwesomeIcon icon={faAngleLeft} />
+            <FontAwesomeIcon icon={faAngleRight} />
           </div>
-          <FontAwesomeIcon icon={faAngleLeft} />
-          <FontAwesomeIcon icon={faAngleRight} />
         </div>
       </div>
     </div>

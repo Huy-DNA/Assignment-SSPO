@@ -1,0 +1,53 @@
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 100px;
+  margin-top: 40px;
+  border-top: 1px solid #ccc;
+}
+
+.logo {
+  margin-top: 10px;
+}
+
+.logo-media {
+
+}
+
+.logo-media-icon {
+  width: 32px;
+  height: 32px;
+  margin: 0 10px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.logo-website {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  font-size: 32px;
+}
+
+.logo-website-icon {
+  width: 120px;
+  height: 120px;
+}
+
+.contact {
+  margin-top: 60px;
+}
+
+.contact-phone,
+.contact-email {
+  font-size: 16px;
+  align-items: center;
+}
+
+.logo-contact {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
