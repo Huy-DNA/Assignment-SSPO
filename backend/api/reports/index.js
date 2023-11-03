@@ -17,8 +17,6 @@ export async function getReports(req, res) {
     data: await client.report.findMany({
       select: {
         id: true,
-        printer_jobs: true,
-        transactions: true,
         week: true,
         year: true,
       },
