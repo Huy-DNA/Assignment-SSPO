@@ -174,10 +174,10 @@ async function searchPrinters(req, res) {
   const printers = await client.printer.findMany({
     where: {
       location: {
-        contains: location,
+        contains: location?.trim(),
       },
       name: {
-        contains: name,
+        contains: name?.trim(),
       },
     },
   });

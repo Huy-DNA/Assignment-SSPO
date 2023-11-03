@@ -252,7 +252,7 @@ async function searchFiles(req, res) {
       },
       where: {
         name: {
-          contains: filename,
+          contains: filename?.trim(),
         },
         userId: user.isManager ? undefined : user.id,
       },
