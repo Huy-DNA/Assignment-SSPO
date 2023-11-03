@@ -17,7 +17,37 @@ const cx = classNames.bind(styles);
 function PrinterManagement() {
   const [numberChecked, setNumberChecked] = useState(0);
   const [isAnyCheckboxChecked, setIsAnyCheckboxChecked] = useState(false);
+  const [checkedIds, setCheckedIds] = useState([]);
   const url = 'http://localhost:3000/api/printers';
+
+
+  // Logic for checkbox
+  const handleCheckboxChange = (e) => {
+    console.log("Call handleCheckboxChange")
+    const checked = e.target.checked;
+    if (checked) {
+      setNumberChecked(numberChecked + 1);
+    }
+    else {
+      setNumberChecked(numberChecked - 1);
+    }
+    updateIsAnyCheckboxChecked(checked);
+  };
+
+  const updateIsAnyCheckboxChecked = (newChecked) => {
+    if (newChecked) {
+      setIsAnyCheckboxChecked(true);
+    } else {
+      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+      const atLeastOneChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
+      if (atLeastOneChecked) {
+        setIsAnyCheckboxChecked(true);
+      } else {
+        setIsAnyCheckboxChecked(false);
+      }
+    }
+  };
+  // Render printer list
   const renderPrinter = (apiUrl) => {
     const [printers, setPrinters] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -47,7 +77,15 @@ function PrinterManagement() {
         {printers.map((printer, index) => (
           <div className={(cx('body-content'))} key={index}>
             <div className={cx('content-select')}>
-              <input type="checkbox" className={cx('select-icon')} onChange={handleCheckboxChange} />
+              <input
+                type="checkbox"
+                className={cx('select-icon')}
+                onChange={ (e) => {
+                  handleCheckboxChange(e);
+                  handleCheckboxGetID(e);
+                }}
+                id={printer.id}
+              />
             </div>
             <div className={cx('content-id-printer')}>
               <h4 className={cx('content-text')}>{index}</h4>
@@ -66,30 +104,22 @@ function PrinterManagement() {
       </div>
     );
   };
-  const handleCheckboxChange = (e) => {
-    const checked = e.target.checked;
-    if (checked) {
-      setNumberChecked(numberChecked + 1);
-    }
-    else {
-      setNumberChecked(numberChecked - 1);
-    }
-    updateIsAnyCheckboxChecked(checked);
-  };
-  const updateIsAnyCheckboxChecked = (newChecked) => {
-    if (newChecked) {
-      setIsAnyCheckboxChecked(true);
-    } else {
-      const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-      const atLeastOneChecked = Array.from(checkboxes).some(checkbox => checkbox.checked);
-      if (atLeastOneChecked) {
-        setIsAnyCheckboxChecked(true);
-      } else {
-        setIsAnyCheckboxChecked(false);
-      }
-    }
-  };
 
+  // Push id checkbox into Array checkedIds
+  const handleCheckboxGetID = (e) => {
+    const id = e.target.id;
+    if (e.target.checked) {
+      setCheckedIds([...checkedIds, id]);
+    } else {
+      const updatedIds = checkedIds.filter((checkedId) => checkedId !== id);
+      setCheckedIds(updatedIds);
+    }
+  };
+  useEffect(() => {
+    console.log(checkedIds);
+  }, [checkedIds]);
+  //
+  
   return (
     <div className={cx('wrapper')}>
       {!isAnyCheckboxChecked ? (
@@ -114,7 +144,14 @@ function PrinterManagement() {
         <button className={cx('add-printer')}>Thêm máy in</button>
         <div className={cx('header-content')}>
           <div className={cx('content-select')}>
-            <input type="checkbox" className={cx('select-icon')} onChange={handleCheckboxChange} />
+            <input 
+              type="checkbox" 
+              className={cx('select-icon')}
+              onChange={ (e) => {
+                handleCheckboxChange(e);
+                // handleCheckboxGetID(e);
+              }}
+            />
             <h4 className={cx('content-text')}>All</h4>
           </div>
           <div className={cx('content-id-printer')}>
