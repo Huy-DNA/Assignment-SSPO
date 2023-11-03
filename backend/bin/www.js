@@ -10,6 +10,7 @@ const debug = _debug('server:server');
 import http from 'http';
 import process from 'process';
 import console from 'console';
+import startReportCronTask from '../crontasks/reportGeneration.js';
 
 /**
  * Get port from environment and store in Express.
@@ -90,4 +91,6 @@ function onListening() {
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
+
+  startReportCronTask();
 }
