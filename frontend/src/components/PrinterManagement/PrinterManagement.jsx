@@ -19,6 +19,7 @@ function PrinterManagement() {
   const [isAnyCheckboxChecked, setIsAnyCheckboxChecked] = useState(false);
   const [printers, setPrinters] = useState([]);
   const [checkedIds, setCheckedIds] = useState([]);
+  const [isDeletePrinter, setIsDeteltePrinter] = useState(false);
 
   // Define URL for API Printer
   const getPrinterURL = {
@@ -74,8 +75,8 @@ function PrinterManagement() {
           console.error(`Error when call API: ${error}`);
           setLoading(false);
         });
-    }, [getPrinterURL.URL]);
-
+    }, [isDeletePrinter]);
+    
     if (loading) {
       return <p>Đang tải...</p>;
     }
@@ -83,7 +84,7 @@ function PrinterManagement() {
     return (
       <div>
         {printers.map((printer, index) => (
-          <div className={(cx('body-content'))} key={index}>
+          <div className={index % 2 === 1 ? (cx('body-content')) : (cx('body-content', 'odd-col'))} key={index}>
             <div className={cx('content-select')}>
               <input
                 type="checkbox"
@@ -123,7 +124,16 @@ function PrinterManagement() {
       setCheckedIds(updatedIds);
     }
   };
-  //
+
+  // Uncheck all checkbox
+  const uncheckAllCheckboxes = () => {
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+  };
+
+  // Call API to delete printer
   const deletePrinter = (printerArr, deletePrinterURL) => {
     axios({
       method: deletePrinterURL.method,
@@ -139,7 +149,7 @@ function PrinterManagement() {
       .catch((error) => {
         console.error('Error deleting printer', error);
       });
-      window.location.reload();
+      setIsDeteltePrinter((prevState) => !prevState);
   };
 
   return (
@@ -159,7 +169,11 @@ function PrinterManagement() {
           <div className={cx('printer-action-list')}>
             <button
               className={cx('delete-printer')}
-              onClick={() => deletePrinter(checkedIds, deletePrinterURL)}
+              onClick={(e) => {
+                deletePrinter(checkedIds, deletePrinterURL);
+                uncheckAllCheckboxes();
+                handleCheckboxChange(e);
+              }}
             >
               Xóa máy in
             </button>
