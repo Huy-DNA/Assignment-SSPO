@@ -9,42 +9,44 @@ const router = Router();
 const client = new PrismaClient();
 
 /**
- * Get all file's metadata
+ * Get all feedbacks
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function getFiles(req, res) {
-  const { SESSION_ID } = req.cookies;
-
-  const user = await getUserFromSession(SESSION_ID);
-
-  const files = await client.file.findMany({
+async function getFeedbacks(req, res) {
+  const feedbacks = await client.feedback.findMany({
     select: {
+      content: true,
       id: true,
-      name: true,
-      uploadedAt: true,
+      postedAt: true,
       userId: true,
-    },
-    where: {
-      userId: user.isManager ? undefined : user.id,
+      user: {
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
   });
 
   res.send({
     success: true,
-    value: files,
+    value: feedbacks,
   });
 }
 
 /**
- * Get the file with a given id
+ * Get the feedback with a given id
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function getFile(req, res) {
-  const { id: fileId } = req.params;
+async function getFeedback(req, res) {
+  const { id: feedbackId } = req.params;
 
-  if (typeof fileId !== 'string') {
+  if (typeof feedbackId !== 'string') {
     res.send({
       success: false,
       error: {
@@ -55,73 +57,55 @@ async function getFile(req, res) {
     return;
   }
 
-  const { SESSION_ID } = req.cookies;
-
-  const user = await getUserFromSession(SESSION_ID);
-
-  const file = await client.file.findFirst({
+  const feedback = await client.feedback.findFirst({
     select: {
-      id: true,
       content: true,
-      name: true,
-      uploadedAt: true,
+      id: true,
+      postedAt: true,
       userId: true,
+      user: {
+        include: {
+          user: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
     },
     where: {
-      id: fileId,
+      id: feedbackId,
     },
   });
 
-  if (file === null) {
+  if (feedback === null) {
     res.send({
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: 'File not found',
+        message: 'Feedback not found',
       },
     });
     return;
-  }
-
-  if (user.id === file.userId) {
-    res.send({
-      success: true,
-      value: file,
-    });
-    return;
-  }
-
-  if (user.isManager) {
-    res.send({
-      success: true,
-      value: {
-        ...file,
-        content: undefined,
-      },
-    });
   }
 
   res.send({
-    success: false,
-    error: {
-      code: ErrorCode.UNAUTHORIZED,
-      message: 'The user has not permission to access this file',
-    },
+    success: true,
+    value: feedback,
   });
 }
 
 /**
- * Upload files
+ * Upload feedbacks
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function uploadFiles(req, res) {
+async function uploadFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.object({
-    name: Joi.string(),
     content: Joi.string(),
   }));
 
-  const { error, value: fileInfos } = schema.validate(req.body);
+  const { error, value: feedbackInfos } = schema.validate(req.body);
 
   if (error) {
     res.send({
@@ -141,8 +125,8 @@ async function uploadFiles(req, res) {
   res.send({
     success: true,
     value: await client.file.createMany({
-      data: fileInfos.map((file) => ({
-        ...file,
+      data: feedbackInfos.map((feedback) => ({
+        ...feedback,
         userId: user.id,
       })),
     }),
@@ -150,13 +134,13 @@ async function uploadFiles(req, res) {
 }
 
 /**
- * Remove all the files with the given ids
+ * Remove all the feedbacks with the given ids
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function deleteFiles(req, res) {
+async function deleteFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.string());
-  const { error, value: fileIds } = schema.validate(req.body);
+  const { error, value: feedbackIds } = schema.validate(req.body);
 
   if (error) {
     res.send({
@@ -166,31 +150,35 @@ async function deleteFiles(req, res) {
     return;
   }
 
+  const { SESSION_ID } = req.cookies;
+
+  const user = await getUserFromSession(SESSION_ID);
+
   res.send({
     success: true,
-    data: await client.file.deleteMany({
+    data: await client.feedback.deleteMany({
       where: {
         id: {
-          in: fileIds,
+          in: feedbackIds,
         },
+        userId: user.isManager ? undefined : user.id,
       },
     }),
   });
 }
 
 /**
- * Modify files
+ * Modify feedbacks
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function modifyFiles(req, res) {
+async function modifyFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string(),
-    name: Joi.string().optional(),
     content: Joi.string().optional(),
   }));
 
-  const { error, value: fileModifiers } = schema.validate(req.body);
+  const { error, value: feedbackModifiers } = schema.validate(req.body);
 
   if (error) {
     res.send({
@@ -209,7 +197,7 @@ async function modifyFiles(req, res) {
       success: true,
       data: {
         count: (await Promise.all(
-          fileModifiers.map((modifier) => client.file.update({
+          feedbackModifiers.map((modifier) => client.feedback.update({
             where: {
               id: modifier.id,
               userId: user.id,
@@ -226,45 +214,47 @@ async function modifyFiles(req, res) {
 }
 
 /**
- * Search for files
+ * Search for feedbacks
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function searchFiles(req, res) {
+async function searchFeedbacks(req, res) {
   const options = req.query;
 
   const {
-    filename,
+    userId,
   } = options;
-
-  const { SESSION_ID } = req.cookies;
-
-  const user = await getUserFromSession(SESSION_ID);
 
   res.send({
     success: true,
-    value: await client.file.findMany({
+    value: await client.feedback.findMany({
       select: {
+        content: true,
         id: true,
-        name: true,
-        uploadedAt: true,
+        postedAt: true,
         userId: true,
+        user: {
+          include: {
+            user: {
+              select: {
+                name: true,
+              },
+            },
+          },
+        },
       },
       where: {
-        name: {
-          contains: filename?.trim(),
-        },
-        userId: user.isManager ? undefined : user.id,
+        userId,
       },
     }),
   });
 }
 
-router.get('/', authUser, getFiles);
-router.get('/info/:id', authUser, getFile);
-router.post('/upload', authStudent, uploadFiles);
-router.post('/update', authStudent, modifyFiles);
-router.post('/delete', authStudent, deleteFiles);
-router.get('/search', authUser, searchFiles);
+router.get('/', getFeedbacks);
+router.get('/info/:id', getFeedback);
+router.post('/upload', authStudent, uploadFeedbacks);
+router.post('/update', authStudent, modifyFeedbacks);
+router.post('/delete', authUser, deleteFeedbacks);
+router.get('/search', searchFeedbacks);
 
 export default router;
