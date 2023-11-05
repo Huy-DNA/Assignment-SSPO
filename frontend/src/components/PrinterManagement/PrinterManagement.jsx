@@ -190,11 +190,7 @@ function PrinterManagement() {
         </button>
         <div className={cx('header-content')}>
           <div className={cx('content-select')}>
-            <input
-              type="checkbox"
-              className={cx('select-icon')}
-            />
-            <h4 className={cx('content-text')}>All</h4>
+            <h4 className={cx('content-text')}>Chọn</h4>
           </div>
           <div className={cx('content-id-printer')}>
             <h4 className={cx('content-text')}>ID máy in</h4>
