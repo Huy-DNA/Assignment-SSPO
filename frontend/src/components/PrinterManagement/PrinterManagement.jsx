@@ -17,13 +17,31 @@ const cx = classNames.bind(styles);
 function PrinterManagement() {
   const [numberChecked, setNumberChecked] = useState(0);
   const [isAnyCheckboxChecked, setIsAnyCheckboxChecked] = useState(false);
+  const [printers, setPrinters] = useState([]);
   const [checkedIds, setCheckedIds] = useState([]);
-  const url = 'http://localhost:3000/api/printers';
 
+  const handleButtonClick = () => {
+    const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+      setIsAnyCheckboxChecked(false);
+      setCheckedIds([]);
+      setNumberChecked(0);
+    });
+  };
+
+  // Define URL for API Printer
+  const getPrinterURL = {
+    URL: 'http://localhost:3000/api/printers',
+    method: 'get'
+  };
+  const deletePrinterURL = {
+    URL: 'http://localhost:3000/api/printers/delete',
+    method: 'post'
+  };
 
   // Logic for checkbox
   const handleCheckboxChange = (e) => {
-    console.log("Call handleCheckboxChange")
     const checked = e.target.checked;
     if (checked) {
       setNumberChecked(numberChecked + 1);
@@ -48,13 +66,12 @@ function PrinterManagement() {
     }
   };
   // Render printer list
-  const renderPrinter = (apiUrl) => {
-    const [printers, setPrinters] = useState([]);
+  const renderPrinter = (getPrinterURL) => {
     const [loading, setLoading] = useState(true);
-
     useEffect(() => {
+
       axios
-        .get(apiUrl)
+        .get(getPrinterURL.URL)
         .then((response) => {
           const data = response.data;
           const printerList = data.data;
@@ -63,10 +80,10 @@ function PrinterManagement() {
           setLoading(false);
         })
         .catch((error) => {
-          console.error(`Lỗi khi gọi API: ${error}`);
+          console.error(`Error when call API: ${error}`);
           setLoading(false);
         });
-    }, [apiUrl]);
+    }, [getPrinterURL.URL]);
 
     if (loading) {
       return <p>Đang tải...</p>;
@@ -80,7 +97,7 @@ function PrinterManagement() {
               <input
                 type="checkbox"
                 className={cx('select-icon')}
-                onChange={ (e) => {
+                onChange={(e) => {
                   handleCheckboxChange(e);
                   handleCheckboxGetID(e);
                 }}
@@ -115,41 +132,64 @@ function PrinterManagement() {
       setCheckedIds(updatedIds);
     }
   };
-  useEffect(() => {
-    console.log(checkedIds);
-  }, [checkedIds]);
   //
-  
+  const deletePrinter = (printerArr, deletePrinterURL) => {
+    axios({
+      method: deletePrinterURL.method,
+      url: deletePrinterURL.URL,
+      data: printerArr,
+    })
+      .then((response) => {
+        console.log('Printer deleted successfully', response.data);
+        setPrinters((prevPrinters) =>
+          prevPrinters.filter((printer) => !printerArr.includes(printer.id))
+        );
+      })
+      .catch((error) => {
+        console.error('Error deleting printer', error);
+      });
+  };
+
   return (
     <div className={cx('wrapper')}>
       {!isAnyCheckboxChecked ? (
         <div className={cx('search')}>
-          <input className={cx('search__input')} placeholder="Tìm kiếm"></input>
+          <input className={cx('search__input')} placeholder="Tìm kiếm" />
           <button className={cx('search__btn')}>
             <FontAwesomeIcon icon={faMagnifyingGlass} />
           </button>
         </div>
       ) : (
         <div className={cx('printer-action')}>
-          <FontAwesomeIcon icon={faCircleXmark} className={cx('close-printer-action')}/>
-          {numberChecked} máy in đã được chọn.
+          <FontAwesomeIcon icon={faCircleXmark} className={cx('close-printer-action')} />
+          {numberChecked}
+          máy in đã được chọn.
           <div className={cx('printer-action-list')}>
-            <button className={cx('delete-printer')}>Xóa máy in</button>
+            <button
+              className={cx('delete-printer')}
+              onClick={() => deletePrinter(checkedIds, deletePrinterURL)}
+            >
+              Xóa máy in
+            </button>
             <button className={cx('edit-printer')}>Chỉnh sửa</button>
             <button className={cx('active-printer')}>Tắt/Mở</button>
           </div>
         </div>
       )}
       <div className={cx('content')}>
-        <button className={cx('add-printer')}>Thêm máy in</button>
+        <button
+          className={cx('add-printer')}
+          onClick={handleButtonClick}
+        >
+          Thêm máy in
+        </button>
         <div className={cx('header-content')}>
           <div className={cx('content-select')}>
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               className={cx('select-icon')}
-              onChange={ (e) => {
+              onChange={(e) => {
                 handleCheckboxChange(e);
-                // handleCheckboxGetID(e);
               }}
             />
             <h4 className={cx('content-text')}>All</h4>
@@ -167,7 +207,7 @@ function PrinterManagement() {
             <h4 className={cx('content-text')}>Trạng thái máy in</h4>
           </div>
         </div>
-        {renderPrinter(url)}
+        {renderPrinter(getPrinterURL)}
         <div className={cx('printer-view')}>
           <div className={cx('printer-view-action')}>
             <div className={cx('printer-view-text')}>

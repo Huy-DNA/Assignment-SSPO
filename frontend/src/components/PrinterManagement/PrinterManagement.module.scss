@@ -92,6 +92,16 @@
   top: 0;
 }
 
+.add-printer,
+.delete-printer,
+.edit-printer,
+.active-printer {
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
 .header-content,
 .body-content {
   margin-top: 60px;
