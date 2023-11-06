@@ -14,11 +14,13 @@ import {
 import styles from './PrinterManagement.module.scss';
 
 const cx = classNames.bind(styles);
+
 function PrinterManagement() {
   const [numberChecked, setNumberChecked] = useState(0);
   const [isAnyCheckboxChecked, setIsAnyCheckboxChecked] = useState(false);
   const [printers, setPrinters] = useState([]);
   const [checkedIds, setCheckedIds] = useState([]);
+  const [isDeletePrinter, setIsDeteltePrinter] = useState(false);
 
   const handleButtonClick = () => {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -65,8 +67,9 @@ function PrinterManagement() {
       }
     }
   };
-  // Render printer list
-  const renderPrinter = (getPrinterURL) => {
+
+  // Call API to get printers list
+  const getPrinter = (getPrinterURL) => {
     const [loading, setLoading] = useState(true);
     useEffect(() => {
 
@@ -81,10 +84,11 @@ function PrinterManagement() {
         })
         .catch((error) => {
           console.error(`Error when call API: ${error}`);
+          console.error(`Error when call API: ${error}`);
           setLoading(false);
         });
-    }, [getPrinterURL.URL]);
-
+    }, [isDeletePrinter]);
+    
     if (loading) {
       return <p>Đang tải...</p>;
     }
@@ -92,7 +96,7 @@ function PrinterManagement() {
     return (
       <div>
         {printers.map((printer, index) => (
-          <div className={(cx('body-content'))} key={index}>
+          <div className={index % 2 === 1 ? (cx('body-content')) : (cx('body-content', 'odd-col'))} key={index}>
             <div className={cx('content-select')}>
               <input
                 type="checkbox"
@@ -132,7 +136,16 @@ function PrinterManagement() {
       setCheckedIds(updatedIds);
     }
   };
-  //
+
+  // Uncheck all checkbox
+  const uncheckAllCheckboxes = () => {
+    const checkboxes = document.querySelectorAll("input[type='checkbox']");
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+  };
+
+  // Call API to delete printer
   const deletePrinter = (printerArr, deletePrinterURL) => {
     axios({
       method: deletePrinterURL.method,
@@ -148,6 +161,7 @@ function PrinterManagement() {
       .catch((error) => {
         console.error('Error deleting printer', error);
       });
+      setIsDeteltePrinter((prevState) => !prevState);
   };
 
   return (
@@ -167,7 +181,11 @@ function PrinterManagement() {
           <div className={cx('printer-action-list')}>
             <button
               className={cx('delete-printer')}
-              onClick={() => deletePrinter(checkedIds, deletePrinterURL)}
+              onClick={(e) => {
+                deletePrinter(checkedIds, deletePrinterURL);
+                uncheckAllCheckboxes();
+                handleCheckboxChange(e);
+              }}
             >
               Xóa máy in
             </button>
@@ -179,20 +197,12 @@ function PrinterManagement() {
       <div className={cx('content')}>
         <button
           className={cx('add-printer')}
-          onClick={handleButtonClick}
         >
           Thêm máy in
         </button>
         <div className={cx('header-content')}>
           <div className={cx('content-select')}>
-            <input
-              type="checkbox"
-              className={cx('select-icon')}
-              onChange={(e) => {
-                handleCheckboxChange(e);
-              }}
-            />
-            <h4 className={cx('content-text')}>All</h4>
+            <h4 className={cx('content-text')}>Chọn</h4>
           </div>
           <div className={cx('content-id-printer')}>
             <h4 className={cx('content-text')}>ID máy in</h4>
@@ -207,7 +217,7 @@ function PrinterManagement() {
             <h4 className={cx('content-text')}>Trạng thái máy in</h4>
           </div>
         </div>
-        {renderPrinter(getPrinterURL)}
+        {getPrinter(getPrinterURL)}
         <div className={cx('printer-view')}>
           <div className={cx('printer-view-action')}>
             <div className={cx('printer-view-text')}>
