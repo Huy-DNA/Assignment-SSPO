@@ -20,7 +20,7 @@ export default [
           use: ['babel-loader'],
         },
         {
-          test: /\.(png|jpeg|gif|jpg)$/,
+          test: /\.(png|jpeg|gif|jpg|svg)$/,
           loader: 'file-loader',
           options: {
             name: '[name].[ext]',

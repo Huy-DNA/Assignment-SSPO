@@ -1,12 +1,6 @@
 import React from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import
-{
-  faFacebook,
-  faInstagram,
-  faTwitter,
-} from '@fortawesome/free-brands-svg-icons';
 
 import
 {
@@ -24,9 +18,21 @@ function Footer() {
     <div className={cx('wrapper')}>
       <div className={cx('logo')}>
         <div className={cx('logo-media')}>
-          <FontAwesomeIcon icon={faFacebook} className={cx('logo-media-icon')} />
-          <FontAwesomeIcon icon={faInstagram} className={cx('logo-media-icon')} />
-          <FontAwesomeIcon icon={faTwitter} className={cx('logo-media-icon')} />
+          <img
+            src={images.facebooklogo}
+            alt="facebook logo"
+            className={cx('logo-media-icon')}
+          />
+          <img
+            src={images.instalogo}
+            alt="instagram logo"
+            className={cx('logo-media-icon')}
+          />
+          <img
+            src={images.twitterlogo}
+            alt="twitter logo"
+            className={cx('logo-media-icon')}
+          />
         </div>
         <div className={cx('logo-website')}>
           <img src={images.logo} alt="logo-web" className={cx('logo-website-icon')} />

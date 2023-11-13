@@ -1,21 +1,20 @@
 .wrapper {
-  margin: 0 200px;
+  margin: 0 12.5rem;
 }
 
 .odd-col {
-  background: rgba(204, 204, 204, 0.3);
+  background: rgba(254, 254, 254, 0.3);
 }
 
-
-
 .search {
-  width: 570px;
-  height: 45px;
+  width: 39rem;
+  height: 2.8rem;
   display: flex;
   align-items: center;
-  border-radius: 30px;
+  justify-content: space-between;
+  border-radius: 1.875rem;
   border: 1px solid #000;
-  margin: 10px auto;
+  margin: 1rem auto;
 
   &:focus-visible {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -25,62 +24,50 @@
 
 .search__input {
   height: 100%;
-  width: 530px;
-  font-size: 16px;
-  border-radius: 30px;
-  padding-left: 10px;
+  width: 35rem;
+  font-size: 1rem;
+  border-radius: 1.875rem;
+  padding-left: 0.625rem;
 }
 
 .search__btn {
   background-color: #fff;
-  padding-right: 10px;
-  font-size: 20px;
+  margin-right: 0.5rem;
+  font-size: 1.25rem;
 }
 
 .printer-action {
-  width: 900px;
-  height: 45px;
+  width: 39rem;
+  height: 2.9rem;
   display: flex;
-  position: relative;
   align-items: center;
-  border-radius: 30px;
+  border-radius: 1.875rem;
   border: 1px solid #000;
-  margin: 10px auto;
+  margin: 0.625rem auto;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   opacity: 0.8;
-  animation: increasedWidth .3s linear alternate;
-}
-
-@keyframes increasedWidth {
-  0% {
-    width: 570px; /* Kích thước ban đầu */
-  }
-  100% {
-    width: 900px; /* Kích thước sau khi hoàn thành animation */
-  }
 }
 
 .close-printer-action {
-  padding: 0 10px;
+  padding: 0 0.625rem;
 }
 
 .printer-action-list {
   height: 100%;
-  position: absolute;
   display: flex;
-  padding-right: 10px;
+  padding-right: 0.625rem;
   top: 0;
   right: 0;
 }
 
-.delete-printer,
-.edit-printer,
-.active-printer {
-  padding: 0 10px;
-  width: 110px;
-  height: 31px;
-  margin: auto 10px;
-  border-radius: 10px;
+.delete-printer-btn,
+.edit-printer-btn,
+.active-printer-btn {
+  padding: 0 1rem;
+  width: 7.2rem;
+  height: 2rem;
+  margin: auto 0.625rem;
+  border-radius: 0.625rem;
   border: 1px solid #333;
   background-color: #fff;
 
@@ -92,26 +79,25 @@
 }
 
 .content {
-  width: 900px;
+  width: 56.25rem;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
   position: relative;
 }
 
-.add-printer {
-  width: 160px;
-  height: 40px;
+.add-printer-btn {
+  width: 10rem;
+  height: 2.5rem;
   justify-content: center;
   color: #FFF;
   text-align: center;
-  font-size: 22px;
+  font-size: 1.375rem;
   font-weight: 600;
-  background-color: #0C8CE9;
-  border-radius: 10px;
-  position: absolute;
-  right: 0;
-  top: 0;
+  background-color: #4f46e5;
+  border-radius: 0.625rem;
+  float: right;
+  margin-top: 0.625rem;
 
   &:hover {
     cursor: pointer;
@@ -119,10 +105,10 @@
   }
 }
 
-.add-printer,
-.delete-printer,
-.edit-printer,
-.active-printer {
+.add-printer-btn,
+.delete-printer-btn,
+.edit-printer-btn,
+.active-printer-btn {
 
   &:hover {
     cursor: pointer;
@@ -131,8 +117,8 @@
 
 .header-content,
 .body-content {
-  margin-top: 60px;
-  padding: 10px 10px;
+  margin-top: 1.875rem;
+  padding: 0.625rem 0.625rem;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -158,7 +144,7 @@
   display: block;
   position: absolute;
   width: 2px;
-  height: 20px;
+  height: 1.25rem;
   background-color: #000;
   right: 0;
   top: 50%;
@@ -167,47 +153,31 @@
 }
 
 .content-select {
-  width: 80px;
+  width: 5rem;
 }
 
 .content-id-printer {
-  width: 170px;
+  width: 10.6rem;
 }
 
 .content-name-printer {
-  width: 250px;
+  width: 15.625rem;
 }
 
 .content-location-printer {
-  width: 200px;
+  width: 12.5rem;
 }
 
 .content-condition-printer {
-  width: 200px;
+  width: 12.5rem;
 }
 
 .content-text {
-  
+  font-size: 1rem;
+  font-weight: 500;
+  text-align: center;
 }
 
 .body-content {
   margin-top: 0;
-}
-
-.printer-view {
-  margin-top: 5px;
-  position: relative;
-}
-
-.printer-view-action {
-  position: absolute;
-  display: flex;
-  align-items: center;
-  text-align: center;
-  top: 0;
-  right: 0;
-}
-
-.printer-view-text {
-  padding-right: 10px;
 }
