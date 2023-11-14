@@ -15,12 +15,15 @@ import {
   GridRowEditStopReasons,
 } from '@mui/x-data-grid';
 
-function EditToolbar(props) {
-  const { setRows, setRowModesModel } = props;
-
+function EditToolbar({ setRows, setRowModesModel }) {
   const handleClick = () => {
-    const id = "";
-    setRows((oldRows) => [...oldRows, { id, name: '', location: '', enabled: true }]);
+    const id = '';
+    setRows((oldRows) => [...oldRows, {
+      id,
+      name: '',
+      location: '',
+      enabled: true,
+    }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -40,10 +43,10 @@ export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState([]);
   React.useEffect(() => {
     axios.get('http://localhost:3000/api/printers')
-      .then(response => {
+      .then((response) => {
         setRows(Object.values(response.data)[1]);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error fetching data:', error);
       });
   }, []);
@@ -91,7 +94,12 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns = [
-    { field: 'name', headerName: 'Name', width: 280, editable: true },
+    {
+      field: 'name',
+      headerName: 'Name',
+      width: 280,
+      editable: true,
+    },
     {
       field: 'location',
       headerName: 'Vị trí máy in',
@@ -174,14 +182,10 @@ export default function FullFeaturedCrudGrid() {
         rows={rows}
         columns={columns}
         editMode="row"
-        // checkboxSelection
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
-        // onRowSelectionModelChange={(data) => {
-        //   console.log(data);
-        // }}
         slots={{
           toolbar: EditToolbar,
         }}

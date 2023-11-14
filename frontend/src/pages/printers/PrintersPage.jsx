@@ -5,7 +5,7 @@ import {
   faMagnifyingGlass,
 } from '@fortawesome/free-solid-svg-icons';
 import styles from './printers.module.scss';
-import DisplayPrinter from '../../components/DisplayPrinter/DisplayPrinter';
+import DisplayPrinter from '../../components/PrinterGrid/PrinterGrid';
 
 const cx = classNames.bind(styles);
 
