@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -12,21 +13,26 @@ import {
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
-  GridRowEditStopReasons,
 } from '@mui/x-data-grid';
+import {
+  CREATE_PRINTERS_URL,
+  DELETE_PRINTERS_URL,
+  GET_PRINTERS_URL,
+  UPDATE_PRINTERS_URL,
+} from '../../../constants/url';
 
 function EditToolbar({ setRows, setRowModesModel }) {
   const handleClick = () => {
-    const id = '';
-    setRows((oldRows) => [...oldRows, {
-      id,
+    const newPrinter = {
+      id: uuidv4(),
       name: '',
       location: '',
       enabled: true,
-    }]);
+    };
+    setRows((oldRows) => [newPrinter, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+      [newPrinter.id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
@@ -40,24 +46,15 @@ function EditToolbar({ setRows, setRowModesModel }) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState([]);
-  React.useEffect(() => {
-    axios.get('http://localhost:3000/api/printers')
-      .then((response) => {
-        setRows(Object.values(response.data)[1]);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-      });
-  }, []);
-
+  const [printers, setPrinters] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
 
-  const handleRowEditStop = (params, event) => {
-    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
-      event.defaultMuiPrevented = true;
-    }
-  };
+  React.useEffect(() => {
+    axios.get(GET_PRINTERS_URL)
+      .then((response) => {
+        setPrinters(Object.values(response.data)[1]);
+      });
+  }, []);
 
   const handleEditClick = (id) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
@@ -68,7 +65,8 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleDeleteClick = (id) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    setPrinters(printers.filter((printer) => printer.id !== id));
+    axios.post(DELETE_PRINTERS_URL, [id]);
   };
 
   const handleCancelClick = (id) => () => {
@@ -76,21 +74,27 @@ export default function FullFeaturedCrudGrid() {
       ...rowModesModel,
       [id]: { mode: GridRowModes.View, ignoreModifications: true },
     });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
-  };
-
-  const processRowUpdate = (newRow) => {
-    const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
   };
 
   const handleRowModesModelChange = (newRowModesModel) => {
     setRowModesModel(newRowModesModel);
+  };
+
+  const handleRowEditStop = ({ row }) => {
+    axios.post(CREATE_PRINTERS_URL, [row]);
+  };
+
+  const processRowUpdate = (updatedRow) => {
+    axios.post(UPDATE_PRINTERS_URL, [updatedRow]);
+    setPrinters((oldPrinters) => {
+      const newPrinters = [...oldPrinters];
+      const updatedPrinterId = newPrinters.findIndex((printer) => printer.id === updatedRow.id);
+      if (updatedPrinterId >= 0) {
+        newPrinters[updatedPrinterId] = updatedRow;
+      }
+      return newPrinters;
+    });
+    return updatedRow;
   };
 
   const columns = [
@@ -179,7 +183,7 @@ export default function FullFeaturedCrudGrid() {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={printers}
         columns={columns}
         editMode="row"
         rowModesModel={rowModesModel}
@@ -190,7 +194,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows: setPrinters, setRowModesModel },
         }}
       />
     </Box>

@@ -67,6 +67,7 @@ export async function getPrinter(req, res) {
  */
 async function addPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
+    id: Joi.string().optional(),
     location: Joi.string(),
     name: Joi.string(),
     enabled: Joi.boolean().default(true),
@@ -143,13 +144,16 @@ async function modifyPrinters(req, res) {
       success: true,
       data: {
         count: (await Promise.all(
-          printerModifiers.map((modifier) => client.printer.update({
+          printerModifiers.map((modifier) => client.printer.upsert({
             where: {
               id: modifier.id,
             },
-            data: {
+            update: {
               ...modifier,
               id: undefined,
+            },
+            create: {
+              ...modifier,
             },
           }).then(() => 1).catch(() => 0)),
         )).reduce((acc, cur) => acc + cur, 0),
