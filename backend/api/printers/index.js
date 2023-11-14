@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
 import Joi from 'joi';
 import { authManager } from '../../middleware/auth.js';
+import ErrorCode from '../../../errorcodes.js';
 
 const router = Router();
 const client = new PrismaClient();
@@ -19,6 +20,47 @@ export async function getPrinters(req, res) {
 }
 
 /**
+ * Return the printer with the specified id in the request param `id`
+ * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
+ * @param {Response<any, Record<string, any>, number>} res - Express response
+ */
+export async function getPrinter(req, res) {
+  const { id } = req.params;
+  if (typeof id !== 'string') {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Bad id',
+      },
+    });
+    return;
+  }
+
+  const printerInfo = await client.printer.findFirst({
+    where: {
+      id,
+    },
+  });
+
+  if (printerInfo === null) {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.RESOURCE_NOT_FOUND,
+        message: 'Printer not found',
+      },
+    });
+    return;
+  }
+
+  res.send({
+    success: true,
+    value: printerInfo,
+  });
+}
+
+/**
  * Add the provided printer information to the database
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
@@ -26,6 +68,8 @@ export async function getPrinters(req, res) {
 async function addPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
     location: Joi.string(),
+    name: Joi.string(),
+    enabled: Joi.boolean().default(true),
   }));
 
   const { error, value: printersInfo } = schema.validate(req.body);
@@ -83,7 +127,9 @@ async function deletePrinters(req, res) {
 async function modifyPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string(),
-    location: Joi.string(),
+    location: Joi.string().optional(),
+    enabled: Joi.boolean().optional(),
+    name: Joi.string().optional(),
   }));
   const { error, value: printerModifiers } = schema.validate(req.body);
 
@@ -112,9 +158,41 @@ async function modifyPrinters(req, res) {
   );
 }
 
+/**
+ * Search printers
+ * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
+ * @param {Response<any, Record<string, any>, number>} res - Express response
+ */
+async function searchPrinters(req, res) {
+  const options = req.query;
+
+  const {
+    location,
+    name,
+  } = options;
+
+  const printers = await client.printer.findMany({
+    where: {
+      location: {
+        contains: location?.trim(),
+      },
+      name: {
+        contains: name?.trim(),
+      },
+    },
+  });
+
+  res.send({
+    success: true,
+    value: printers,
+  });
+}
+
 router.get('/', getPrinters);
+router.get('/search', searchPrinters);
 router.post('/add', authManager, addPrinters);
 router.post('/delete', authManager, deletePrinters);
 router.post('/update', authManager, modifyPrinters);
+router.get('/info/:id', getPrinter);
 
 export default router;

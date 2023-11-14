@@ -1,15 +1,18 @@
 import axios from 'axios';
+import { Router } from 'express';
 import process from 'process';
 import addIfNewUser from '../utils/addIfNewUser.js';
 import getSessionId from '../utils/getSessionId.js';
 import getUserFromSession from '../utils/getUserFromSession.js';
+
+const router = Router();
 
 /**
  * Controller for /login
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-export default async function LoginController(req, res) {
+async function LoginController(req, res) {
   const { ticket } = req.query;
 
   if (ticket) {
@@ -19,7 +22,7 @@ export default async function LoginController(req, res) {
       res.redirect(`http://${process.env.CAS_PATH}?service=http://${process.env.HOSTNAME}:${process.env.PORT}/login/`);
     } else {
       const { name, isManager, id } = userInfo.data;
-      addIfNewUser(userInfo.data);
+      await addIfNewUser(userInfo.data);
       res.cookie('name', name);
       res.cookie('isManager', isManager);
       res.cookie('id', id);
@@ -52,3 +55,7 @@ export default async function LoginController(req, res) {
 
   res.redirect(`http://${process.env.CAS_PATH}?service=http://${process.env.HOSTNAME}:${process.env.PORT}/login/`);
 }
+
+router.get('/login', LoginController);
+
+export default router;

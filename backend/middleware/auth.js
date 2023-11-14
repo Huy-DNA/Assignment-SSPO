@@ -1,4 +1,5 @@
 import { PrismaClient, UserRole } from '@prisma/client';
+import ErrorCode from '../../errorcodes.js';
 
 const client = new PrismaClient();
 
@@ -13,7 +14,10 @@ export async function authManager(req, res, next) {
   if (!SESSION_ID) {
     res.send({
       success: false,
-      error: 'Not logged in',
+      error: {
+        code: ErrorCode.NOT_LOGGED_IN,
+        message: 'Not logged in',
+      },
     });
     return;
   }
@@ -28,7 +32,10 @@ export async function authManager(req, res, next) {
     res.clearCookie('SESSION_ID');
     res.send({
       success: false,
-      error: 'Invalid session id',
+      error: {
+        code: ErrorCode.INVALID_SESSION,
+        message: 'Invalid session id',
+      },
     });
     return;
   }
@@ -46,7 +53,10 @@ export async function authManager(req, res, next) {
 
   res.send({
     success: false,
-    error: 'Not a manager',
+    error: {
+      code: ErrorCode.MANAGER_EXPECTED,
+      message: 'Not a manager',
+    },
   });
 }
 
@@ -61,7 +71,10 @@ export async function authStudent(req, res, next) {
   if (!SESSION_ID) {
     res.send({
       success: false,
-      error: 'Not logged in',
+      error: {
+        code: ErrorCode.NOT_LOGGED_IN,
+        message: 'Not logged in',
+      },
     });
     return;
   }
@@ -75,7 +88,10 @@ export async function authStudent(req, res, next) {
   if (!userId) {
     res.send({
       success: false,
-      error: 'Invalid session id',
+      error: {
+        code: ErrorCode.INVALID_SESSION,
+        message: 'Invalid session id',
+      },
     });
     return;
   }
@@ -93,7 +109,10 @@ export async function authStudent(req, res, next) {
 
   res.send({
     success: false,
-    error: 'Not a student',
+    error: {
+      code: ErrorCode.STUDENT_EXPECTED,
+      message: 'Not a student',
+    },
   });
 }
 
@@ -108,7 +127,10 @@ export async function authUser(req, res, next) {
   if (!SESSION_ID) {
     res.send({
       success: false,
-      error: 'Not logged in',
+      error: {
+        code: ErrorCode.NOT_LOGGED_IN,
+        message: 'Not logged in',
+      },
     });
     return;
   }
@@ -122,7 +144,10 @@ export async function authUser(req, res, next) {
   if (!userId) {
     res.send({
       success: false,
-      error: 'Invalid session id',
+      error: {
+        code: ErrorCode.INVALID_SESSION,
+        message: 'Invalid session id',
+      },
     });
     return;
   }

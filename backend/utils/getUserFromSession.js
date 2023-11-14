@@ -5,7 +5,7 @@ const client = new PrismaClient();
 /**
  * Find the user associated with sessionId
  * @param { string } sessionId - The session id
- * @returns {null | { name: string, isManager: boolean, id: string }} userInfo
+ * @returns {Promise<null | { name: string, isManager: boolean, id: string }>} userInfo
  */
 export default async function getUserFromSession(sessionId) {
   const session = await client.session.findFirst({
