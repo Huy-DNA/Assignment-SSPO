@@ -1,13 +1,9 @@
-import React from 'react';
-
-import Home from '../pages/Home/Home';
-import PrinterManagement from '../pages/PrinterManagement/PrinterManagement';
-import AddPrinters from '../pages/AddPrinters/AddPrinters';
+import HomePage from '../pages/home/HomePage';
+import PrintersPage from '../pages/printers/PrintersPage';
 
 const publicRoutes = [
-  { path: '/', component: Home },
-  { path: '/manageprinter', component: PrinterManagement },
-  { path: '/addprinters', component: AddPrinters },
+  { path: '/', component: HomePage },
+  { path: '/printers', component: PrintersPage },
 ];
 
 const privateRoutes = [

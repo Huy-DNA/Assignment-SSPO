@@ -1,23 +1,15 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMagnifyingGlass,
-  faAngleLeft,
-  faAngleRight,
 } from '@fortawesome/free-solid-svg-icons';
-import {
-  faCircleXmark,
-} from '@fortawesome/free-regular-svg-icons';
-
-import styles from './PrinterManagement.module.scss';
-import GetPrinters, { deletePrinters, editPrinters, displayPrinter } from '../../components/GetPrinters/GetPrinters';
+import styles from './printers.module.scss';
 import DisplayPrinter from '../../components/DisplayPrinter/DisplayPrinter';
 
 const cx = classNames.bind(styles);
 
-function PrinterManagement() {
+function PrintersPage() {
   const [printers, setPrinters] = useState([]);
   const [checkedIds, setCheckedIds] = useState([]);
   const [recallRender, setRecallRender] = useState(false);
@@ -35,11 +27,11 @@ function PrinterManagement() {
 
   const handleEditPrinter = () => {
     setIsEditPrinters(true);
-  }
+  };
 
   const handleSavePrinter = () => {
     setIsEditPrinters(false);
-  }
+  };
 
   const handleButtonClick = () => {
     const checkboxes = document.querySelectorAll('input[type="checkbox"]');
@@ -51,7 +43,7 @@ function PrinterManagement() {
 
   // Push id checkbox into Array checkedIds
   const handleCheckboxGetID = (e) => {
-    const id = e.target.id;
+    const { id } = e.target;
     if (e.target.checked) {
       setCheckedIds([...checkedIds, id]);
     } else {
@@ -78,4 +70,4 @@ function PrinterManagement() {
   );
 }
 
-export default PrinterManagement;
+export default PrintersPage;

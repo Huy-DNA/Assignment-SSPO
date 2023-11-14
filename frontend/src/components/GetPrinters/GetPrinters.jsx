@@ -2,7 +2,7 @@ import axios from 'axios';
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames/bind';
 
-import styles from '../../pages/PrinterManagement/PrinterManagement.module.scss';
+import styles from '../../pages/printers/PrinterManagement.module.scss';
 
 const cx = classNames.bind(styles);
 

@@ -10,39 +10,42 @@ const cx = classNames.bind(styles);
 const MENU_ITEMS = [
   {
     title: 'Quản lí máy in',
-    to: '/manageprinter',
-    classname: 'management-printer'
+    to: '/printers',
+    classname: 'management-printer',
   },
   {
     title: 'Quản lí tài khoản',
-    to: '/manageaccount',
-    classname: 'management-account'
+    to: '/account',
+    classname: 'management-account',
   },
   {
     title: 'Xem lịch sử',
-    to: '/viewhistory',
-    classname: 'view-history'
+    to: '/history',
+    classname: 'view-history',
   },
   {
     title: 'Xem báo cáo',
-    to: '/viewreport',
-    classname: 'view-report'
+    to: '/reports',
+    classname: 'view-report',
   },
   {
     title: 'Xem đánh giá',
-    to: '/viewrate',
-    classname: 'view-rate'
-  }
-]
+    to: '/feedbacks',
+    classname: 'view-feedback',
+  },
+];
+
 function Header() {
   const isLogin = true;
-  const handleMenu = (menuItems) => {
-    return menuItems.map((item, index) => (
-      <a key={index} href={item.to} className={cx({ [item.classname]: true })}>
-        {item.title}
-      </a>
-    ));
-  }
+  const handleMenu = (menuItems) => menuItems.map((item) => (
+    <a
+      key={item.to}
+      href={item.to}
+      className={cx({ [item.classname]: true })}
+    >
+      {item.title}
+    </a>
+  ));
 
   const renderMenu = handleMenu(MENU_ITEMS, 'action');
   return (
@@ -54,17 +57,17 @@ function Header() {
               <img src={images.logo} alt="logo-web" className={cx('logo-icon')} />
             </div>
             <div className={cx('action')}>
-               {renderMenu}
-            </div>          
+              {renderMenu}
+            </div>
             <div className={cx('user')}>
-              <FontAwesomeIcon icon={faBell} className={cx('user-bell')}/>
+              <FontAwesomeIcon icon={faBell} className={cx('user-bell')} />
               <img
                 className={cx('user-avatar')}
                 src={images.avatar}
                 alt=""
                 width={40}
                 height={40}
-                />
+              />
             </div>
           </>
         ) : (
