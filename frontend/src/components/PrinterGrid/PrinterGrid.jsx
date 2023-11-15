@@ -48,12 +48,14 @@ function EditToolbar({ setRows, setRowModesModel }) {
 export default function FullFeaturedCrudGrid() {
   const [printers, setPrinters] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
+  const [loading, setLoading] = React.useState(true);
 
-  React.useEffect(() => {
-    axios.get(GET_PRINTERS_URL)
+  React.useEffect(async () => {
+    await axios.get(GET_PRINTERS_URL)
       .then((response) => {
         setPrinters(Object.values(response.data)[1]);
       });
+    setLoading(false);
   }, []);
 
   const handleEditClick = (id) => () => {
@@ -183,6 +185,7 @@ export default function FullFeaturedCrudGrid() {
       }}
     >
       <DataGrid
+        loading={loading}
         rows={printers}
         columns={columns}
         editMode="row"
