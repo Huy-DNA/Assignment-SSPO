@@ -42,7 +42,7 @@ function EditToolbar(props) {
     console.log(checkIDs);
     axios({
       method: 'post',
-      url: 'http://localhost:3000/api/printers/delete',
+      url: DELETE_PRINTERS_URL,
       data: checkIDs,
     })
       .then((response) => {
