@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
   GridRowModes,
   DataGrid,
@@ -21,27 +22,52 @@ import {
   UPDATE_PRINTERS_URL,
 } from '../../../constants/url';
 
-function EditToolbar({ setRows, setRowModesModel }) {
-  const handleClick = () => {
+function EditToolbar(props) {
+  const { setPrinters, setRowModesModel, checkIDs, setCheckIDs } = props;
+  const handleAddPrinters = () => {
     const newPrinter = {
       id: uuidv4(),
       name: '',
       location: '',
       enabled: true,
     };
-    setRows((oldRows) => [newPrinter, ...oldRows]);
+    setPrinters((oldRows) => [newPrinter, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [newPrinter.id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
   };
 
+  const handleDeletePrinters = () => {
+    console.log(checkIDs);
+    axios({
+      method: 'post',
+      url: 'http://localhost:3000/api/printers/delete',
+      data: checkIDs,
+    })
+      .then((response) => {
+        console.log('Printers deleted successfully', response.data);
+        setPrinters((oldRows) => oldRows.filter((row) => !checkIDs.includes(row.id)));
+        setRowModesModel({});
+      })
+      .catch((error) => {
+        console.error('Error deleting printers', error);
+      });
+  };
+
   return (
-    <GridToolbarContainer>
-      <Button color="primary" startIcon={<AddIcon />} onClick={handleClick}>
-        Thêm máy in
-      </Button>
-    </GridToolbarContainer>
+    <div style={{ display: 'flex' }}>
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<AddIcon />} onClick={handleAddPrinters}>
+          Thêm máy in
+        </Button>
+      </GridToolbarContainer>
+      <GridToolbarContainer>
+        <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeletePrinters}>
+          Xoá máy in
+        </Button>
+      </GridToolbarContainer>
+    </div>
   );
 }
 
@@ -49,6 +75,7 @@ export default function FullFeaturedCrudGrid() {
   const [printers, setPrinters] = React.useState([]);
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [loading, setLoading] = React.useState(true);
+  const [checkIDs, setCheckIDs] = React.useState([]);
 
   React.useEffect(async () => {
     await axios.get(GET_PRINTERS_URL)
@@ -108,7 +135,7 @@ export default function FullFeaturedCrudGrid() {
     },
     {
       field: 'location',
-      headerName: 'Vị trí máy in',
+      headerName: 'Location',
       type: 'text',
       width: 280,
       align: 'left',
@@ -189,15 +216,19 @@ export default function FullFeaturedCrudGrid() {
         rows={printers}
         columns={columns}
         editMode="row"
+        checkboxSelection
         rowModesModel={rowModesModel}
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
+        onRowSelectionModelChange={(ids) => {
+          setCheckIDs(ids)
+        }}
         slots={{
           toolbar: EditToolbar,
         }}
         slotProps={{
-          toolbar: { setRows: setPrinters, setRowModesModel },
+          toolbar: { setPrinters, setRowModesModel, checkIDs, setCheckIDs },
         }}
       />
     </Box>
