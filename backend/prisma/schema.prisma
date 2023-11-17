@@ -53,7 +53,7 @@ model File {
 
 model Printer {
   id          String       @id @default(uuid())
-  code        String       @unique
+  code        Int          @unique @default(autoincrement())
   name        String
   campus      String
   building    String
