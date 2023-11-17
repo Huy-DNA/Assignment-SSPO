@@ -12,11 +12,12 @@ export default function Breadcrumbs() {
   if (subpaths.length > 1 && subpaths[subpaths.length - 1] === '') {
     subpaths.pop();
   }
+  
   return (
     <div>
       {
         subpaths.map((subpath, index) => (
-          <Link key={subpath} to={subpaths.slice(0, index + 1).join('/')} className={index === subpaths.length - 1 ? 'text-blue-900' : 'text-blue-700'}>
+          <Link key={subpath} to={[...subpaths.slice(0, index + 1), ''].join('/')} className={index === subpaths.length - 1 ? 'text-blue-900' : 'text-blue-700'}>
             <span className='after:content-["/"]'>
               {` ${capitalize(subpath || 'home')} `}
             </span>
