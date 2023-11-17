@@ -68,7 +68,10 @@ export async function getPrinter(req, res) {
 async function addPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string().optional(),
-    location: Joi.string(),
+    code: Joi.string(),
+    campus: Joi.string().uppercase().valid('BK1', 'BK2'),
+    building: Joi.string().uppercase(),
+    room: Joi.number(),
     name: Joi.string(),
     enabled: Joi.boolean().default(true),
   }));
@@ -128,7 +131,10 @@ async function deletePrinters(req, res) {
 async function modifyPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string(),
-    location: Joi.string().optional(),
+    campus: Joi.string().uppercase().valid('BK1', 'BK2').optional(),
+    building: Joi.string().uppercase().optional(),
+    room: Joi.number().optional(),
+    code: Joi.string().optional(),
     enabled: Joi.boolean().optional(),
     name: Joi.string().optional(),
   }));
