@@ -1,15 +1,11 @@
 import React from 'react';
-import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faMagnifyingGlass,
   faArrowUpFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
 
-import styles from './Upload.module.scss';
 import images from '../../../assets/images/images';
-
-const cx = classNames.bind(styles);
 
 function Upload() {
   const FILES = [
@@ -40,42 +36,41 @@ function Upload() {
     },
   ]
   return (
-    <div className={cx('wrapper')}>
-      <div className={cx('search')}>
-        <input className={cx('search__input')} placeholder="Tìm kiếm" />
+    <div>
+      <div>
+        <input placeholder="Tìm kiếm" />
         <button
           type="button"
-          className={cx('search__btn')}
-        >
+          
+     >
           <FontAwesomeIcon icon={faMagnifyingGlass} />
         </button>
       </div>
-      <div className={cx('upload-file')}>
-        <FontAwesomeIcon icon={faArrowUpFromBracket} className={cx('upload-icon')}/>
-        <h3 className={cx('upload-context')}>Tải lên ảnh của bạn ở đây</h3>
+      <div>
+        <FontAwesomeIcon icon={faArrowUpFromBracket} />
+        <h3>Tải lên ảnh của bạn ở đây</h3>
       </div>
-      <div className={cx('file-uploaded')}>
+      <div>
         {
           FILES.map((file, index) => (
-            <div key={index} className={cx('file-item')}>
+            <div key={index}>
               <img
-                className={cx('file-image')}
                 src={images.file}
                 alt=""
                 width={100}
                 height={140}
               />
-              <div className={cx('file-context')}>
-                <h2 className={cx('file-context-header')}>
+              <div>
+                <h2>
                   Tên file: {file.title}
                 </h2>
-                <h3 className={cx('file-context-body')}>
+                <h3>
                   Loại file: {file.fileType}
                 </h3>
-                <h3 className={cx('file-context-body')}>
+                <h3>
                   Số trang: {file.numPages}
                 </h3>
-                <button className={cx('delete-file-btn')}>
+                <button>
                   Xóa file
                 </button>
               </div>

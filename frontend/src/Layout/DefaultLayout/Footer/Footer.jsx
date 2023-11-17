@@ -1,52 +1,47 @@
 import React from 'react';
-import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 import
 {
   faPhone,
   faEnvelope,
 } from '@fortawesome/free-solid-svg-icons';
-
-import styles from './Footer.module.scss';
 import images from '../../../../assets/images/images';
-
-const cx = classNames.bind(styles);
+import '../../../../styles.css';
 
 function Footer() {
   return (
-    <div className={cx('wrapper')}>
-      <div className={cx('logo')}>
-        <div className={cx('logo-media')}>
+    <div className="flex flex-row justify-between p-5 bg-blue-950">
+      <div className="mt-2.5">
+        <div className="flex flex-row m-5 gap-5">
           <img
             src={images.facebooklogo}
             alt="facebook logo"
-            className={cx('logo-media-icon')}
+            className="w-8 h-8 mr-0 m-2 hover:cursor-pointer"
           />
           <img
             src={images.instalogo}
             alt="instagram logo"
-            className={cx('logo-media-icon')}
+            className="w-8 h-8 mr-0 m-2 hover:cursor-pointer"
           />
           <img
             src={images.twitterlogo}
             alt="twitter logo"
-            className={cx('logo-media-icon')}
+            className="w-8 h-8 mr-0 m-2 hover:cursor-pointer"
           />
         </div>
-        <div className={cx('logo-website')}>
-          <img src={images.logo} alt="logo-web" className={cx('logo-website-icon')} />
-          BK PRINTERS SERVICES
+        <div className="flex items-center font-medium text-white hover:cursor-pointer m-5">
+          <img src={images.logo} alt="logo-web" className="w-32 h-32 m-2" />
+          <span>BK PRINTERS SERVICES</span>
         </div>
       </div>
-      <div className={cx('contact')}>
-        <div className={cx('contact-phone')}>
-          <FontAwesomeIcon icon={faPhone} className={cx('logo-contact')} />
-          0123456789
+      <div className="mt-8">
+        <div className="flex items-center text-white text-sm hover:cursor-pointer">
+          <FontAwesomeIcon icon={faPhone} className="w-5 h-5 m-2 hover:cursor-pointer" />
+          <span>0123456789</span>
         </div>
-        <div className={cx('contact-email')}>
-          <FontAwesomeIcon icon={faEnvelope} className={cx('logo-contact')} />
-          bkprinterservice@gmail.com
+        <div className="flex items-center text-white text-sm hover:cursor-pointer">
+          <FontAwesomeIcon icon={faEnvelope} className="w-5 h-5 m-2 hover:cursor-pointer" />
+          <span>bkprinterservice@gmail.com</span>
         </div>
       </div>
     </div>

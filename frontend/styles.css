@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 @import 'normalize.css';
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,300;0,500;0,600;0,700;1,400;1,700&family=Roboto:ital,wght@0,300;0,400;1,300;1,400&display=swap');
 
@@ -22,17 +26,4 @@ body {
   line-height: 1.5;
   text-rendering: optimizeSpeed;
   text-decoration: none;
-}
-
-button, input, [tabindex] {
-    border: none;
-    outline: none;
-}
-
-a {
-  text-decoration: none;
-  color: var(--black-color);
-  text-align: center;
-  font-size: 1.25rem;
-  font-weight: 400;
 }

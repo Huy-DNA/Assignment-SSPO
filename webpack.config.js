@@ -28,16 +28,22 @@ export default [
           },
         },
         {
-          test: /\.scss$/,
+          test: /\.css$/i,
           use: [
             'style-loader',
+            'css-loader',
             {
-              loader: 'css-loader',
+              loader: 'postcss-loader',
               options: {
-                importLoaders: 1,
+                postcssOptions: {
+                  plugins: [
+                    [
+                      'postcss-preset-env',
+                    ],
+                  ],
+                },
               },
             },
-            'sass-loader',
           ],
         },
       ],

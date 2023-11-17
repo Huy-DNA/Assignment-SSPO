@@ -2,11 +2,12 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
 import { publicRoutes } from './src/routes/routes';
 import DefaultLayout from './src/layout/DefaultLayout/DefaultLayout';
+import './styles.css';
 
 function App() {
   return (
     <BrowserRouter>
-      <div className="App">
+      <div>
         <Routes>
           {publicRoutes.map((route) => {
             const Layout = DefaultLayout;
@@ -17,7 +18,9 @@ function App() {
                 path={route.path}
                 element={(
                   <Layout>
-                    <Page />
+                    <div className="h-screen m-10">
+                      <Page />
+                    </div>
                   </Layout>
                 )}
               />

@@ -118,7 +118,7 @@ export default function FullFeaturedCrudGrid() {
     setPrinters((oldPrinters) => {
       const newPrinters = [...oldPrinters];
       const updatedPrinterId = newPrinters.findIndex((printer) => printer.id === updatedRow.id);
-      if (updatedPrinterId >= 0) {
+      if (updatedPrinterId>= 0) {
         newPrinters[updatedPrinterId] = updatedRow;
       }
       return newPrinters;
@@ -127,6 +127,11 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns = [
+    {
+      field: 'code',
+      headerName: 'Code',
+      editable: true,
+    },
     {
       field: 'name',
       headerName: 'Name',
@@ -210,7 +215,7 @@ export default function FullFeaturedCrudGrid() {
           color: 'text.primary',
         },
       }}
-    >
+ >
       <DataGrid
         loading={loading}
         rows={printers}

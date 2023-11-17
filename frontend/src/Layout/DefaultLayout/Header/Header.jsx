@@ -1,88 +1,82 @@
 import React from 'react';
-import classNames from 'classnames/bind';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-
-import styles from './Header.module.scss';
 import images from '../../../../assets/images/images';
+import '../../../../styles.css';
 
-const cx = classNames.bind(styles);
 const MENU_ITEMS = [
   {
     title: 'Quản lí máy in',
     to: '/printers',
-    classname: 'management-printer',
   },
   {
     title: 'Quản lí tài khoản',
     to: '/account',
-    classname: 'management-account',
   },
   {
     title: 'Xem lịch sử',
     to: '/history',
-    classname: 'view-history',
   },
   {
     title: 'Xem báo cáo',
     to: '/reports',
-    classname: 'view-report',
   },
   {
     title: 'Xem đánh giá',
     to: '/feedbacks',
-    classname: 'view-feedback',
   },
 ];
 
 function Header() {
   const isLogin = true;
-  const handleMenu = (menuItems) => menuItems.map((item) => (
-    <a
-      key={item.to}
-      href={item.to}
-      className={cx({ [item.classname]: true })}
-    >
-      {item.title}
-    </a>
-  ));
 
-  const renderMenu = handleMenu(MENU_ITEMS, 'action');
   return (
-    <div className={cx('wrapper')}>
-      {
-        isLogin ? (
-          <>
-            <div className={cx('logo')}>
-              <img src={images.logo} alt="logo-web" className={cx('logo-icon')} />
-            </div>
-            <div className={cx('action')}>
-              {renderMenu}
-            </div>
-            <div className={cx('user')}>
-              <FontAwesomeIcon icon={faBell} className={cx('user-bell')} />
-              <img
-                className={cx('user-avatar')}
-                src={images.avatar}
-                alt=""
-                width={40}
-                height={40}
-              />
-            </div>
-          </>
-        ) : (
-          <>
-            <div className={cx('logo')}>
-              <img src={images.logo} alt="logo-web" className={cx('logo-icon')} />
-            </div>
+    isLogin ? (
+      <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
+        <div className="w-16 h-16 m-4">
+          <a href="/">
+            <img src={images.logo} alt="logo-web" />
+          </a>
+        </div>
+        <div className="self-stretch flex flex-row items-stretch">
+          {
+            MENU_ITEMS.map(
+              (item) => (
+                <a
+                  key={item.to}
+                  href={item.to}
+                  className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out p-5 text-lg"
+                >
+                  {item.title}
+                </a>
+              ),
+            )
+          }
+        </div>
+        <div className="flex flex-row self-end items-center">
+          <div className="m-4 hover:cursor-pointer">
+            <FontAwesomeIcon icon={faBell} />
+          </div>
+          <img
+            className="rounded-full w-10 h-10 m-4 self-end hover:cursor-pointer"
+            src={images.avatar}
+            alt="user avatar"
+            width={40}
+            height={40}
+          />
+        </div>
+      </div>
+    ) : (
+      <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
+        <div className="w-10 h-10 m-4">
+          <img src={images.logo} alt="logo-web" />
+        </div>
 
-            <div className={cx('action')}>
-              <a href="/login" to="/profile">Đăng nhập</a>
-            </div>
-          </>
-        )
-      }
-    </div>
+        <div>
+          <a href="/login" to="/profile">Đăng nhập</a>
+        </div>
+      </div>
+    )
   );
 }
 
