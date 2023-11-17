@@ -115,7 +115,7 @@ async function deletePrinters(req, res) {
 
   res.send({
     success: true,
-    data: await client.printer.update({
+    data: await client.printer.updateMany({
       data: {
         isDeleted: true,
       },
