@@ -76,6 +76,33 @@ export async function getPrinter(req, res) {
 }
 
 /**
+ * Generate a printer
+ * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
+ * @param {Response<any, Record<string, any>, number>} res - Express response
+ */
+export async function generatePrinter(req, res) {
+  const printer = await client.printer.create({
+    data: {
+      brand: '',
+      building: 'BK1',
+      campus: 'H1',
+      description: '',
+      enabled: true,
+      name: '',
+      room: 100,
+    },
+  });
+
+  res.send({
+    success: true,
+    value: {
+      ...printer,
+      isDeleted: undefined,
+    },
+  });
+}
+
+/**
  * Add the provided printer information to the database
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
@@ -83,7 +110,6 @@ export async function getPrinter(req, res) {
 async function addPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string().optional(),
-    code: Joi.string(),
     campus: Joi.string().uppercase().valid('BK1', 'BK2'),
     building: Joi.string().uppercase(),
     room: Joi.number(),
@@ -154,7 +180,7 @@ async function modifyPrinters(req, res) {
     campus: Joi.string().uppercase().valid('BK1', 'BK2').optional(),
     building: Joi.string().uppercase().optional(),
     room: Joi.number().optional(),
-    code: Joi.string().optional(),
+    code: Joi.number().optional(),
     description: Joi.string().allow('').optional(),
     brand: Joi.string().allow('').optional(),
     enabled: Joi.boolean().optional(),
@@ -178,6 +204,7 @@ async function modifyPrinters(req, res) {
           printerModifiers.map((modifier) => client.printer.upsert({
             where: {
               id: modifier.id,
+              code: modifier.code,
             },
             update: {
               ...modifier,
@@ -225,6 +252,7 @@ async function searchPrinters(req, res) {
 
 router.get('/', getPrinters);
 router.get('/search', searchPrinters);
+router.post('/gen', generatePrinter);
 router.post('/add', authManager, addPrinters);
 router.post('/delete', authManager, deletePrinters);
 router.post('/update', authManager, modifyPrinters);
