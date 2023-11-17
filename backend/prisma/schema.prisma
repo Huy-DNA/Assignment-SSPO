@@ -60,7 +60,7 @@ model Printer {
   room        Int
   brand       String?
   enabled     Boolean      @default(true)
-  isDeleted   Boolean      @default(true)
+  isDeleted   Boolean      @default(false)
   description String?
   jobs        PrinterJob[]
 }
