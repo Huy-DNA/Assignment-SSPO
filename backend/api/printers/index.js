@@ -15,7 +15,11 @@ const client = new PrismaClient();
 export async function getPrinters(req, res) {
   res.send({
     success: true,
-    data: await client.printer.findMany(),
+    data: await client.printer.findMany({
+      where: {
+        isDeleted: false,
+      },
+    }),
   });
 }
 
