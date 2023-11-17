@@ -72,6 +72,8 @@ async function addPrinters(req, res) {
     campus: Joi.string().uppercase().valid('BK1', 'BK2'),
     building: Joi.string().uppercase(),
     room: Joi.number(),
+    brand: Joi.string().optional(),
+    description: Joi.string().optional(),
     name: Joi.string(),
     enabled: Joi.boolean().default(true),
   }));
@@ -135,6 +137,8 @@ async function modifyPrinters(req, res) {
     building: Joi.string().uppercase().optional(),
     room: Joi.number().optional(),
     code: Joi.string().optional(),
+    description: Joi.string().allow('').optional(),
+    brand: Joi.string().allow('').optional(),
     enabled: Joi.boolean().optional(),
     name: Joi.string().optional(),
   }));

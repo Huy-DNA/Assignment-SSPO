@@ -51,16 +51,17 @@ model File {
 }
 
 model Printer {
-  id       String       @id @default(uuid())
-  code     String       @unique
-  name     String
-  campus   String
-  building String
-  room     Int
-  brand    String
-  enabled  Boolean
-  isDeleted Boolean
-  jobs     PrinterJob[]
+  id          String       @id @default(uuid())
+  code        String       @unique
+  name        String
+  campus      String
+  building    String
+  room        Int
+  brand       String?
+  enabled     Boolean      @default(true)
+  isDeleted   Boolean      @default(true)
+  description String?
+  jobs        PrinterJob[]
 }
 
 model PrinterJob {
