@@ -16,6 +16,17 @@ export async function getPrinters(req, res) {
   res.send({
     success: true,
     data: await client.printer.findMany({
+      select: {
+        brand: true,
+        building: true,
+        campus: true,
+        code: true,
+        description: true,
+        enabled: true,
+        id: true,
+        name: true,
+        room: true,
+      },
       where: {
         isDeleted: false,
       },
