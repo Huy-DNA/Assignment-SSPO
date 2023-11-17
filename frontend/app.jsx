@@ -18,7 +18,7 @@ function App() {
                 path={route.path}
                 element={(
                   <Layout>
-                    <div className="h-screen m-10">
+                    <div className="min-h-[70vh] m-10">
                       <Page />
                     </div>
                   </Layout>
