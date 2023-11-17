@@ -169,6 +169,9 @@ async function deleteFiles(req, res) {
   res.send({
     success: true,
     data: await client.file.deleteMany({
+      data: {
+        isDeleted: true,
+      },
       where: {
         id: {
           in: fileIds,

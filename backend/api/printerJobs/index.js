@@ -20,6 +20,17 @@ export async function getPrinterJobs(req, res) {
   res.send({
     success: true,
     data: await client.printerJob.findMany({
+      select: {
+        userId: true,
+        building: true,
+        campus: true,
+        room: true,
+        copiesNo: true,
+        createdAt: true,
+        startPage: true,
+        endPage: true,
+        status: true,
+      },
       where: {
         userId: user.isManager ? undefined : user.id,
       },
