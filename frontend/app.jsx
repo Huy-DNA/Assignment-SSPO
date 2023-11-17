@@ -3,6 +3,7 @@ import React from 'react';
 import { publicRoutes } from './src/routes/routes';
 import DefaultLayout from './src/layout/DefaultLayout/DefaultLayout';
 import './styles.css';
+import Breadcrumbs from './src/components/Breadcrumbs/Breadcrumbs';
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
                 path={route.path}
                 element={(
                   <Layout>
+                    <div className="mx-10 my-5">
+                      <Breadcrumbs />
+                    </div>
                     <div className="min-h-[70vh] m-10">
                       <Page />
                     </div>
