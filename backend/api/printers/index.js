@@ -84,8 +84,8 @@ export async function generatePrinter(req, res) {
   const printer = await client.printer.create({
     data: {
       brand: '',
-      building: 'BK1',
-      campus: 'H1',
+      building: 'H1',
+      campus: 'BK1',
       description: '',
       enabled: true,
       name: '',
@@ -252,7 +252,7 @@ async function searchPrinters(req, res) {
 
 router.get('/', getPrinters);
 router.get('/search', searchPrinters);
-router.post('/gen', generatePrinter);
+router.post('/gen', authManager, generatePrinter);
 router.post('/add', authManager, addPrinters);
 router.post('/delete', authManager, deletePrinters);
 router.post('/update', authManager, modifyPrinters);
