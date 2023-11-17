@@ -148,7 +148,10 @@ async function modifyPrinters(req, res) {
   const { error, value: printerModifiers } = schema.validate(req.body);
 
   if (error) {
-    res.send(error);
+    res.send({
+      success: false,
+      error,
+    });
     return;
   }
 
