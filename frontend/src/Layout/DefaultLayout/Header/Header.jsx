@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import images from '../../../../assets/images/images';
@@ -34,21 +35,21 @@ function Header() {
     isLogin ? (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
         <div className="w-16 h-16 m-4">
-          <a href="/">
+          <Link to="/">
             <img src={images.logo} alt="logo-web" />
-          </a>
+          </Link>
         </div>
         <div className="self-stretch flex flex-row items-stretch">
           {
             MENU_ITEMS.map(
               (item) => (
-                <a
+                <Link
                   key={item.to}
-                  href={item.to}
+                  to={item.to}
                   className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out p-5 text-lg"
                 >
                   {item.title}
-                </a>
+                </Link>
               ),
             )
           }
@@ -73,7 +74,7 @@ function Header() {
         </div>
 
         <div>
-          <a href="/login" to="/profile">Đăng nhập</a>
+          <Link to="/login">Đăng nhập</Link>
         </div>
       </div>
     )
