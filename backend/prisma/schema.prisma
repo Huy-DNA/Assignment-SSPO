@@ -48,6 +48,7 @@ model File {
   uploadedAt DateTime     @default(now())
   content    String
   PrinterJob PrinterJob[]
+  isDeleted  Boolean      @default(false)
 }
 
 model Printer {
@@ -68,6 +69,9 @@ model PrinterJob {
   id            String           @id @default(uuid())
   printerId     String
   printer       Printer          @relation(fields: [printerId], references: [id])
+  campus        String
+  building      String
+  room          Int
   userId        String
   user          Student          @relation(fields: [userId], references: [id])
   fileId        String
