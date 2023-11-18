@@ -36,7 +36,7 @@ const USER_ITEMS = [
     to: '/printers',
   },
   {
-    title: 'Quản lý files',
+    title: 'Quản lý tài liệu',
     to: '/files',
   },
   {
