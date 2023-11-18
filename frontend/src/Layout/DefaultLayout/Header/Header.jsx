@@ -36,6 +36,10 @@ const USER_ITEMS = [
     to: '/printers',
   },
   {
+    title: 'Quản lý files',
+    to: '/files',
+  },
+  {
     title: 'Xem lịch sử',
     to: '/history',
   },

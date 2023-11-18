@@ -8,9 +8,11 @@ import {
 } from '../../constants/url';
 import Grid from '../Grid/Grid';
 import extractAPIResponse from '../../utils/extractAPIResponse';
-import isManager from '../../utils/isManager';
+import { useSelector } from 'react-redux';
+import { LoginStatus } from '../../constants/loginStatus';
 
 export default function PrinterGrid() {
+  const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;
   const [printers, setPrinters] = React.useState([]);
   const loadPrinters = () => axios.get(GET_PRINTERS_URL)
     .then(({ data }) => extractAPIResponse(data));
@@ -20,8 +22,8 @@ export default function PrinterGrid() {
     .then(({ data }) => extractAPIResponse(data));
   const createNewPrinter = () => axios.post(GEN_PRINTER_URL)
     .then(({ data }) => extractAPIResponse(data));
-  const showActions = isManager();
-  const showToolBar = isManager();
+  const showActions = isManager;
+  const showToolBar = isManager;
   const columns = [
     {
       field: 'code',
@@ -35,7 +37,7 @@ export default function PrinterGrid() {
       headerName: 'Brand',
       align: 'right',
       headerAlign: 'right',
-      editable: true,
+      editable: isManager,
       flex: 2,
     },
     {
@@ -43,7 +45,7 @@ export default function PrinterGrid() {
       headerName: 'Name',
       align: 'right',
       headerAlign: 'right',
-      editable: true,
+      editable: isManager,
       flex: 2,
     },
     {
@@ -53,7 +55,7 @@ export default function PrinterGrid() {
       valueOptions: ['BK1', 'BK2'],
       align: 'right',
       headerAlign: 'right',
-      editable: true,
+      editable: isManager,
       flex: 1,
     },
     {
@@ -63,7 +65,7 @@ export default function PrinterGrid() {
       valueOptions: ['H1', 'H2', 'H3', 'H6', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
       align: 'right',
       headerAlign: 'right',
-      editable: true,
+      editable: isManager,
       flex: 1,
     },
     {
@@ -72,7 +74,7 @@ export default function PrinterGrid() {
       type: 'number',
       align: 'right',
       headerAlign: 'right',
-      editable: true,
+      editable: isManager,
       flex: 1,
     },
     {
@@ -80,7 +82,7 @@ export default function PrinterGrid() {
       headerName: 'Enabled',
       align: 'right',
       headerAlign: 'right',
-      editable: true,
+      editable: isManager,
       type: 'singleSelect',
       valueOptions: [true, false],
       renderCell: (params) => (
@@ -91,7 +93,7 @@ export default function PrinterGrid() {
     {
       field: 'description',
       headerName: 'Desc.',
-      editable: true,
+      editable: isManager,
       type: 'text',
       flex: 2,
     },

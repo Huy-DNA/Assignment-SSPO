@@ -10,7 +10,6 @@ export const guestRoutes = [
 export const managerRoutes = [
   { path: '/', component: HomePage },
   { path: '/printers', component: PrintersPage },
-  { path: '/files', component: FilesPage },
 ];
 
 export const userRoutes = [

@@ -1,5 +1,5 @@
 import React from 'react';
-import DisplayPrinter from '../../components/PrinterGrid/PrinterGrid';
+import PrinterGrid from '../../components/PrinterGrid/PrinterGrid';
 
 function PrintersPage() {
   return (
@@ -8,7 +8,7 @@ function PrintersPage() {
         QUẢN LÍ MÁY IN
       </h1>
       <div>
-        <DisplayPrinter />
+        <PrinterGrid />
       </div>
     </div>
   );
