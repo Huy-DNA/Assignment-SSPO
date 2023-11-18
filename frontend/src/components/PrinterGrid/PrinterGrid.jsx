@@ -7,63 +7,93 @@ import {
   UPDATE_PRINTERS_URL,
 } from '../../../constants/url';
 import Grid from '../Grid/Grid';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+import isManager from '../../utils/isManager';
 
 export default function PrinterGrid() {
   const [printers, setPrinters] = React.useState([]);
   const loadPrinters = () => axios.get(GET_PRINTERS_URL)
-    .then((response) => Object.values(response.data)[1]);
-  const deletePrinters = (ids) => axios.post(DELETE_PRINTERS_URL, ids);
-  const updatePrinters = (rows) => axios.post(UPDATE_PRINTERS_URL, rows);
+    .then(({ data }) => extractAPIResponse(data));
+  const deletePrinters = (ids) => axios.post(DELETE_PRINTERS_URL, ids)
+    .then(({ data }) => extractAPIResponse(data));
+  const updatePrinters = (rows) => axios.post(UPDATE_PRINTERS_URL, rows)
+    .then(({ data }) => extractAPIResponse(data));
   const createNewPrinter = () => axios.post(GEN_PRINTER_URL)
-    .then((response) => Object.values(response.data)[1]);
-  const showActions = true;
+    .then(({ data }) => extractAPIResponse(data));
+  const showActions = isManager();
+  const showToolBar = isManager();
   const columns = [
     {
       field: 'code',
       headerName: 'Code',
+      align: 'right',
+      headerAlign: 'right',
+      flex: 1,
     },
     {
       field: 'brand',
       headerName: 'Brand',
+      align: 'right',
+      headerAlign: 'right',
       editable: true,
+      flex: 2,
     },
     {
       field: 'name',
       headerName: 'Name',
+      align: 'right',
+      headerAlign: 'right',
       editable: true,
+      flex: 2,
     },
     {
       field: 'campus',
       headerName: 'Campus',
       type: 'singleSelect',
       valueOptions: ['BK1', 'BK2'],
+      align: 'right',
+      headerAlign: 'right',
       editable: true,
+      flex: 1,
     },
     {
       field: 'building',
       headerName: 'Building',
       type: 'singleSelect',
       valueOptions: ['H1', 'H2', 'H3', 'H6', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2'],
+      align: 'right',
+      headerAlign: 'right',
       editable: true,
+      flex: 1,
     },
     {
       field: 'room',
       headerName: 'Room',
       type: 'number',
+      align: 'right',
+      headerAlign: 'right',
       editable: true,
+      flex: 1,
     },
     {
       field: 'enabled',
       headerName: 'Enabled',
+      align: 'right',
+      headerAlign: 'right',
       editable: true,
       type: 'singleSelect',
-      valueOptions: ['true', 'false'],
+      valueOptions: [true, false],
+      renderCell: (params) => (
+        <span className={params.value ? 'text-blue-700' : 'text-gray-600'}>{`${params.value}`}</span>
+      ),
+      flex: 1,
     },
     {
       field: 'description',
       headerName: 'Desc.',
       editable: true,
       type: 'text',
+      flex: 2,
     },
   ];
 
@@ -76,6 +106,7 @@ export default function PrinterGrid() {
       rows={printers}
       setRows={setPrinters}
       showActions={showActions}
+      showToolBar={showToolBar}
       updateRows={updatePrinters}
     />
   );

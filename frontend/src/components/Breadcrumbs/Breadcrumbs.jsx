@@ -12,7 +12,7 @@ export default function Breadcrumbs() {
   if (subpaths.length > 1 && subpaths[subpaths.length - 1] === '') {
     subpaths.pop();
   }
-  
+
   return (
     <div>
       {

@@ -16,18 +16,26 @@ import {
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns }) {
   const handleAddRows = async () => {
-    const newRow = await createNewRow();
-    setRows((oldRows) => [newRow, ...oldRows]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [newRow.id]: { mode: GridRowModes.Edit, fieldToFocus: columns[0].field },
-    }));
+    try {
+      const newRow = await createNewRow();
+      setRows((oldRows) => [newRow, ...oldRows]);
+      setRowModesModel((oldModel) => ({
+        ...oldModel,
+        [newRow.id]: { mode: GridRowModes.Edit, fieldToFocus: columns[0].field },
+      }));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   const handleDeleteRows = async () => {
-    await deleteRows(checkedIds);
-    setRows((oldRows) => oldRows.filter((row) => !checkedIds.includes(row.id)));
-    setRowModesModel({});
+    try {
+      await deleteRows(checkedIds);
+      setRows((oldRows) => oldRows.filter((row) => !checkedIds.includes(row.id)));
+      setRowModesModel({});
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -55,13 +63,14 @@ export default function Grid({
   updateRows,
   createNewRow,
   showActions,
+  showToolBar,
 }) {
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [checkedIds, setCheckedIds] = React.useState([]);
 
   React.useEffect(() => {
-    loadRows().then(setRows).then(() => setLoading(false));
+    loadRows().then(setRows).then(() => setLoading(false)).catch(console.log);
   }, []);
 
   const handleEditClick = (id) => () => {
@@ -74,7 +83,7 @@ export default function Grid({
 
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
-    deleteRows([id]);
+    deleteRows([id]).catch(console.log);
   };
 
   const handleCancelClick = (id) => () => {
@@ -175,10 +184,10 @@ export default function Grid({
         processRowUpdate={processRowUpdate}
         onRowSelectionModelChange={setCheckedIds}
         slots={{
-          toolbar: EditToolbar,
+          toolbar: !showToolBar ? undefined : EditToolbar,
         }}
         slotProps={{
-          toolbar: {
+          toolbar: !showToolBar ? undefined : {
             setRows,
             setRowModesModel,
             checkedIds,
