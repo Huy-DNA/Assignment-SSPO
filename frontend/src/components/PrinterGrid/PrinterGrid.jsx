@@ -5,7 +5,7 @@ import {
   GEN_PRINTER_URL,
   GET_PRINTERS_URL,
   UPDATE_PRINTERS_URL,
-} from '../../../constants/url';
+} from '../../constants/url';
 import Grid from '../Grid/Grid';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 import isManager from '../../utils/isManager';

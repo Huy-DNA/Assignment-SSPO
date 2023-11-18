@@ -4,6 +4,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
 import images from '../../../../assets/images/images';
 import '../../../../styles.css';
+import { useSelector } from 'react-redux';
+import { LoginStatus } from '../../../constants/loginStatus';
 
 const MENU_ITEMS = [
   {
@@ -29,10 +31,10 @@ const MENU_ITEMS = [
 ];
 
 function Header() {
-  const isLogin = true;
+  const loginStatus = useSelector(state => state.loginStatus.value);
 
   return (
-    isLogin ? (
+    loginStatus !== LoginStatus.NOT_LOGGED_IN ? (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
         <div className="w-16 h-16 m-4">
           <Link to="/">
