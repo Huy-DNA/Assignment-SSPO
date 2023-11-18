@@ -7,14 +7,14 @@ import '../../../../styles.css';
 import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../../constants/loginStatus';
 
-const MENU_ITEMS = [
+const MANAGER_ITEMS = [
   {
     title: 'Quản lí máy in',
     to: '/printers',
   },
   {
     title: 'Quản lí tài khoản',
-    to: '/account',
+    to: '/accounts',
   },
   {
     title: 'Xem lịch sử',
@@ -30,8 +30,39 @@ const MENU_ITEMS = [
   },
 ];
 
+const USER_ITEMS = [
+  {
+    title: 'Xem máy in',
+    to: '/printers',
+  },
+  {
+    title: 'Xem lịch sử',
+    to: '/history',
+  },
+  {
+    title: 'Xem đánh giá',
+    to: '/feedbacks',
+  },
+];
+
+const GUEST_ITEMS = [
+  {
+    title: 'Xem máy in',
+    to: '/printers',
+  },
+  {
+    title: 'Xem đánh giá',
+    to: '/feedbacks',
+  },
+]
+
 function Header() {
   const loginStatus = useSelector(state => state.loginStatus.value);
+  const menuItems = loginStatus === LoginStatus.NOT_LOGGED_IN
+    ? GUEST_ITEMS
+    : loginStatus === LoginStatus.MANAGER
+    ? MANAGER_ITEMS
+    : USER_ITEMS;
 
   return (
     loginStatus !== LoginStatus.NOT_LOGGED_IN ? (
@@ -43,7 +74,7 @@ function Header() {
         </div>
         <div className="self-stretch flex flex-row items-stretch">
           {
-            MENU_ITEMS.map(
+            menuItems.map(
               (item) => (
                 <Link
                   key={item.to}
