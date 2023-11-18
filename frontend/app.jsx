@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
-import { publicRoutes } from './src/routes/routes';
+import { routeInfos } from './src/routes/routes';
 import DefaultLayout from './src/layout/DefaultLayout/DefaultLayout';
 import './styles.css';
 import Breadcrumbs from './src/components/Breadcrumbs/Breadcrumbs';
@@ -10,7 +10,7 @@ function App() {
     <BrowserRouter>
       <div>
         <Routes>
-          {publicRoutes.map((route) => {
+          {routeInfos.map((route) => {
             const Layout = DefaultLayout;
             const Page = route.component;
             return (
