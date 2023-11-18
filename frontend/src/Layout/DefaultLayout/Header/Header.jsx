@@ -71,12 +71,14 @@ function Header() {
       </div>
     ) : (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-        <div className="w-10 h-10 m-4">
+        <div className="w-16 h-16 m-4">
           <img src={images.logo} alt="logo-web" />
         </div>
 
         <div>
-          <Link to="/login">Đăng nhập</Link>
+          <a href="/login" className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out p-5 text-lg">
+            Đăng nhập
+          </a>
         </div>
       </div>
     )

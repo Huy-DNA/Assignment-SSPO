@@ -1,16 +1,20 @@
 import HomePage from '../pages/home/HomePage';
 import PrintersPage from '../pages/printers/PrintersPage';
-import Upload from '../pages/upload/Upload';
+import FilesPage from '../pages/files/FilesPage';
 
-const publicRoutes = [
+export const guestRoutes = [
   { path: '/', component: HomePage },
   { path: '/printers', component: PrintersPage },
-  { path: '/upload', component: Upload },
-
 ];
 
-const privateRoutes = [
-
+export const managerRoutes = [
+  { path: '/', component: HomePage },
+  { path: '/printers', component: PrintersPage },
+  { path: '/files', component: FilesPage },
 ];
 
-export { publicRoutes, privateRoutes };
+export const userRoutes = [
+  { path: '/', component: HomePage },
+  { path: '/printers', component: PrintersPage },
+  { path: '/files', component: FilesPage },
+];

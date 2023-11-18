@@ -7,7 +7,7 @@ import {
 
 import images from '../../../assets/images/images';
 
-function Upload() {
+function FilesPage() {
   const FILES = [
     {
       title: 'Cấu trúc dữ liệu và giải thuật',
@@ -82,4 +82,4 @@ function Upload() {
   );
 }
 
-export default Upload;
+export default FilesPage;
