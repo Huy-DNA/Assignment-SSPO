@@ -12,7 +12,9 @@ import {
   DataGrid,
   GridToolbarContainer,
   GridActionsCellItem,
+  GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
+import { Toolbar } from '@mui/material';
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns }) {
   const handleAddRows = async () => {
@@ -39,16 +41,19 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
   };
 
   return (
-    <div className="flex">
+    <div>
       <GridToolbarContainer>
-        <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRows}>
-          Thêm máy in
-        </Button>
-      </GridToolbarContainer>
-      <GridToolbarContainer>
-        <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeleteRows}>
-          Xoá máy in
-        </Button>
+        <Toolbar>
+          <div className="flex flex-row">
+            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRows}>
+              Thêm máy in
+            </Button>
+            <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeleteRows}>
+              Xoá máy in
+            </Button>
+            <GridToolbarQuickFilter />
+          </div>
+        </Toolbar>
       </GridToolbarContainer>
     </div>
   );
