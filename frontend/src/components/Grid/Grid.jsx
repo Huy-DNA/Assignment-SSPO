@@ -81,7 +81,8 @@ export default function Grid({
   const [checkedIds, setCheckedIds] = React.useState([]);
 
   React.useEffect(() => {
-    loadRows().then(setRows).then(() => setLoading(false)).catch(console.log);
+    loadRows().then((rows) => setRows((oldRows) => [...oldRows, ...rows]))
+              .then(() => setLoading(false)).catch(console.log);
   }, []);
 
   const handleEditClick = (id) => () => {

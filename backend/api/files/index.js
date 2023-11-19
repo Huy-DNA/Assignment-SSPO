@@ -229,10 +229,14 @@ async function modifyFiles(req, res) {
             },
             create: {
               ...modifier,
+              content: Base64.encode(modifier.content || ''),
               userId: user.id,
             },
-            data: {
+            update: {
               ...modifier,
+              content: typeof modifier.content === 'string'
+                ? Base64.encode(modifier.content)
+                : undefined,
               id: undefined,
             },
           }).then(() => 1).catch(() => 0)),

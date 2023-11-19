@@ -17,7 +17,7 @@ export default function FileGrid({ files, setFiles }) {
       UPDATE_FILES_URL, 
       rows.map((row) => ({ id: row.id, name: row.name, content: row.content, })),
   ).then(({ data }) => extractAPIResponse(data));
-  const createNewPrinter = async () => { throw "Not supported" };
+  const createNewFile = async () => { throw "Not supported" };
   const showActions = isUser;
   const showToolBar = {
     showAdd: false,
@@ -67,7 +67,7 @@ export default function FileGrid({ files, setFiles }) {
   return (
     <Grid
       columns={columns}
-      createNewRow={createNewPrinter}
+      createNewRow={createNewFile}
       deleteRows={deleteFiles}
       loadRows={loadFiles}
       rows={files}

@@ -20,7 +20,7 @@ function FilesPage() {
     const uploadInfos = await Promise.all(uploadedFiles.map((file) => file.text().then((content) => ({ id: uuidv4(), name: file.name, content: content, uploadedAt: new Date(Date.now()), }))));
     await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo])));
     setUploadedFiles([]);
-    setFiles([...uploadInfos, ...files]);
+    setFiles((oldFiles) => [...uploadInfos, ...oldFiles]);
   }
 
   return (
