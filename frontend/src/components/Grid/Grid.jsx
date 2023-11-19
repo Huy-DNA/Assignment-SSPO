@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -15,8 +15,11 @@ import {
   GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import { Toolbar } from '@mui/material';
+import { NotificationStatus } from '../../constants/notification';
+import useNotification from '../../hooks/useNotification';
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
+  const notify = useNotification();
   const handleAddRows = async () => {
     try {
       const newRow = await createNewRow();
@@ -25,9 +28,10 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
         ...oldModel,
         [newRow.id]: { mode: GridRowModes.Edit, fieldToFocus: columns[0].field },
       }));
+      notify(NotificationStatus.OK, '');
     } catch (e) {
-      console.log(e);
-    }
+      notify(NotificationStatus.ERR, e.message);
+    } 
   };
 
   const handleDeleteRows = async () => {
@@ -35,8 +39,9 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
       await deleteRows(checkedIds);
       setRows((oldRows) => oldRows.filter((row) => !checkedIds.includes(row.id)));
       setRowModesModel({});
+      notify(NotificationStatus.OK, '');
     } catch (e) {
-      console.log(e);
+      notify(NotificationStatus.ERR, e.message);
     }
   };
 
@@ -76,13 +81,15 @@ export default function Grid({
   showActions,
   showToolBar,
 }) {
+  const notify = useNotification();
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [checkedIds, setCheckedIds] = React.useState([]);
 
   React.useEffect(() => {
     loadRows().then((rows) => setRows((oldRows) => [...oldRows, ...rows]))
-              .then(() => setLoading(false)).catch(console.log);
+              .then(() => setLoading(false))
+              .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   const handleEditClick = (id) => () => {

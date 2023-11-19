@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUpFromBracket,
@@ -8,8 +8,12 @@ import axios from 'axios';
 import { UPLOAD_FILES_URL } from '../../constants/url';
 import { v4 as uuidv4 } from 'uuid';
 import { getClass } from 'file-icons-js';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+import { NotificationStatus } from '../../constants/notification';
+import useNotification from '../../hooks/useNotification';
 
 function FilesPage() {
+  const notify = useNotification();
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [files, setFiles] = useState([]);
 
@@ -18,7 +22,11 @@ function FilesPage() {
   };
   const onSubmitFiles = async () => {
     const uploadInfos = await Promise.all(uploadedFiles.map((file) => file.text().then((content) => ({ id: uuidv4(), name: file.name, content: content, uploadedAt: new Date(Date.now()), }))));
-    await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo])));
+    try {
+      await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({data}) => extractAPIResponse(data)))));
+    } catch (e) {
+      notify(NotificationStatus.ERR, e.message);
+    }
     setUploadedFiles([]);
     setFiles((oldFiles) => [...uploadInfos, ...oldFiles]);
   }
