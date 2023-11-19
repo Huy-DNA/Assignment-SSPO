@@ -23,9 +23,15 @@ async function LoginController(req, res) {
     } else {
       const { name, isManager, id } = userInfo.data;
       await addIfNewUser(userInfo.data);
-      res.cookie('name', name);
-      res.cookie('isManager', isManager);
-      res.cookie('id', id);
+      res.cookie('name', name, {
+        maxAge: 900000,
+      });
+      res.cookie('isManager', isManager, {
+        maxAge: 900000,
+      });
+      res.cookie('id', id, {
+        maxAge: 900000,
+      });
       const sessionId = await getSessionId(id);
       res.cookie('SESSION_ID', sessionId, {
         httpOnly: true,
