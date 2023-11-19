@@ -1,6 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import Joi from 'joi';
+import { Base64 } from 'js-base64';
 import getUserFromSession from '../../utils/getUserFromSession.js';
 import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
@@ -86,7 +87,10 @@ async function getFile(req, res) {
   if (user.id === file.userId) {
     res.send({
       success: true,
-      value: file,
+      value: {
+        ...file,
+        content: Base64.decode(file.content),
+      },
     });
     return;
   }
@@ -142,7 +146,8 @@ async function uploadFiles(req, res) {
     success: true,
     value: await client.file.createMany({
       data: fileInfos.map((file) => ({
-        ...file,
+        name: file.name,
+        content: Base64.encode(file.content),
         userId: user.id,
       })),
     }),

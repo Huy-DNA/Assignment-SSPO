@@ -60,6 +60,7 @@
     "http-errors": "^2.0.0",
     "http-server": "^14.1.1",
     "joi": "^17.11.0",
+    "js-base64": "^3.7.5",
     "mdb-react-ui-kit": "^6.3.0",
     "mini-css-extract-plugin": "^2.7.6",
     "moment": "^2.29.4",
