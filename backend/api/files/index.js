@@ -28,6 +28,7 @@ async function getFiles(req, res) {
     },
     where: {
       userId: user.isManager ? undefined : user.id,
+      isDeleted: false,
     },
   });
 
@@ -121,6 +122,7 @@ async function getFile(req, res) {
  */
 async function uploadFiles(req, res) {
   const schema = Joi.array().items(Joi.object({
+    id: Joi.string().optional(),
     name: Joi.string().allow(''),
     content: Joi.string().allow(''),
   }));
@@ -146,6 +148,7 @@ async function uploadFiles(req, res) {
     success: true,
     value: await client.file.createMany({
       data: fileInfos.map((file) => ({
+        id: file.id,
         name: file.name,
         content: Base64.encode(file.content),
         userId: user.id,
@@ -173,7 +176,7 @@ async function deleteFiles(req, res) {
 
   res.send({
     success: true,
-    data: await client.file.deleteMany({
+    data: await client.file.updateMany({
       data: {
         isDeleted: true,
       },

@@ -6,16 +6,20 @@ import {
 import FileGrid from '../../components/FileGrid/FileGrid';
 import axios from 'axios';
 import { UPLOAD_FILES_URL } from '../../constants/url';
+import { v4 as uuidv4 } from 'uuid';
 
 function FilesPage() {
+  const [uploadedFiles, setUploadedFiles] = useState([]);
   const [files, setFiles] = useState([]);
+
   const handleFilesChange = (e) => {
-    setFiles([...files, ...e.target.files]);;
+    setUploadedFiles([...uploadedFiles, ...e.target.files]);;
   };
   const onSubmitFiles = async () => {
-    await Promise.all(files.map((file) => file.text().then((content) => ({ name: file.name, content: content }))
-                                                     .then((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]))));
-    setFiles([]);
+    const uploadInfos = await Promise.all(uploadedFiles.map((file) => file.text().then((content) => ({ id: uuidv4(), name: file.name, content: content }))));
+    await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo])));
+    setUploadedFiles([]);
+    setFiles([...uploadInfos, ...files]);
   }
 
   return (
@@ -26,10 +30,10 @@ function FilesPage() {
           <h3 className="text-center m-5">Tải lên file của bạn ở đây</h3>
         </div>
       </label>
-      { files.length > 0 && <button onClick={onSubmitFiles}>Upload files</button> }
+      { uploadedFiles.length > 0 && <button onClick={onSubmitFiles}>Upload files</button> }
       <input type="file" multiple id="fileUpload" className="hidden" onChange={handleFilesChange}/>
       
-      <FileGrid />
+      <FileGrid files={files} setFiles={setFiles} />
     </div>
   );
 }

@@ -6,9 +6,8 @@ import extractAPIResponse from '../../utils/extractAPIResponse';
 import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../constants/loginStatus';
 
-export default function PrinterGrid() {
+export default function FileGrid({ files, setFiles }) {
   const isUser = useSelector(state => state.loginStatus.value) === LoginStatus.USER;
-  const [files, setFiles] = React.useState([]);
   const loadFiles = () => axios.get(GET_FILES_URL)
     .then(({ data }) => extractAPIResponse(data));
   const deleteFiles = (ids) => axios.post(DELETE_FILES_URL, ids)
