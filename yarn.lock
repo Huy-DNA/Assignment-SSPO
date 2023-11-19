@@ -4161,6 +4161,10 @@ file-entry-cache@^6.0.1:
   dependencies:
     flat-cache "^3.0.4"
 
+file-icons-js@websemantics/file-icons-js:
+  version "1.1.0"
+  resolved "https://codeload.github.com/websemantics/file-icons-js/tar.gz/8b397223dc14fa57600f1b06c787dfd2107c4449"
+
 file-loader@^6.2.0:
   version "6.2.0"
   resolved "https://registry.yarnpkg.com/file-loader/-/file-loader-6.2.0.tgz#baef7cf8e1840df325e4390b4484879480eebe4d"

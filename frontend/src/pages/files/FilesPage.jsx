@@ -7,6 +7,7 @@ import FileGrid from '../../components/FileGrid/FileGrid';
 import axios from 'axios';
 import { UPLOAD_FILES_URL } from '../../constants/url';
 import { v4 as uuidv4 } from 'uuid';
+import { getClass } from 'file-icons-js';
 
 function FilesPage() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
@@ -32,13 +33,23 @@ function FilesPage() {
       </label>
       { 
         uploadedFiles.length > 0 &&
-        <div className="rounded-md flex flex-col p-5 m-10">
+        <div className="rounded-md flex flex-col p-5 m-10 bg-gray-100">
           <button
             onClick={onSubmitFiles}
-            className="rounded-lg bg-gray-100 border-2 border-b-slate-300 w-20 h-10 self-end"
+            className="rounded-lg bg-gray-200 border-2 border-slate-300 w-20 h-10 self-end"
           >
             Upload
           </button>
+          
+          <div className="m-5">
+            {
+              uploadedFiles.map((file) => (
+                <div key={`${file.name}@${file.uploadedAt}`} className="bg-gray-200 border-2 rounded-lg p-2 m-2">
+                  <span className={`${getClass(file.name)}`}></span> &nbsp; { file.name }
+                </div>
+              ))
+            }
+          </div>
         </div>
       }
       <input type="file" multiple id="fileUpload" className="hidden" onChange={handleFilesChange}/>
