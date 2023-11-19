@@ -17,6 +17,7 @@ import {
 import { Toolbar } from '@mui/material';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
+import extractAPIResponse from '../../utils/extractAPIResponse';
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
   const notify = useNotification();
@@ -102,7 +103,14 @@ export default function Grid({
 
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
-    deleteRows([id]).catch(console.log);
+    deleteRows([id]).then(() => notify(
+                      NotificationStatus.OK,
+                      '',
+                    ))
+                    .catch((e) => notify(
+                      NotificationStatus.ERR,
+                      e.message,
+                    ));
   };
 
   const handleCancelClick = (id) => () => {
@@ -167,15 +175,24 @@ export default function Grid({
   };
 
   const processRowUpdate = (updatedRow) => {
-    updateRows([updatedRow]);
-    setRows((oldRows) => {
-      const newRows = [...oldRows];
-      const updatedRowId = newRows.findIndex((row) => row.id === updatedRow.id);
-      if (updatedRowId >= 0) {
-        newRows[updatedRowId] = updatedRow;
-      }
-      return newRows;
-    });
+    updateRows([updatedRow])
+      .then(() => notify(
+        NotificationStatus.OK,
+        '',
+      ))
+      .then(() =>
+        setRows((oldRows) => {
+          const newRows = [...oldRows];
+          const updatedRowId = newRows.findIndex((row) => row.id === updatedRow.id);
+          if (updatedRowId >= 0) {
+            newRows[updatedRowId] = updatedRow;
+          }
+          return newRows;
+      }))
+      .catch((e) => notify(
+        NotificationStatus.ERR,
+        e.message,
+      ));
     return updatedRow;
   };
 
