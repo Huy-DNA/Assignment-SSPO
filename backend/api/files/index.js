@@ -117,8 +117,8 @@ async function getFile(req, res) {
  */
 async function uploadFiles(req, res) {
   const schema = Joi.array().items(Joi.object({
-    name: Joi.string(),
-    content: Joi.string(),
+    name: Joi.string().allow(''),
+    content: Joi.string().allow(''),
   }));
 
   const { error, value: fileInfos } = schema.validate(req.body);
@@ -189,8 +189,8 @@ async function deleteFiles(req, res) {
 async function modifyFiles(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string(),
-    name: Joi.string().optional(),
-    content: Joi.string().optional(),
+    name: Joi.string().allow('').optional(),
+    content: Joi.string().allow('').optional(),
   }));
 
   const { error, value: fileModifiers } = schema.validate(req.body);
@@ -212,9 +212,13 @@ async function modifyFiles(req, res) {
       success: true,
       data: {
         count: (await Promise.all(
-          fileModifiers.map((modifier) => client.file.update({
+          fileModifiers.map((modifier) => client.file.upsert({
             where: {
               id: modifier.id,
+              userId: user.id,
+            },
+            create: {
+              ...modifier,
               userId: user.id,
             },
             data: {

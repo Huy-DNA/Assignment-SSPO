@@ -30,6 +30,7 @@ export default function PrinterGrid() {
       headerName: 'Code',
       align: 'right',
       headerAlign: 'right',
+      hideable: true,
       flex: 1,
     },
     {
@@ -38,6 +39,7 @@ export default function PrinterGrid() {
       align: 'right',
       headerAlign: 'right',
       editable: isManager,
+      hideable: true,
       flex: 2,
     },
     {
@@ -46,6 +48,7 @@ export default function PrinterGrid() {
       align: 'right',
       headerAlign: 'right',
       editable: isManager,
+      hideable: true,
       flex: 2,
     },
     {
@@ -56,6 +59,7 @@ export default function PrinterGrid() {
       align: 'right',
       headerAlign: 'right',
       editable: isManager,
+      hideable: true,
       flex: 1,
     },
     {
@@ -66,6 +70,7 @@ export default function PrinterGrid() {
       align: 'right',
       headerAlign: 'right',
       editable: isManager,
+      hideable: true,
       flex: 1,
     },
     {
@@ -75,6 +80,7 @@ export default function PrinterGrid() {
       align: 'right',
       headerAlign: 'right',
       editable: isManager,
+      hideable: true,
       flex: 1,
     },
     {
@@ -84,6 +90,7 @@ export default function PrinterGrid() {
       headerAlign: 'right',
       editable: isManager,
       type: 'singleSelect',
+      hideable: true,
       valueOptions: [true, false],
       renderCell: (params) => (
         <span className={params.value ? 'text-blue-700' : 'text-gray-600'}>{`${params.value}`}</span>
@@ -95,6 +102,7 @@ export default function PrinterGrid() {
       headerName: 'Desc.',
       editable: isManager,
       type: 'text',
+      hideable: true,
       flex: 2,
     },
   ];

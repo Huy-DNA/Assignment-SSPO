@@ -16,7 +16,7 @@ import {
 } from '@mui/x-data-grid';
 import { Toolbar } from '@mui/material';
 
-function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns }) {
+function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
   const handleAddRows = async () => {
     try {
       const newRow = await createNewRow();
@@ -44,13 +44,19 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
     <div>
       <GridToolbarContainer>
         <Toolbar>
-          <div className="flex flex-row">
-            <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRows}>
-              Thêm
-            </Button>
-            <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeleteRows}>
-              Xoá
-            </Button>
+          <div className="flex flex-row gap-2">
+            {
+              (showToolBar === true || showToolBar.showAdd) && 
+                <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRows}>
+                  Thêm
+                </Button>
+            }
+            {
+              (showToolBar === true || showToolBar.showDel) &&
+              <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeleteRows}>
+                Xoá
+              </Button>
+            }
             <GridToolbarQuickFilter />
           </div>
         </Toolbar>
@@ -103,7 +109,7 @@ export default function Grid({
     {
       field: 'actions',
       type: 'actions',
-      headerName: 'Actions',
+      headerName: '',
       width: 100,
       cellClassName: 'actions',
       getActions: ({ id }) => {
@@ -199,6 +205,7 @@ export default function Grid({
             createNewRow,
             deleteRows,
             columns: augmentedColumns,
+            showToolBar,
           },
         }}
       />
