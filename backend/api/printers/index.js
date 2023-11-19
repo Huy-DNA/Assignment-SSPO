@@ -124,7 +124,10 @@ async function addPrinters(req, res) {
   if (error) {
     res.send({
       success: false,
-      error,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.details[0].message,
+      },
     });
     return;
   }
@@ -149,7 +152,10 @@ async function deletePrinters(req, res) {
   if (error) {
     res.send({
       success: false,
-      error,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.details[0].message,
+      },
     });
     return;
   }
@@ -191,7 +197,10 @@ async function modifyPrinters(req, res) {
   if (error) {
     res.send({
       success: false,
-      error,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.details[0].message,
+      },
     });
     return;
   }

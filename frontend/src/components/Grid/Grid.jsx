@@ -17,7 +17,6 @@ import {
 import { Toolbar } from '@mui/material';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
-import extractAPIResponse from '../../utils/extractAPIResponse';
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
   const notify = useNotification();
@@ -174,7 +173,7 @@ export default function Grid({
     setRowModesModel(newRowModesModel);
   };
 
-  const processRowUpdate = (updatedRow) => {
+  const processRowUpdate = (updatedRow, originalRow) => {
     updateRows([updatedRow])
       .then(() => notify(
         NotificationStatus.OK,
@@ -192,8 +191,8 @@ export default function Grid({
       .catch((e) => notify(
         NotificationStatus.ERR,
         e.message,
-      ));
-    return updatedRow;
+      ))
+    return originalRow;
   };
 
   return (

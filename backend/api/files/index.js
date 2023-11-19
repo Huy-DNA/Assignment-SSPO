@@ -135,7 +135,7 @@ async function uploadFiles(req, res) {
       success: false,
       error: {
         code: ErrorCode.BAD_PAYLOAD,
-        message: error.message,
+        message: error.details[0].message,
       },
     });
     return;
@@ -171,7 +171,10 @@ async function deleteFiles(req, res) {
   if (error) {
     res.send({
       success: false,
-      error,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.details[0].message,
+      },
     });
     return;
   }
@@ -208,7 +211,10 @@ async function modifyFiles(req, res) {
   if (error) {
     res.send({
       success: false,
-      error,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.details[0].message,
+      },
     });
     return;
   }
