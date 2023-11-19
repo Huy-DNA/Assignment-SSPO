@@ -125,6 +125,7 @@ async function uploadFiles(req, res) {
     id: Joi.string().optional(),
     name: Joi.string().allow(''),
     content: Joi.string().allow(''),
+    uploadedAt: Joi.date().optional(),
   }));
 
   const { error, value: fileInfos } = schema.validate(req.body);
@@ -151,6 +152,7 @@ async function uploadFiles(req, res) {
         id: file.id,
         name: file.name,
         content: Base64.encode(file.content),
+        uploadedAt: file.uploadedAt,
         userId: user.id,
       })),
     }),

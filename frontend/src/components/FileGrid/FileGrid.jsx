@@ -9,7 +9,8 @@ import { LoginStatus } from '../../constants/loginStatus';
 export default function FileGrid({ files, setFiles }) {
   const isUser = useSelector(state => state.loginStatus.value) === LoginStatus.USER;
   const loadFiles = () => axios.get(GET_FILES_URL)
-    .then(({ data }) => extractAPIResponse(data));
+    .then(({ data }) => extractAPIResponse(data))
+    .then((rows) => rows.map((row) => ({...row, uploadedAt: new Date(row.uploadedAt), })));
   const deleteFiles = (ids) => axios.post(DELETE_FILES_URL, ids)
     .then(({ data }) => extractAPIResponse(data));
   const updateFiles = (rows) => axios.post(
@@ -42,11 +43,11 @@ export default function FileGrid({ files, setFiles }) {
         flex: 1,
       },
       {
-        field: 'createdAt',
-        headerName: 'Created at',
+        field: 'uploadedAt',
+        headerName: 'Uploaded at',
         align: 'right',
         headerAlign: 'right',
-        type: 'dateime',
+        type: 'dateTime',
         hideable: true,
         flex: 1,
       },
