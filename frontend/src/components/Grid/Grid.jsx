@@ -46,10 +46,10 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
         <Toolbar>
           <div className="flex flex-row">
             <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRows}>
-              Thêm máy in
+              Thêm
             </Button>
             <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeleteRows}>
-              Xoá máy in
+              Xoá
             </Button>
             <GridToolbarQuickFilter />
           </div>
