@@ -6,6 +6,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import ViewIcon from '@mui/icons-material/Visibility';
 import RemoveCircleOutlineIcon from '@mui/icons-material/RemoveCircleOutline';
 import {
   GridRowModes,
@@ -17,6 +18,8 @@ import {
 import { Toolbar } from '@mui/material';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
+import { useNavigate } from 'react-router';
+import { Link } from 'react-router-dom';
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
   const notify = useNotification();
@@ -82,6 +85,7 @@ export default function Grid({
   showToolBar,
 }) {
   const notify = useNotification();
+  const navigate = useNavigate();
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [checkedIds, setCheckedIds] = React.useState([]);
@@ -164,6 +168,14 @@ export default function Grid({
             onClick={handleDeleteClick(id)}
             color="inherit"
           />,
+          <GridActionsCellItem
+            icon={<ViewIcon />}
+            label="View"
+            color="inherit"
+            component={Link}
+            to={`./${id}`}
+            target="_blank" 
+          />
         ];
       },
     },

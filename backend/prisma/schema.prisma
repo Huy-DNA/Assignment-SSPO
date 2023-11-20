@@ -46,7 +46,7 @@ model File {
   user       Student      @relation(fields: [userId], references: [id])
   name       String
   uploadedAt DateTime     @default(now())
-  content    Bytes
+  content    String
   PrinterJob PrinterJob[]
   isDeleted  Boolean      @default(false)
 }

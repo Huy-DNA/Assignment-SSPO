@@ -90,7 +90,7 @@ async function getFile(req, res) {
       success: true,
       value: {
         ...file,
-        content: file.content.toString('utf-8'),
+        content: file.content.toString('base64'),
       },
     });
     return;
@@ -145,15 +145,13 @@ async function uploadFiles(req, res) {
 
   const user = await getUserFromSession(SESSION_ID);
 
-  console.log(fileInfos[0].content.slice(0, 10));
-  console.log(Base64.encode(fileInfos[0].content).slice(0, 10));
   res.send({
     success: true,
     value: await client.file.createMany({
       data: fileInfos.map((file) => ({
         id: file.id,
         name: file.name,
-        content: Base64.encode(file.content),
+        content: file.content,
         uploadedAt: file.uploadedAt,
         userId: user.id,
       })),
@@ -237,13 +235,13 @@ async function modifyFiles(req, res) {
             },
             create: {
               ...modifier,
-              content: Base64.encode(modifier.content || ''),
+              content: modifier.content,
               userId: user.id,
             },
             update: {
               ...modifier,
               content: typeof modifier.content === 'string'
-                ? Base64.encode(modifier.content)
+                ? modifier.content
                 : undefined,
               id: undefined,
             },
