@@ -26,4 +26,5 @@ export const userRoutes = [
   { path: '/printers/:id', component: PrinterDetailPage },
   { path: '/files', component: FilesPage },
   { path: '/files/:id', component: FileDetailPage },
+  { path: '/history', component: HistoryPage },
 ];
