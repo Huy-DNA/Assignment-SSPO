@@ -11,35 +11,63 @@ import { getClass } from 'file-icons-js';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
+import { PDFDocument } from 'pdf-lib';
+
+import Docxtemplater from 'docxtemplater';
 
 function FilesPage() {
   const notify = useNotification();
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [files, setFiles] = useState([]);
 
-  const handleFilesChange = (e) => {
-    setUploadedFiles([...uploadedFiles, ...e.target.files]);;
-  };
+  const handleGetNumbersPagePDF = async (files) => {
+    console.log(files)
+    const numPagesPromises = Array.from(files).map(async (file) => {
+      try {
+        const fileContent = await file.arrayBuffer();
+        const pdfDoc = await PDFDocument.load(fileContent);
+        const context = pdfDoc.context;
+
+        const numPages = pdfDoc.getPageCount();
+        return numPages;
+      } catch (error) {
+        console.error('Error processing file:', error);
+        return -1;
+      }
+    });
+
+    try {
+      const numPagesArray = await Promise.all(numPagesPromises);
+      console.log(numPagesArray);
+    } catch (error) {
+      console.error('Error processing files:', error);
+    }
+  }
+
+  const handleFilesChange = async (e) => {
+    handleGetNumbersPagePDF(e.target.files);
+    setUploadedFiles([...uploadedFiles, ...e.target.files]);
+  }
+
   const onSubmitFiles = async () => {
     const uploadInfos = await Promise.all(uploadedFiles.map((file) => file.text().then((content) => ({ id: uuidv4(), name: file.name, content: content, uploadedAt: new Date(Date.now()), }))));
     try {
-      await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({data}) => extractAPIResponse(data)))));
+      await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({ data }) => extractAPIResponse(data)))));
     } catch (e) {
       notify(NotificationStatus.ERR, e.message);
     }
     setUploadedFiles([]);
     setFiles((oldFiles) => [...uploadInfos, ...oldFiles]);
   }
-
   return (
     <div>
       <label htmlFor="fileUpload">
         <div className="rounded-md border-gray-600 border-dashed border-2 bg-gray-200 flex flex-col p-20 m-10 hover:cursor-pointer">
-          <FontAwesomeIcon icon={faArrowUpFromBracket} className="text-5xl"/>
+          <FontAwesomeIcon icon={faArrowUpFromBracket} className="text-5xl" />
           <h3 className="text-center m-5">Tải lên file của bạn ở đây</h3>
         </div>
       </label>
-      { 
+      {
         uploadedFiles.length > 0 &&
         <div className="rounded-md flex flex-col p-5 m-10 bg-gray-100">
           <button
@@ -48,20 +76,20 @@ function FilesPage() {
           >
             Upload
           </button>
-          
+
           <div className="m-5">
             {
               uploadedFiles.map((file) => (
                 <div key={`${file.name}@${file.uploadedAt}`} className="bg-gray-200 border-2 rounded-lg p-2 m-2">
-                  <span className={`${getClass(file.name)}`}></span> &nbsp; { file.name }
+                  <span className={`${getClass(file.name)}`}></span> &nbsp; {file.name}
                 </div>
               ))
             }
           </div>
         </div>
       }
-      <input type="file" multiple id="fileUpload" className="hidden" onChange={handleFilesChange}/>
-      
+      <input type="file" multiple id="fileUpload" className="hidden" onChange={handleFilesChange} />
+
       <FileGrid files={files} setFiles={setFiles} />
     </div>
   );

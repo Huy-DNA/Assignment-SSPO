@@ -1,7 +1,18 @@
 import React from "react";
-
+import { useEffect } from "react";
+import axios from 'axios';
 
 function PrintFile() {
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/files').then((data) => {
+      console.log(data)
+    })
+      .catch(error => {
+        console.log(error)
+      });
+  }, []);
+
   return (
     <div className="w-full">
       <h1 className="text-3xl font-medium pl-80 pb-4">IN TÀI LIỆU</h1>
@@ -21,8 +32,8 @@ function PrintFile() {
               </select>
             </div>
           </div>
-          <div className="w-1/5 h-[41px] text-xl font-medium px-8 py-2 mt-[44px] bg-white mr-8 rounded-lg hover:cursor-pointer items-center hover:bg-gray-200">
-            <button>Tải file lên</button>
+          <div className="w-1/5 h-[41px] text-xl font-medium py-2 px-[2.4rem] mt-[44px] bg-white mr-8 rounded-lg hover:cursor-pointer items-center hover:bg-gray-200">
+            <button className="">Xác nhận</button>
           </div>
         </div>
         <div className="h-28 bg-white mx-8 my-8 rounded-lg"></div>
@@ -70,7 +81,7 @@ function PrintFile() {
           <button className="w-32 h-10 bg-red-500 hover:cursor-pointer hover:bg-red-800 text-white text-xl rounded-lg">
             Hủy
           </button>
-          <button className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-xl rounded-lg">
+          <button className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-white text-xl rounded-lg">
             Xác nhận
           </button>
         </div>
