@@ -40,6 +40,10 @@ const USER_ITEMS = [
     to: '/files',
   },
   {
+    title: 'In tài liệu',
+    to: '/printfile',
+  },
+  {
     title: 'Xem lịch sử',
     to: '/history',
   },
@@ -71,7 +75,7 @@ function Header() {
   return (
     loginStatus !== LoginStatus.NOT_LOGGED_IN ? (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-        <div className="w-16 h-16 m-4">
+        <div className="w-12 h-12 mx-2 ml-16">
           <Link to="/">
             <img src={images.logo} alt="logo-web" />
           </Link>
@@ -83,7 +87,7 @@ function Header() {
                 <Link
                   key={item.to}
                   to={item.to}
-                  className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out p-5 text-lg"
+                  className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out px-6 py-2 text-lg"
                 >
                   {item.title}
                 </Link>
@@ -92,11 +96,11 @@ function Header() {
           }
         </div>
         <div className="flex flex-row self-end items-center">
-          <div className="m-4 hover:cursor-pointer">
+          <div className="m-4 hover:cursor-pointer scale-125">
             <FontAwesomeIcon icon={faBell} />
           </div>
           <img
-            className="rounded-full w-10 h-10 m-4 self-end hover:cursor-pointer"
+            className="rounded-full w-10 h-10 m-4 mr-12 self-end hover:cursor-pointer"
             src={images.avatar}
             alt="user avatar"
             width={40}
@@ -106,12 +110,12 @@ function Header() {
       </div>
     ) : (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-        <div className="w-16 h-16 m-4">
+        <div className="w-12 h-12 mx-2 ml-16">
           <img src={images.logo} alt="logo-web" />
         </div>
 
         <div>
-          <a href="/login" className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out p-5 text-lg">
+          <a href="/login" className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out px-5 mr-16 my-[21px] text-lg">
             Đăng nhập
           </a>
         </div>
