@@ -13,7 +13,7 @@ const client = new PrismaClient();
 export async function getUsers(req, res) {
   res.send({
     success: true,
-    data: await client.user.findMany(),
+    value: await client.user.findMany(),
   });
 }
 
