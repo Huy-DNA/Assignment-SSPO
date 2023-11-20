@@ -3,6 +3,7 @@ import PrintersPage from '../pages/printers/PrintersPage';
 import FilesPage from '../pages/files/FilesPage';
 import PrinterDetailPage from '../pages/printerDetail/PrinterDetailPage';
 import FileDetailPage from '../pages/fileDetail/FileDetailPage';
+import HistoryPage from '../pages/history/HistoryPage';
 
 export const guestRoutes = [
   { path: '/', component: HomePage },
@@ -14,6 +15,7 @@ export const managerRoutes = [
   { path: '/', component: HomePage },
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
+  { path: '/history', component: HistoryPage },
 ];
 
 export const userRoutes = [
