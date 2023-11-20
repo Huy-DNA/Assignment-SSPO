@@ -26,7 +26,7 @@ export async function authManager(req, res, next) {
     where: {
       id: SESSION_ID,
     },
-  });
+  }) || {};
 
   if (!userId) {
     res.clearCookie('SESSION_ID');
@@ -83,7 +83,7 @@ export async function authStudent(req, res, next) {
     where: {
       id: SESSION_ID,
     },
-  });
+  }) || {};
 
   if (!userId) {
     res.send({
@@ -139,7 +139,7 @@ export async function authUser(req, res, next) {
     where: {
       id: SESSION_ID,
     },
-  });
+  }) || {};
 
   if (!userId) {
     res.send({

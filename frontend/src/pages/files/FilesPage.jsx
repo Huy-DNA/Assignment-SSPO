@@ -12,7 +12,7 @@ import extractAPIResponse from '../../utils/extractAPIResponse';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
 import { PDFDocument } from 'pdf-lib';
-
+import encodeUploadedFileToBase64 from '../../utils/encodeUploadedFileToBase64';
 import Docxtemplater from 'docxtemplater';
 
 function FilesPage() {
@@ -50,7 +50,12 @@ function FilesPage() {
   }
 
   const onSubmitFiles = async () => {
-    const uploadInfos = await Promise.all(uploadedFiles.map((file) => file.text().then((content) => ({ id: uuidv4(), name: file.name, content: content, uploadedAt: new Date(Date.now()), }))));
+    const uploadInfos = await Promise.all(
+      uploadedFiles.map(
+        (file) => encodeUploadedFileToBase64(file)
+          .then((content) => ({ id: uuidv4(), name: file.name, content, uploadedAt: new Date(Date.now()), }))
+      )
+    );
     try {
       await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({ data }) => extractAPIResponse(data)))));
     } catch (e) {

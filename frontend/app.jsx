@@ -1,11 +1,13 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Provider, useSelector } from 'react-redux';
-import React, { useEffect } from 'react';
-import { guestRoutes, managerRoutes, routeInfos, userRoutes } from './src/routes/routes';
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import React from 'react';
+import { guestRoutes, managerRoutes, userRoutes } from './src/routes/routes';
 import DefaultLayout from './src/layout/DefaultLayout/DefaultLayout';
 import './styles.css';
 import Breadcrumbs from './src/components/Breadcrumbs/Breadcrumbs';
 import { LoginStatus } from './src/constants/loginStatus';
+import FilesPage from './src/pages/files/FilesPage';
+import FileDetailPage from './src/pages/fileDetail/FileDetailPage';
 
 function App() {
   const loginStatus = useSelector(state => state.loginStatus.value);
@@ -26,6 +28,7 @@ function App() {
               <Route
                 key={route.path}
                 path={route.path}
+                exact
                 element={(
                   <Layout>
                     <div className="mx-10 my-5">
