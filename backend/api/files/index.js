@@ -90,7 +90,7 @@ async function getFile(req, res) {
       success: true,
       value: {
         ...file,
-        content: Base64.decode(file.content),
+        content: file.content.toString('utf-8'),
       },
     });
     return;
@@ -145,6 +145,8 @@ async function uploadFiles(req, res) {
 
   const user = await getUserFromSession(SESSION_ID);
 
+  console.log(fileInfos[0].content.slice(0, 10));
+  console.log(Base64.encode(fileInfos[0].content).slice(0, 10));
   res.send({
     success: true,
     value: await client.file.createMany({
