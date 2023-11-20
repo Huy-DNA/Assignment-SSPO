@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import Joi from 'joi';
-import { Base64 } from 'js-base64';
 import getUserFromSession from '../../utils/getUserFromSession.js';
 import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
