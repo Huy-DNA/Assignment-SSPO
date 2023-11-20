@@ -11,6 +11,9 @@ export default function HistoryPage() {
 
   return (
     <div>
+      <h1 className="text-blue-900 my-6 font-bold text-3xl">
+        XEM LỊCH SỬ IN & GIAO DỊCH
+      </h1>
       <Tabs value={tab} onChange={handleTabChange}>
         <Tab label="Printer Jobs"/>
         <Tab label="Transactions"/>
