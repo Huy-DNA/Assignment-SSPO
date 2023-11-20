@@ -39,6 +39,9 @@ function FilesPage() {
 
   return (
     <div>
+      <h1 className="text-blue-900 my-6 font-bold text-3xl">
+        QUẢN LÍ TÀI LIỆU
+      </h1>
       <label htmlFor="fileUpload">
         <div className="rounded-md border-gray-600 border-dashed border-2 bg-gray-200 flex flex-col p-20 m-10 hover:cursor-pointer">
           <FontAwesomeIcon icon={faArrowUpFromBracket} className="text-5xl"/>
