@@ -13,7 +13,6 @@ import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
 import { PDFDocument } from 'pdf-lib';
 import encodeUploadedFileToBase64 from '../../utils/encodeUploadedFileToBase64';
-import Docxtemplater from 'docxtemplater';
 
 function FilesPage() {
   const notify = useNotification();
