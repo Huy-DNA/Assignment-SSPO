@@ -5,6 +5,7 @@ import FilesAPI from './files/index.js';
 import PrinterJobsAPI from './printerJobs/index.js';
 import FeedbacksAPI from './feedbacks/index.js';
 import UsersAPI from './users/index.js';
+import TransactionsAPI from './transactions/index.js';
 
 const router = Router();
 
@@ -14,4 +15,5 @@ router.use('/files', FilesAPI);
 router.use('/printerjobs', PrinterJobsAPI);
 router.use('/feedbacks', FeedbacksAPI);
 router.use('/users', UsersAPI);
+router.use('/transactions', TransactionsAPI);
 export default router;
