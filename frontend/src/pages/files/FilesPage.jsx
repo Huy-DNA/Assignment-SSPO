@@ -44,7 +44,8 @@ function FilesPage() {
   }
 
   const handleFilesChange = async (e) => {
-    handleGetNumbersPagePDF(e.target.files);
+    // handleGetNumbersPagePDF(e.target.files);
+
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
   }
 

@@ -45,12 +45,12 @@ const USER_ITEMS = [
     to: '/printfile',
   },
   {
-    title: 'Xem lịch sử',
-    to: '/history',
+    title: 'Mua giấy in',
+    to: '/buypaper',
   },
   {
     title: 'Xem đánh giá',
-    to: '/feedbacks',
+    to: '/history',
   },
 ];
 
@@ -86,11 +86,7 @@ function Header() {
   return (
     loginStatus !== LoginStatus.NOT_LOGGED_IN ? (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-<<<<<<< HEAD
         <div className="w-12 h-12 mx-2 ml-16">
-=======
-        <div className="w-16 h-16 mx-10">
->>>>>>> 9d1e8679a2cddbf806194c19736946499c703904
           <Link to="/">
             <img src={images.logo} alt="logo-web" />
           </Link>
@@ -139,11 +135,7 @@ function Header() {
       </div>
     ) : (
       <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-<<<<<<< HEAD
         <div className="w-12 h-12 mx-2 ml-16">
-=======
-        <div className="w-16 h-16 mx-10">
->>>>>>> 9d1e8679a2cddbf806194c19736946499c703904
           <img src={images.logo} alt="logo-web" />
         </div>
 
