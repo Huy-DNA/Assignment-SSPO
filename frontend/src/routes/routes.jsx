@@ -6,6 +6,7 @@ import FileDetailPage from '../pages/fileDetail/FileDetailPage';
 import HistoryPage from '../pages/history/HistoryPage';
 import UsersPage from '../pages/users/UserPage';
 import ReportsPage from '../pages/reports/ReportsPage';
+import ReportDetailPage from '../pages/reportDetail/ReportDetailPage';
 
 export const guestRoutes = [
   { path: '/', component: HomePage },
@@ -20,6 +21,7 @@ export const managerRoutes = [
   { path: '/history', component: HistoryPage },
   { path: '/accounts', component: UsersPage },
   { path: '/reports', component: ReportsPage },
+  { path: '/reports/:id', component: ReportDetailPage },
 ];
 
 export const userRoutes = [

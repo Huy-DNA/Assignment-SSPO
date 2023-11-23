@@ -11,10 +11,10 @@ export const UPDATE_FILES_URL = '/api/files/update';
 export const UPLOAD_FILES_URL = '/api/files/upload';
 export const DELETE_FILES_URL = '/api/files/delete';
 
-export const GET_PRINTERJOBS_URL = '/api/printerjobs/';
+export const GET_PRINTERJOBS_URL = '/api/printerjobs';
 
-export const GET_TRANSACTIONS_URL = '/api/transactions/';
+export const GET_TRANSACTIONS_URL = '/api/transactions';
 
-export const GET_USERS_URL = '/api/users/';
+export const GET_USERS_URL = '/api/users';
 
-export const GET_REPORTS_URL = '/api/reports/';
+export const GET_REPORTS_URL = '/api/reports';
