@@ -20,6 +20,7 @@ function FilesPage() {
 
   const handleFilesChange = (e) => {
     setUploadedFiles((uploadedFiles) => [...uploadedFiles, ...e.target.files]);
+    e.target.value = null;
   };
   const onSubmitFiles = async () => {
     const uploadInfos = await Promise.all(
