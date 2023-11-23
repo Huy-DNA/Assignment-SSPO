@@ -11,8 +11,12 @@ export default function UserGrid() {
   const deleteUsers = (ids) => { throw new Error('Not supported') };
   const updateUsers = (rows) => { throw new Error('Not supported') };
   const createNewUser = () => { throw new Error('Not supported') };
-  const showActions = false;
-  const showToolBar = false;
+  const showActions = {
+    showView: true,
+  };
+  const showToolBar = {
+    showSearch: true,
+  };
   const columns = [
     {
       field: 'id',

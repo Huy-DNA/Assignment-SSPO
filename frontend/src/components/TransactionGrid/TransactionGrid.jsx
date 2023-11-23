@@ -11,8 +11,12 @@ export default function TransactionGrid() {
   const deleteTransactions = (ids) => { throw new Error('Not supported') };
   const updateTransactions = (rows) => { throw new Error('Not supported') };
   const createNewTransaction = () => { throw new Error('Not supported') };
-  const showActions = false;
-  const showToolBar = false;
+  const showActions = {
+    showView: true,
+  };
+  const showToolBar = {
+    showSearch: true,
+  };
   const columns = [
     {
       field: 'id',

@@ -65,7 +65,10 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
                 Xoá
               </Button>
             }
-            <GridToolbarQuickFilter />
+            {
+              (showToolBar === true || showToolBar.showSearch) &&
+              <GridToolbarQuickFilter />
+            }
           </div>
         </Toolbar>
       </GridToolbarContainer>
@@ -155,27 +158,39 @@ export default function Grid({
         }
 
         return [
-          <GridActionsCellItem
-            icon={<EditIcon />}
-            label="Edit"
-            className="textPrimary"
-            onClick={handleEditClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<DeleteIcon />}
-            label="Delete"
-            onClick={handleDeleteClick(id)}
-            color="inherit"
-          />,
-          <GridActionsCellItem
-            icon={<ViewIcon />}
-            label="View"
-            color="inherit"
-            component={Link}
-            to={`./${id}`}
-            target="_blank" 
-          />
+          ...(
+            (showActions === true || showActions.showEdit) ? [
+              <GridActionsCellItem
+                icon={<EditIcon />}
+                label="Edit"
+                className="textPrimary"
+                onClick={handleEditClick(id)}
+                color="inherit"
+              />
+            ] : []
+          ),
+          ...(
+            (showActions === true || showActions.showDel) ? [
+              <GridActionsCellItem
+                icon={<DeleteIcon />}
+                label="Delete"
+                onClick={handleDeleteClick(id)}
+                color="inherit"
+              />
+            ] : []
+          ),
+          ...(
+            (showActions || showActions.showEdit) ? [
+              <GridActionsCellItem
+                icon={<ViewIcon />}
+                label="View"
+                color="inherit"
+                component={Link}
+                to={`./${id}`}
+                target="_blank" 
+              />
+            ] : []
+          ), 
         ];
       },
     },
