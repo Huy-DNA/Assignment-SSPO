@@ -16,3 +16,5 @@ export const GET_PRINTERJOBS_URL = '/api/printerjobs/';
 export const GET_TRANSACTIONS_URL = '/api/transactions/';
 
 export const GET_USERS_URL = '/api/users/';
+
+export const GET_REPORTS_URL = '/api/reports/';

@@ -14,7 +14,7 @@ const client = new PrismaClient();
 export async function getReports(req, res) {
   res.send({
     success: true,
-    data: await client.report.findMany({
+    value: await client.report.findMany({
       select: {
         id: true,
         week: true,

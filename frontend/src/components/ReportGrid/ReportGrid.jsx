@@ -1,0 +1,56 @@
+import React from 'react';
+import { GET_REPORTS_URL } from '../../constants/url';
+import Grid from '../Grid/Grid';
+import axios from 'axios';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+
+export default function ReportGrid() {
+  const [reports, setReports] = React.useState([]);
+  const loadReports = () => axios.get(GET_REPORTS_URL)
+    .then(({ data }) => extractAPIResponse(data));
+  const deleteReports = (ids) => { throw new Error('Not supported') };
+  const updateReports = (rows) => { throw new Error('Not supported') };
+  const createNewReport = () => { throw new Error('Not supported') };
+  const showActions = false;
+  const showToolBar = false;
+  const columns = [
+    {
+      field: 'id',
+      headerName: 'Id',
+      align: 'right',
+      headerAlign: 'right',
+      hideable: true,
+      flex: 1,
+    },
+    {
+      field: 'week',
+      headerName: 'Week',
+      align: 'right',
+      headerAlign: 'right',
+      hideable: true,
+      flex: 1,
+    },
+    {
+      field: 'year',
+      headerName: 'Year',
+      align: 'right',
+      headerAlign: 'right',
+      hideable: true,
+      flex: 1,
+    },
+  ];
+
+  return (
+    <Grid
+      columns={columns}
+      createNewRow={createNewReport}
+      deleteRows={deleteReports}
+      loadRows={loadReports}
+      rows={reports}
+      setRows={setReports}
+      showActions={showActions}
+      showToolBar={showToolBar}
+      updateRows={updateReports}
+    />
+  );
+}

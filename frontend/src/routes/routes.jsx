@@ -5,6 +5,7 @@ import PrinterDetailPage from '../pages/printerDetail/PrinterDetailPage';
 import FileDetailPage from '../pages/fileDetail/FileDetailPage';
 import HistoryPage from '../pages/history/HistoryPage';
 import UsersPage from '../pages/users/UserPage';
+import ReportsPage from '../pages/reports/ReportsPage';
 
 export const guestRoutes = [
   { path: '/', component: HomePage },
@@ -18,6 +19,7 @@ export const managerRoutes = [
   { path: '/printers/:id', component: PrinterDetailPage },
   { path: '/history', component: HistoryPage },
   { path: '/accounts', component: UsersPage },
+  { path: '/reports', component: ReportsPage },
 ];
 
 export const userRoutes = [
