@@ -13,6 +13,7 @@ export const guestRoutes = [
   { path: '/', component: HomePage },
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
+  { path: '/payment', component: PaymentMethod},
 ];
 
 export const managerRoutes = [
