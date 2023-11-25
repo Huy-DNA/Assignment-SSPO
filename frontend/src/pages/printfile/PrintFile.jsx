@@ -1,63 +1,115 @@
 import React from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from 'axios';
 
+import images from "../../../assets/images/images";
+
 function PrintFile() {
+  let fileIndex;
+  const [files, setFiles] = useState([]);
+  const [fileToPrint, setFileToPrint] = useState({
+    file: '',
+    pageType: '',
+    numberPage: '',
+    idPrinter: '',
+  });
+  console.log(fileToPrint);
 
   useEffect(() => {
     axios.get('http://localhost:3000/api/files').then((data) => {
       console.log(data)
+      setFiles(data.data.value);
     })
       .catch(error => {
         console.log(error)
       });
   }, []);
 
+  const getInfoFile = (fileName) => {
+    return files.findIndex((value) => value.name === fileName);
+  }
+
   return (
     <div className="w-full">
       <h1 className="text-3xl font-medium pl-80 pb-4">IN TÀI LIỆU</h1>
       <div className="w-[50rem] h-[40rem] mx-auto bg-blue-200 rounded-3xl">
         <div className="w-full flex justify-between">
-          <div className="w-4/6 flex justify-start flex-col mt-4 mb-3 ml-8">
+          <div className="w-full flex justify-start flex-col mt-4 mb-3 mx-8">
             <div>
               <label className="font-medium mb-1 text-xl">Chọn file để in</label>
               <select
-                id="role"
-                className="input min-w-[30rem] min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
+                id="file"
+                className="input w-full min-w-[30rem] min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
                 style={{ fontSize: '18px', padding: '6px' }}
+                onChange={(e) => {
+                  e.target.value === 'Chọn file đã tải lên' ? (
+                    setFileToPrint({ ...fileToPrint, file: '' })
+                  ) : (
+                    setFileToPrint({ ...fileToPrint, file: e.target.value, numberPage: 44 })
+                  );
+                }}
               >
                 <option style={{ fontSize: '18px', padding: '6px' }}>Chọn file đã tải lên</option>
-                <option value="DSA" style={{ fontSize: '18px', padding: '6px' }}>Cấu trúc dl&gt</option>
-                <option value="MD" style={{ fontSize: '18px', padding: '6px' }}>Mô hình hóa toán học</option>
+                {
+                  files && files.map((file, index) => (
+                    <option value={file.name} key={file.id} style={{ fontSize: '18px', padding: '6px' }}>{file.name}</option>
+                  ))
+                }
               </select>
             </div>
           </div>
-          <div className="w-1/5 h-[41px] text-xl font-medium py-2 px-[2.4rem] mt-[44px] bg-white mr-8 rounded-lg hover:cursor-pointer items-center hover:bg-gray-200">
-            <button className="">Xác nhận</button>
-          </div>
         </div>
-        <div className="h-28 bg-white mx-8 my-8 rounded-lg"></div>
+        <div className="h-28 bg-white mx-8 my-8 rounded-lg flex">
+          {
+            fileToPrint.file ? (
+              <div className="mt-2 ml-2 flex">
+                <img src={images.file} className="w-24 h-24 mr-4" />
+                <div className="">
+                  <h2 className="font-medium text-2xl">{files[getInfoFile(fileToPrint.file)].name}</h2>
+                  <h2 className="font-normal text-xl">Loại file: {files[getInfoFile(fileToPrint.file)].name.split('.').pop()}</h2>
+                  <h2 className="font-normal text-xl">Số trang: 44</h2>
+                </div>
+              </div>
+            ) : (
+              <div className="mt-2 ml-2">
+              </div>
+            )
+          }
+        </div>
         <div className="mx-8">
           <label className="font-medium mb-1 text-xl">Chọn khổ giấy in in</label>
           <select
             id="role"
             className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
             style={{ fontSize: '18px', padding: '6px' }}
+            onChange={(e) => {
+              setFileToPrint({ ...fileToPrint, pageType: e.target.value})
+            }}
           >
             <option style={{ fontSize: '18px', padding: '6px' }}>Chọn khổ giấy in</option>
-            <option value="DSA" style={{ fontSize: '18px', padding: '6px' }}>A4</option>
-            <option value="MD" style={{ fontSize: '18px', padding: '6px' }}>A3</option>
+            <option value="A4" style={{ fontSize: '18px', padding: '6px' }}>A4</option>
+            <option value="A3" style={{ fontSize: '18px', padding: '6px' }}>A3</option>
           </select>
         </div>
         <div className="mx-8 flex justify-between mt-8">
           <div>
             <div className="font-medium mb-1 text-xl">Số trang giấy in</div>
             <div className="w-3/8 h-[41px] bg-white text-xl px-20 py-2 rounded-lg">
-              100 trang
+              {
+                fileToPrint.file && fileToPrint.pageType === 'A4' ? (
+                  fileToPrint.numberPage
+                ) : (
+                  fileToPrint.file && fileToPrint.pageType === 'A3' ? (
+                    fileToPrint.numberPage * 2
+                  ) : (
+                    <></>
+                  )
+                )
+              }
             </div>
           </div>
           <div>
-          <div className="font-medium mb-1 text-xl">Số trang giấy in còn lại</div>
+            <div className="font-medium mb-1 text-xl">Số trang giấy in còn lại</div>
             <div className="w-3/8 h-[41px] bg-white text-xl px-20 py-2 rounded-lg">
               200 trang
             </div>

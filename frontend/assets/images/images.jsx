@@ -5,6 +5,7 @@ import instalogo from './instagram-logo.svg';
 import twitterlogo from './twitter-logo.svg';
 import printer from './printer.png';
 import paper from './papper-image.png';
+import file from './file-image.jpg';
 
 const images = {
   logo,
@@ -14,6 +15,7 @@ const images = {
   twitterlogo,
   printer,
   paper,
+  file,
 };
 
 export default images;

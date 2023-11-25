@@ -1,16 +1,16 @@
 import React from 'react';
-import { GET_USERS_URL } from '../../constants/url';
+import { GET_REPORTS_URL } from '../../constants/url';
 import Grid from '../Grid/Grid';
 import axios from 'axios';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 
-export default function UserGrid() {
-  const [users, setUsers] = React.useState([]);
-  const loadUsers = () => axios.get(GET_USERS_URL)
+export default function ReportGrid() {
+  const [reports, setReports] = React.useState([]);
+  const loadReports = () => axios.get(GET_REPORTS_URL)
     .then(({ data }) => extractAPIResponse(data));
-  const deleteUsers = (ids) => { throw new Error('Not supported') };
-  const updateUsers = (rows) => { throw new Error('Not supported') };
-  const createNewUser = () => { throw new Error('Not supported') };
+  const deleteReports = (ids) => { throw new Error('Not supported') };
+  const updateReports = (rows) => { throw new Error('Not supported') };
+  const createNewReport = () => { throw new Error('Not supported') };
   const showActions = {
     showView: true,
   };
@@ -27,20 +27,18 @@ export default function UserGrid() {
       flex: 1,
     },
     {
-      field: 'name',
-      headerName: 'Name',
+      field: 'week',
+      headerName: 'Week',
       align: 'right',
       headerAlign: 'right',
       hideable: true,
       flex: 1,
     },
     {
-      field: 'role',
-      headerName: 'Role',
+      field: 'year',
+      headerName: 'Year',
       align: 'right',
       headerAlign: 'right',
-      type: 'singleSelect',
-      valueOptions: ['Manager', 'Student'],
       hideable: true,
       flex: 1,
     },
@@ -49,14 +47,14 @@ export default function UserGrid() {
   return (
     <Grid
       columns={columns}
-      createNewRow={createNewUser}
-      deleteRows={deleteUsers}
-      loadRows={loadUsers}
-      rows={users}
-      setRows={setUsers}
+      createNewRow={createNewReport}
+      deleteRows={deleteReports}
+      loadRows={loadReports}
+      rows={reports}
+      setRows={setReports}
       showActions={showActions}
       showToolBar={showToolBar}
-      updateRows={updateUsers}
+      updateRows={updateReports}
     />
   );
 }

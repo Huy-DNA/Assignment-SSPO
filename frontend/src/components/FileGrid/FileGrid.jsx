@@ -22,6 +22,7 @@ export default function FileGrid({ files, setFiles }) {
   const showToolBar = {
     showAdd: false,
     showDel: isUser,
+    showSearch: true,
   };
   const columns = [
     ...[

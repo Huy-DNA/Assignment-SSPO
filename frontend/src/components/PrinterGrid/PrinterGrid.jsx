@@ -22,8 +22,16 @@ export default function PrinterGrid() {
     .then(({ data }) => extractAPIResponse(data));
   const createNewPrinter = () => axios.post(GEN_PRINTER_URL)
     .then(({ data }) => extractAPIResponse(data));
-  const showActions = isManager;
-  const showToolBar = isManager;
+  const showActions = {
+    showEdit: isManager,
+    showDel: isManager,
+    showView: true,
+  };
+  const showToolBar = {
+    showAdd: isManager,
+    showDel: isManager,
+    showSearch: true,
+  };
   const columns = [
     {
       field: 'code',
