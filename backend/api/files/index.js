@@ -1,9 +1,11 @@
 import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import Joi from 'joi';
+import { Base64 } from 'js-base64';
 import getUserFromSession from '../../utils/getUserFromSession.js';
 import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
+import getNumberOfPages from '../../utils/getNumberOfPages.js';
 
 const router = Router();
 const client = new PrismaClient();
@@ -146,16 +148,33 @@ async function uploadFiles(req, res) {
 
   const user = await getUserFromSession(SESSION_ID);
 
+  const fileData = (await Promise.all(fileInfos.map(async (file) => {
+    const pageNo = await getNumberOfPages(file.name, file.content);
+    return pageNo === undefined ? [] : [{
+      id: file.id,
+      name: file.name,
+      content: file.content,
+      uploadedAt: file.uploadedAt,
+      pageNo,
+      userId: user.id,
+    }];
+  }))).flatMap((e) => e);
+
+  if (fileData.length < fileInfos.length) {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Some files are corrupted or files with unknown extensions were uploaded',
+      },
+    });
+    return;
+  }
+
   res.send({
     success: true,
     value: await client.file.createMany({
-      data: fileInfos.map((file) => ({
-        id: file.id,
-        name: file.name,
-        content: file.content,
-        uploadedAt: file.uploadedAt,
-        userId: user.id,
-      })),
+      data: fileData,
     }),
   });
 }
@@ -223,6 +242,28 @@ async function modifyFiles(req, res) {
   const { SESSION_ID } = req.cookies;
 
   const user = await getUserFromSession(SESSION_ID);
+
+  const newFileModifiers = (await Promise.all(fileModifiers.map(async (modifier) => {
+    if (modifier.content) {
+      return modifier;
+    }
+    const pageNo = await getNumberOfPages(modifier.name, modifier.content);
+    return pageNo === undefined ? [] : [{
+      ...modifier,
+      pageNo,
+    }];
+  }))).flatMap((e) => e);
+
+  if (newFileModifiers.length !== fileModifiers.length) {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Some files are corrupted or have unknown extensions',
+      },
+    });
+    return;
+  }
 
   res.send(
     {
