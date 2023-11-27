@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import { PdfCounter, DocxCounter } from 'page-count';
+import { PdfCounter, DocxCounter, PptxCounter, OdtCounter } from 'page-count';
 
 /**
  * @param { string } base64Content - the content of the pdf file
@@ -30,6 +30,34 @@ export async function getNumberOfDocxPages(base64Content) {
 }
 
 /**
+ * @param { string } base64Content - the content of the odt file
+ * @returns { Promise<number | undefined> } the number of pages
+ */
+export async function getNumberOfOdtPages(base64Content) {
+  const odtBuffer = Buffer.from(base64Content, 'base64');
+
+  try {
+    return await OdtCounter.count(odtBuffer);
+  } catch (e) {
+    return undefined;
+  }
+}
+
+/**
+ * @param { string } base64Content - the content of the pptx file
+ * @returns { Promise<number | undefined> } the number of pages
+ */
+export async function getNumberOfPptxPages(base64Content) {
+  const pptxBuffer = Buffer.from(base64Content, 'base64');
+
+  try {
+    return await PptxCounter.count(pptxBuffer);
+  } catch (e) {
+    return undefined;
+  }
+}
+
+/**
  * @param { string } name - the name of the file
  * @param { content } base64Content - the content of the file encoded in Base64
  * @returns { number | undefined } the number of pages
@@ -44,6 +72,10 @@ export default function getNumberOfPages(name, base64Content) {
       return getNumberOfPdfPages(base64Content);
     case 'docx':
       return getNumberOfDocxPages(base64Content);
+    case 'odt':
+      return getNumberOfOdtPages(base64Content);
+    case 'pptx':
+      return getNumberOfPptxPages(base64Content);
     case 'png':
     case 'svg':
     case 'jpg':
