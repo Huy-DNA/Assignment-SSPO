@@ -24,6 +24,7 @@ async function getFiles(req, res) {
       name: true,
       uploadedAt: true,
       userId: true,
+      pageNo: true,
     },
     where: {
       userId: user.isManager ? undefined : user.id,
@@ -67,6 +68,7 @@ async function getFile(req, res) {
       name: true,
       uploadedAt: true,
       userId: true,
+      pageNo: true,
     },
     where: {
       id: fileId,
