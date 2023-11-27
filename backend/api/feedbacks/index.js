@@ -124,7 +124,7 @@ async function uploadFeedbacks(req, res) {
 
   res.send({
     success: true,
-    value: await client.file.createMany({
+    value: await client.feedback.createMany({
       data: feedbackInfos.map((feedback) => ({
         ...feedback,
         userId: user.id,
@@ -156,7 +156,7 @@ async function deleteFeedbacks(req, res) {
 
   res.send({
     success: true,
-    data: await client.feedback.deleteMany({
+    value: await client.feedback.deleteMany({
       where: {
         id: {
           in: feedbackIds,
@@ -195,7 +195,7 @@ async function modifyFeedbacks(req, res) {
   res.send(
     {
       success: true,
-      data: {
+      value: {
         count: (await Promise.all(
           feedbackModifiers.map((modifier) => client.feedback.update({
             where: {

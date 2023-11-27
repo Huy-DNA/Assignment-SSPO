@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import extractAPIResponse from "../../utils/extractAPIResponse";
 import axios from "axios";
 import { GET_REPORTS_URL } from "../../constants/url";
+import { NotificationStatus } from "../../constants/notification";
 
 export default function ReportDetailPage() {
   const notify = useNotification();

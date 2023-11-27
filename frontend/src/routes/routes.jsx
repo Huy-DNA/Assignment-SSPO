@@ -7,11 +7,13 @@ import HistoryPage from '../pages/history/HistoryPage';
 import UsersPage from '../pages/users/UserPage';
 import ReportsPage from '../pages/reports/ReportsPage';
 import ReportDetailPage from '../pages/reportDetail/ReportDetailPage';
+import FeedbacksPage from '../pages/feedbacks/FeedbacksPage';
 
 export const guestRoutes = [
   { path: '/', component: HomePage },
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
+  { path: '/feedbacks', component: FeedbacksPage },
 ];
 
 export const managerRoutes = [
@@ -22,6 +24,7 @@ export const managerRoutes = [
   { path: '/accounts', component: UsersPage },
   { path: '/reports', component: ReportsPage },
   { path: '/reports/:id', component: ReportDetailPage },
+  { path: '/feedbacks', component: FeedbacksPage },
 ];
 
 export const userRoutes = [
@@ -31,4 +34,5 @@ export const userRoutes = [
   { path: '/files', component: FilesPage },
   { path: '/files/:id', component: FileDetailPage },
   { path: '/history', component: HistoryPage },
+  { path: '/feedbacks', component: FeedbacksPage },
 ];
