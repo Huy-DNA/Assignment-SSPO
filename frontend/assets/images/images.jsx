@@ -3,8 +3,9 @@ import avatar from './avatar.jpg';
 import facebooklogo from './facebook-logo.svg';
 import instalogo from './instagram-logo.svg';
 import twitterlogo from './twitter-logo.svg';
-import file from './file-images.png';
 import printer from './printer.png';
+import paper from './papper-image.png';
+import file from './file-image.jpg';
 
 const images = {
   logo,
@@ -12,8 +13,9 @@ const images = {
   facebooklogo,
   instalogo,
   twitterlogo,
-  file,
   printer,
+  paper,
+  file,
 };
 
 export default images;
