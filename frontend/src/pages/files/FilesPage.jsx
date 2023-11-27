@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowUpFromBracket,
 } from '@fortawesome/free-solid-svg-icons';
+import CloseIcon from '@mui/icons-material/Close';
 import FileGrid from '../../components/FileGrid/FileGrid';
 import axios from 'axios';
 import { UPLOAD_FILES_URL } from '../../constants/url';
@@ -62,9 +63,17 @@ function FilesPage() {
 
           <div className="m-5">
             {
-              uploadedFiles.map((file) => (
-                <div key={`${file.name}@${file.uploadedAt}`} className="bg-gray-200 border-2 rounded-lg p-2 m-2">
-                  <span className={`${getClass(file.name)}`}></span> &nbsp; {file.name}
+              uploadedFiles.map((file, index) => (
+                <div key={index} className="bg-gray-200 border-2 rounded-lg p-2 m-2 flex flex-row justify-between">
+                  <span>
+                    <span className={`${getClass(file.name)}`}></span> &nbsp; {file.name}
+                  </span>
+                  <span
+                    className='self-end text-red-500 hover:cursor-pointer'
+                    onClick={() => setUploadedFiles([...uploadedFiles.slice(0, index), ...uploadedFiles.slice(index + 1)])}
+                  >
+                    <CloseIcon/>
+                  </span>
                 </div>
               ))
             }

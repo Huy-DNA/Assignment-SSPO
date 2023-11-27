@@ -89,10 +89,10 @@ function Header() {
 
   return (
     loginStatus !== LoginStatus.NOT_LOGGED_IN ? (
-      <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-        <div className="w-12 h-12 mx-2 ml-16">
+      <div className="flex flex-row items-center justify-between bg-slate-100 px-10">
+        <div>
           <Link to="/">
-            <img src={images.logo} alt="logo-web" />
+            <img src={images.logo} alt="logo-web" width={50} className='max-w-none'/>
           </Link>
         </div>
         <div className="self-stretch flex flex-row items-stretch">
@@ -138,13 +138,15 @@ function Header() {
         </div>
       </div>
     ) : (
-      <div className="flex flex-row items-center justify-between bg-slate-100 px-5">
-        <div className="w-12 h-12 mx-2 ml-16">
-          <img src={images.logo} alt="logo-web" />
+      <div className="flex flex-row items-center justify-between bg-slate-100 px-10">
+        <div>
+          <Link to="/">
+            <img src={images.logo} alt="logo-web" width={50} className='max-w-none'/>
+          </Link>
         </div>
 
         <div>
-          <a href="/login" className="flex flex-row justify-center items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out px-5 mr-16 my-[21px] text-lg">
+          <a href="/login" className="flex flex-row justify-between items-center hover:cursor-pointer hover:bg-slate-50 transition ease-in-out px-5 mr-5 my-[21px] text-lg">
             Đăng nhập
           </a>
         </div>

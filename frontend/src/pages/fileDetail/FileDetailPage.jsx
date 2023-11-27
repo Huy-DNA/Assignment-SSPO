@@ -7,6 +7,8 @@ import useNotification from '../../hooks/useNotification';
 import { NotificationStatus } from '../../constants/notification';
 import mime from 'node-mime';
 import _ from 'lodash';
+import formatDate from '../../utils/formatDate';
+import { CircularProgress } from '@mui/material';
 
 export default function FileDetailPage() {
   const notify = useNotification();
@@ -29,31 +31,25 @@ export default function FileDetailPage() {
       .catch((e) => notify(NotificationStatus.ERR, e.message))
   }, []);
   return (
-    <div className="w-full h-full">
+    <div className="h-screen">
       <h1 className="text-blue-900 my-6 font-bold text-3xl">
         CHI TIẾT TÀI LIỆU
       </h1>
-      <div className="w-full h-screen flex flex-row"> 
-        <div className="w-full lg:w-1/3 p-5">
-          <h1 className="font-semibold text-2xl">
-            Name: { detail.name === undefined ? <i className="font-light">Loading...</i> : detail.name }
-          </h1>
-
-          <div className="m-5">
-            <p>
-              Uploaded at: { detail.uploadedAt === undefined ? <i className="font-light">Loading...</i> : detail.uploadedAt }
-            </p>
-          </div>
-        </div>
+      <div className="h-full">
+        <h1 className="font-semibold text-2xl my-2">
+          { detail.name }
+        </h1>
+        <p>{ detail.uploadedAt && <span>Upload vào: { formatDate(new Date(detail.uploadedAt)) }</span> }</p>
         
-        <div className="w-full h-full lg:w-2/3 p-5">
-          { detail.content
-            ? <iframe className="w-full h-full"
-              src={`data:${mime.lookUpType(ext)};base64,${detail.content}`}
-            />
-            : <div className="w-full h-full p-10 text-white bg-gray-500 text-2xl">
-              Loading file content...
-            </div>
+        <div className="h-full m-2">
+          { 
+            detail.content ?
+              <iframe className="border-dashed border-3 w-full h-4/6 sm:h-5/6 sm:w-5/6 m-auto"
+                src={`data:${mime.lookUpType(ext)};base64,${detail.content}`}
+              /> :
+              <div className="h-full flex items-center justify-center">
+                <CircularProgress size="4rem" title="Loading"/>
+              </div>
           }
         </div>
       </div>
