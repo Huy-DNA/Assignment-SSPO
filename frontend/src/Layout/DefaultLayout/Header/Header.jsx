@@ -49,8 +49,12 @@ const USER_ITEMS = [
     to: '/buypaper',
   },
   {
-    title: 'Xem đánh giá',
+    title: 'Xem lịch sử',
     to: '/history',
+  },
+  {
+    title: 'Xem đánh giá',
+    to: '/feedbacks',
   },
 ];
 

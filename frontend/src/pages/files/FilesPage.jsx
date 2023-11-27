@@ -11,7 +11,6 @@ import { getClass } from 'file-icons-js';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
-import { PDFDocument } from 'pdf-lib';
 import encodeUploadedFileToBase64 from '../../utils/encodeUploadedFileToBase64';
 
 function FilesPage() {
@@ -19,34 +18,10 @@ function FilesPage() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [files, setFiles] = useState([]);
 
-  const handleGetNumbersPagePDF = async (files) => {
-    console.log(files)
-    const numPagesPromises = Array.from(files).map(async (file) => {
-      try {
-        const fileContent = await file.arrayBuffer();
-        const pdfDoc = await PDFDocument.load(fileContent);
-        const context = pdfDoc.context;
-
-        const numPages = pdfDoc.getPageCount();
-        return numPages;
-      } catch (error) {
-        console.error('Error processing file:', error);
-        return -1;
-      }
-    });
-
-    try {
-      const numPagesArray = await Promise.all(numPagesPromises);
-      console.log(numPagesArray);
-    } catch (error) {
-      console.error('Error processing files:', error);
-    }
-  }
-
   const handleFilesChange = async (e) => {
-    // handleGetNumbersPagePDF(e.target.files);
-
     setUploadedFiles([...uploadedFiles, ...e.target.files]);
+
+    e.target.value = null;
   }
 
   const onSubmitFiles = async () => {
