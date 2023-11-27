@@ -9,8 +9,8 @@ export async function getNumberOfPdfPages(base64Content) {
   const pdfBuffer = Buffer.from(base64Content, 'base64');
 
   try {
-    return PdfCounter.count(pdfBuffer);
-  } catch {
+    return await PdfCounter.count(pdfBuffer);
+  } catch (e) {
     return undefined;
   }
 }
@@ -23,8 +23,8 @@ export async function getNumberOfDocxPages(base64Content) {
   const docxBuffer = Buffer.from(base64Content, 'base64');
 
   try {
-    return DocxCounter.count(docxBuffer);
-  } catch {
+    return await DocxCounter.count(docxBuffer);
+  } catch (e) {
     return undefined;
   }
 }
