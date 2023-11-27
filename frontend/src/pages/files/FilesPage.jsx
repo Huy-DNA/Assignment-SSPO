@@ -33,11 +33,11 @@ function FilesPage() {
     );
     try {
       await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({ data }) => extractAPIResponse(data)))));
+      setUploadedFiles([]);
+      setFiles((oldFiles) => [...uploadInfos, ...oldFiles]);
     } catch (e) {
       notify(NotificationStatus.ERR, e.message);
     }
-    setUploadedFiles([]);
-    setFiles((oldFiles) => [...uploadInfos, ...oldFiles]);
   }
   return (
     <div>
