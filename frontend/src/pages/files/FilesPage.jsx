@@ -18,10 +18,12 @@ function FilesPage() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [files, setFiles] = useState([]);
 
-  const handleFilesChange = (e) => {
-    setUploadedFiles((uploadedFiles) => [...uploadedFiles, ...e.target.files]);
+  const handleFilesChange = async (e) => {
+    setUploadedFiles([...uploadedFiles, ...e.target.files]);
+
     e.target.value = null;
-  };
+  }
+
   const onSubmitFiles = async () => {
     const uploadInfos = await Promise.all(
       uploadedFiles.map(
@@ -30,14 +32,13 @@ function FilesPage() {
       )
     );
     try {
-      await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({data}) => extractAPIResponse(data)))));
+      await Promise.all(uploadInfos.map((fileInfo) => axios.post(UPLOAD_FILES_URL, [fileInfo]).then((({ data }) => extractAPIResponse(data)))));
     } catch (e) {
       notify(NotificationStatus.ERR, e.message);
     }
     setUploadedFiles([]);
     setFiles((oldFiles) => [...uploadInfos, ...oldFiles]);
   }
-
   return (
     <div>
       <h1 className="text-blue-900 my-6 font-bold text-3xl">
@@ -45,11 +46,11 @@ function FilesPage() {
       </h1>
       <label htmlFor="fileUpload">
         <div className="rounded-md border-gray-600 border-dashed border-2 bg-gray-200 flex flex-col p-20 m-10 hover:cursor-pointer">
-          <FontAwesomeIcon icon={faArrowUpFromBracket} className="text-5xl"/>
+          <FontAwesomeIcon icon={faArrowUpFromBracket} className="text-5xl" />
           <h3 className="text-center m-5">Tải lên file của bạn ở đây</h3>
         </div>
       </label>
-      { 
+      {
         uploadedFiles.length > 0 &&
         <div className="rounded-md flex flex-col p-5 m-10 bg-gray-100">
           <button
@@ -58,20 +59,20 @@ function FilesPage() {
           >
             Upload
           </button>
-          
+
           <div className="m-5">
             {
               uploadedFiles.map((file) => (
                 <div key={`${file.name}@${file.uploadedAt}`} className="bg-gray-200 border-2 rounded-lg p-2 m-2">
-                  <span className={`${getClass(file.name)}`}></span> &nbsp; { file.name }
+                  <span className={`${getClass(file.name)}`}></span> &nbsp; {file.name}
                 </div>
               ))
             }
           </div>
         </div>
       }
-      <input type="file" multiple id="fileUpload" className="hidden" onChange={handleFilesChange}/>
-      
+      <input type="file" multiple id="fileUpload" className="hidden" onChange={handleFilesChange} />
+
       <FileGrid files={files} setFiles={setFiles} />
     </div>
   );
