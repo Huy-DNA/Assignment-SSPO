@@ -1,5 +1,7 @@
 import _ from 'lodash';
-import { PdfCounter, DocxCounter, PptxCounter, OdtCounter } from 'page-count';
+import {
+  PdfCounter, DocxCounter, PptxCounter, OdtCounter,
+} from 'page-count';
 
 /**
  * @param { string } base64Content - the content of the pdf file
