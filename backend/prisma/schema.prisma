@@ -80,6 +80,7 @@ model PrinterJob {
   reportId      String?
   status        PrinterJobStatus
   oneSided      Boolean
+  pageSize      String
   estimatedTime Float
   createdAt     DateTime
   copiesNo      Int

@@ -31,6 +31,9 @@ export async function getPrinterJobs(req, res) {
         startPage: true,
         endPage: true,
         status: true,
+        oneSided: true,
+        pageSize: true,
+        fileId: true,
       },
       where: {
         userId: user.isManager ? undefined : user.id,
