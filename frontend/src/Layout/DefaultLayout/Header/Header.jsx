@@ -91,7 +91,6 @@ function Header() {
     setAnchorEl(null);
   };
 
-  console.log(location.pathname);
   const menuComponents = menuItems.map(
     (item) => (
       <Link
