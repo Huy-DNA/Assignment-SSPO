@@ -14,6 +14,13 @@ const client = new PrismaClient();
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 async function getFeedbacks(req, res) {
+  const options = req.query;
+  const { userId, start, end } = options;
+
+  const startNum = start && Number.parseInt(start, 10);
+  const endNum = end && Number.parseInt(end, 10);
+
+  const total = await client.feedback.count();
   const feedbacks = await client.feedback.findMany({
     select: {
       content: true,
@@ -30,11 +37,19 @@ async function getFeedbacks(req, res) {
         },
       },
     },
+    where: {
+      userId,
+    },
+    skip: Number.isNaN(startNum) && startNum >= 0 ? undefined : startNum,
+    take: Number.isNaN(endNum) && endNum > startNum ? undefined : endNum - startNum,
   });
 
   res.send({
     success: true,
-    value: feedbacks,
+    value: {
+      feedbacks,
+      total,
+    },
   });
 }
 
