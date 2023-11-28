@@ -95,7 +95,8 @@ function Header() {
       <Link
         key={item.to}
         to={item.to}
-        className="flex flex-row border-b-2 lg:border-0 border-gray-200 justify-center items-center hover:cursor-pointer hover:bg-blue-400 lg:hover:bg-slate-200 transition ease-in-out px-6 py-2 text-lg"
+        className="flex flex-row border-b-2 lg:border-0 border-gray-200 justify-start items-start lg:justify-center lg:items-center hover:cursor-pointer hover:bg-blue-400 lg:hover:bg-slate-200 transition ease-in-out px-6 py-2 text-lg"
+        onClick={() => setIsMenuOpen(false)}
       >
         {item.title}
       </Link>
@@ -109,8 +110,8 @@ function Header() {
           <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)} className="hover:cursor-pointer"/>
           {
             isMenuOpen &&
-            <div className="absolute h-full left-0 top-0 bg-white z-50">
-              <div className="hover:cursor-pointer border-b-2 p-5" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            <div className="fixed h-full left-0 top-0 bg-white z-50">
+              <div className="hover:cursor-pointer border-b-2 p-5" onClick={() => setIsMenuOpen(false)}>
                 <CloseIcon />
               </div>
               { menuComponents }
@@ -118,7 +119,7 @@ function Header() {
           }
           {
             isMenuOpen &&
-            <div className="absolute h-screen w-screen left-0 top-0 z-40 bg-slate-200 opacity-70"></div>
+            <div className="fixed h-screen w-screen left-0 top-0 z-40 bg-slate-200 opacity-70"></div>
           }
         </div>
         <Link to="/">
