@@ -6,7 +6,7 @@ import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
 import getUserFromSession from '../../utils/getUserFromSession.js';
 import { formatConfig, pageSizeConfig } from '../../core/systemConfig.js';
-import estimatePrintTime from '../../../frontend/src/utils/estimatePrintTime.js';
+import estimatePrintTime from '../../utils/estimatePrintTime.js';
 import printerManager from '../../core/printerManager.js';
 
 const router = Router();
