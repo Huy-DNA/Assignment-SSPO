@@ -106,7 +106,7 @@ function Header() {
     <div className="flex flex-row items-center justify-between bg-slate-100 px-10 h-24"> 
       <div className="flex flex-row gap-5 items-center">
         <div className="block lg:hidden">
-          <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)} />
+          <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)} className="hover:cursor-pointer"/>
           {
             isMenuOpen &&
             <div className="absolute h-full left-0 top-0 bg-white z-50">
