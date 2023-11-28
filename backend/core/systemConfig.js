@@ -1,4 +1,4 @@
-const configs = {
+export const configs = {
   allowedFormats: ['docx', 'pptx', 'odt', 'pdf', 'png', 'svg', 'jpg', 'jpeg'],
   allowedPageSize: ['a3', 'a4'],
 };
