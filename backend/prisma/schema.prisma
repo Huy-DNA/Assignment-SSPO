@@ -83,6 +83,7 @@ model PrinterJob {
   oneSided      Boolean
   pageSize      String
   estimatedTime Float
+  startAt       DateTime?
   createdAt     DateTime
   copiesNo      Int
   startPage     Int

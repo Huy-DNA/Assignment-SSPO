@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 import { Router } from 'express';
 import Joi from 'joi';
-import { Base64 } from 'js-base64';
 import getUserFromSession from '../../utils/getUserFromSession.js';
 import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
@@ -223,7 +222,6 @@ async function modifyFiles(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string(),
     name: Joi.string().allow('').optional(),
-    content: Joi.string().allow('').optional(),
   }));
 
   const { error, value: fileModifiers } = schema.validate(req.body);
@@ -277,14 +275,10 @@ async function modifyFiles(req, res) {
             },
             create: {
               ...modifier,
-              content: modifier.content,
               userId: user.id,
             },
             update: {
               ...modifier,
-              content: typeof modifier.content === 'string'
-                ? modifier.content
-                : undefined,
               id: undefined,
             },
           }).then(() => 1).catch(() => 0)),
