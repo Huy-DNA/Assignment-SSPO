@@ -109,8 +109,7 @@ function Header() {
         <div className="block lg:hidden">
           <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)} className="hover:cursor-pointer"/>
           {
-            isMenuOpen &&
-            <div className="fixed h-full left-0 top-0 bg-white z-50">
+            <div className={`fixed h-full w-60 left-0 top-0 bg-white z-50 transition-transform duration-300 ${isMenuOpen ? "translate-x-0" : "-translate-x-full"}` }>
               <div className="hover:cursor-pointer border-b-2 p-5" onClick={() => setIsMenuOpen(false)}>
                 <CloseIcon />
               </div>
