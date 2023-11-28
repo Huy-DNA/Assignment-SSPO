@@ -12,30 +12,30 @@ import { LoginStatus } from '../../../constants/loginStatus';
 
 const MANAGER_ITEMS = [
   {
-    title: 'Quản lí máy in',
+    title: 'Máy in',
     to: '/printers',
   },
   {
-    title: 'Quản lí tài khoản',
+    title: 'Người dùng',
     to: '/accounts',
   },
   {
-    title: 'Xem lịch sử',
+    title: 'Lịch sử',
     to: '/history',
   },
   {
-    title: 'Xem báo cáo',
+    title: 'Báo cáo',
     to: '/reports',
   },
   {
-    title: 'Xem đánh giá',
+    title: 'Đánh giá',
     to: '/feedbacks',
   },
 ];
 
 const USER_ITEMS = [
   {
-    title: 'Xem máy in',
+    title: 'Máy in',
     to: '/printers',
   },
   {
@@ -47,26 +47,26 @@ const USER_ITEMS = [
     to: '/printfile',
   },
   {
-    title: 'Mua giấy in',
-    to: '/buypaper',
+    title: 'Mua giấy',
+    to: '/packages',
   },
   {
-    title: 'Xem lịch sử',
+    title: 'Lịch sử',
     to: '/history',
   },
   {
-    title: 'Xem đánh giá',
+    title: 'Đánh giá',
     to: '/feedbacks',
   },
 ];
 
 const GUEST_ITEMS = [
   {
-    title: 'Xem máy in',
+    title: 'Máy in',
     to: '/printers',
   },
   {
-    title: 'Xem đánh giá',
+    title: 'Đánh giá',
     to: '/feedbacks',
   },
 ]
@@ -104,7 +104,7 @@ function Header() {
   );
 
   return (
-    <div className="flex flex-row items-center justify-between bg-slate-100 px-10 h-24"> 
+    <div className="flex flex-row items-center bg-slate-100 px-10 h-24 gap-5"> 
       <div className="flex flex-row gap-5 items-center">
         <div className="block lg:hidden">
           <MenuIcon onClick={() => setIsMenuOpen(!isMenuOpen)} className="hover:cursor-pointer"/>
@@ -129,9 +129,10 @@ function Header() {
       <div className="hidden lg:self-stretch lg:flex lg:flex-row lg:items-stretch">
         { menuComponents }
       </div>
+      <div className="flex-[5]"></div>
       {
         loginStatus !== LoginStatus.NOT_LOGGED_IN ?
-        <div className="flex flex-row self-end items-center">
+        <div className="flex flex-row items-center justify-self-end flex-1">
           <div className="m-4 hover:cursor-pointer scale-125">
             <FontAwesomeIcon icon={faBell} />
           </div>

@@ -9,7 +9,7 @@ import UsersPage from '../pages/users/UserPage';
 import ReportsPage from '../pages/reports/ReportsPage';
 import ReportDetailPage from '../pages/reportDetail/ReportDetailPage';
 import FeedbacksPage from '../pages/feedbacks/FeedbacksPage';
-import BuyPaper from '../pages/buypaper/BuyPaper';
+import PackagesPage from '../pages/packages/PackagesPage';
 import PaymentMethod from '../pages/payment/Payment';
 
 export const guestRoutes = [
@@ -17,6 +17,7 @@ export const guestRoutes = [
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
   { path: '/feedbacks', component: FeedbacksPage },
+  { path: '/packages', component: PackagesPage },
 ];
 
 export const managerRoutes = [
@@ -28,6 +29,7 @@ export const managerRoutes = [
   { path: '/reports', component: ReportsPage },
   { path: '/reports/:id', component: ReportDetailPage },
   { path: '/feedbacks', component: FeedbacksPage },
+  { path: '/packages', component: PackagesPage },
 ];
 
 export const userRoutes = [
@@ -39,6 +41,6 @@ export const userRoutes = [
   { path: '/files/:id', component: FileDetailPage },
   { path: '/history', component: HistoryPage },
   { path: '/feedbacks', component: FeedbacksPage },
-  { path: '/buypaper', component: BuyPaper},
   { path: '/payment', component: PaymentMethod},
+  { path: '/packages', component: PackagesPage },
 ];
