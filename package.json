@@ -6,7 +6,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --passWithNoTests",
-    "build:backend": "copyfiles \"backend/**/*\" .dist",
+    "build:backend": "copyfiles \"backend/**/*\" .dist && copyfiles frontend/assets/images/favicon.ico .dist",
     "build:frontend": "webpack",
     "build": "npx yarn build:backend && npx yarn build:frontend && copyfiles ./errorcodes.js .dist",
     "start:cas": "node ./__mock-cas__/server.js",
