@@ -33,19 +33,23 @@ export default function FeedbacksPage() {
       }])
         .then(({ data }) => extractAPIResponse(data))
         .then(() => notify(NotificationStatus.OK, ''))
+        .then(() => page === Math.floor(totalFeedbacks / paginationSize) ? refreshFeedbacks() : undefined)
         .then(() => setTypedFeedback(''))
+        .then(() => setTotalFeedbacks(totalFeedbacks + 1))
         .catch((e) => notify(NotificationStatus.ERR, e.message))
         .then(() => setDisabledFeedback(false));
     }
   } 
   const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;
 
-  useEffect(() => {
+  const refreshFeedbacks = () => {
     axios.get(`${GET_FEEDBACKS_URL}?start=${startFeedbackId}&end=${endFeedbackId}`)
       .then(({ data }) => extractAPIResponse(data))
       .then(({ feedbacks, total }) => { setFeedbacks(feedbacks); setTotalFeedbacks(total); })
       .catch((e) => notify(NotificationStatus.ERR, e.message))
-  }, [page]);
+  };
+
+  useEffect(refreshFeedbacks, [page]);
 
   return (
     <div className="w-full h-full">
