@@ -1,14 +1,19 @@
 import { PrinterJobStatus, PrismaClient } from '@prisma/client';
+import { EventEmitter } from 'node:events';
 
-const prisma = new PrismaClient();
+const client = new PrismaClient();
 
 class PrinterManager {
   constructor() {
     this.pendingJobs = new Map();
+    this.awakePrinters = new Set();
+    this.jobEventEmitter = new EventEmitter();
+    this.jobEventEmitter.on('alert', (printerId) => this.alertPrinter(printerId));
+    this.init();
   }
 
   async init() {
-    const pendingJobs = await prisma.printerJob.findMany({
+    const pendingJobs = await client.printerJob.findMany({
       where: {
         status: {
           not: PrinterJobStatus.Done,
@@ -17,30 +22,78 @@ class PrinterManager {
     });
 
     for (const job of pendingJobs) {
-      if (!this.pendingJobs.has(job.printerId)) {
-        this.pendingJobs.set(job.printerId, []);
+      const { printerId } = job;
+      if (!this.pendingJobs.has(printerId)) {
+        this.pendingJobs.set(printerId, []);
       }
-      this.pendingJobs.get(job.printerId).push(job);
+      const jobs = this.pendingJobs.get(printerId);
+      jobs.push(job);
+      this.jobEventEmitter.emit('alert', printerId);
     }
   }
 
-  getNextJob(printerId) {
-    const jobs = this.pendingJobs.get(printerId);
-    if (!jobs) {
-      return undefined;
+  async alertPrinter(printerId) {
+    if (this.awakePrinters.has(printerId)) {
+      return;
     }
-    return jobs.pop();
+    this.awakePrinters.add(printerId);
+    this.processJobs(printerId);
   }
 
-  pushJob(job, printerId) {
+  /* eslint-disable no-await-in-loop */
+  async processJobs(printerId) {
+    const jobs = this.pendingJobs.get(printerId) || [];
+    while (jobs.length > 0) {
+      const job = jobs.pop();
+      const { id, estimatedTime } = job;
+
+      try {
+        await client.printerJob.update({
+          data: {
+            status: PrinterJobStatus.Printing,
+          },
+          where: {
+            id,
+          },
+        });
+
+        // eslint-disable-next-line no-promise-executor-return
+        await new Promise((resolve) => setTimeout(resolve, estimatedTime * 1000));
+
+        await client.printerJob.update({
+          data: {
+            status: PrinterJobStatus.Done,
+          },
+          where: {
+            id,
+          },
+        });
+      } catch {
+        await client.printerJob.update({
+          data: {
+            status: PrinterJobStatus.Aborted,
+          },
+          where: {
+            id,
+          },
+        });
+      }
+    }
+    this.awakePrinters.delete(printerId);
+  }
+  /* eslint-enable no-await-in-loop */
+
+  pushJob(job) {
+    const { printerId } = job;
     if (!this.pendingJobs.has(printerId)) {
       this.pendingJobs.set(printerId, []);
     }
-    this.pendingJobs.get(printerId).push(job);
+    const jobs = this.pendingJobs.get(printerId);
+    jobs.push(job);
+    this.jobEventEmitter.emit('alert', printerId);
   }
 }
 
 const printerManager = new PrinterManager();
-await printerManager.init();
 
 export default printerManager;
