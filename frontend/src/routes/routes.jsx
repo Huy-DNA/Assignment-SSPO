@@ -1,7 +1,7 @@
 import HomePage from '../pages/home/HomePage';
 import PrintersPage from '../pages/printers/PrintersPage';
 import FilesPage from '../pages/files/FilesPage';
-import PrintFile from '../pages/printfile/PrintFile';
+import PrintPage from '../pages/print/PrintPage';
 import PrinterDetailPage from '../pages/printerDetail/PrinterDetailPage';
 import FileDetailPage from '../pages/fileDetail/FileDetailPage';
 import HistoryPage from '../pages/history/HistoryPage';
@@ -37,7 +37,7 @@ export const userRoutes = [
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
   { path: '/files', component: FilesPage },
-  { path: '/printfile', component: PrintFile},
+  { path: '/print', component: PrintPage },
   { path: '/files/:id', component: FileDetailPage },
   { path: '/history', component: HistoryPage },
   { path: '/feedbacks', component: FeedbacksPage },

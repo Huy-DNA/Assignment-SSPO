@@ -44,7 +44,7 @@ const USER_ITEMS = [
   },
   {
     title: 'In tài liệu',
-    to: '/printfile',
+    to: '/print',
   },
   {
     title: 'Mua giấy',

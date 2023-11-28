@@ -1,10 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import axios from 'axios';
-
 import images from "../../../assets/images/images";
 
-function PrintFile() {
+export default function PrintPage() {
   let fileIndex;
   const [files, setFiles] = useState([]);
   const [fileToPrint, setFileToPrint] = useState({
@@ -141,5 +140,3 @@ function PrintFile() {
     </div>
   );
 }
-
-export default PrintFile;
