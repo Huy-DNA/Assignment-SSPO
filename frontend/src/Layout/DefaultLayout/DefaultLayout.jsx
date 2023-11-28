@@ -28,11 +28,13 @@ function DefaultLayout({ children }) {
           onClose={onClose}
         />
       }
-      <Header />
-      <div>
-        {children}
+      <div className="bg-gray-50 p-0 m-0">
+        <Header />
+        <div>
+          {children}
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </NotificationContext.Provider>
   );
 }
