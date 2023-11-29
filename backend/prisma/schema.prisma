@@ -91,15 +91,17 @@ model PrinterJob {
 }
 
 model Transaction {
-  id        String   @id @default(uuid())
-  userId    String
-  user      Student  @relation(fields: [userId], references: [id])
-  paperNo   Int
-  price     Float
-  createdAt DateTime
-  report    Report?  @relation(fields: [reportId], references: [id])
-  reportId  String?
-  success   Boolean
+  id           String       @id @default(uuid())
+  userId       String
+  user         Student      @relation(fields: [userId], references: [id])
+  paperNo      Int
+  price        Float
+  createdAt    DateTime
+  report       Report?      @relation(fields: [reportId], references: [id])
+  reportId     String?
+  success      Boolean
+  packageId    String?
+  PaperPackage PaperPackage @relation(fields: [id], references: [id])
 }
 
 model Report {
@@ -116,6 +118,17 @@ model Feedback {
   userId   String
   user     Student  @relation(fields: [userId], references: [id])
   content  String
+}
+
+model PaperPackage {
+  id           String        @id @default(uuid())
+  createdAt    DateTime      @default(now())
+  name         String
+  description  String        @default("")
+  isDeleted    Boolean
+  price        Float
+  paperNo      Int
+  transactions Transaction[]
 }
 
 enum UserRole {
