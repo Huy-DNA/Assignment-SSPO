@@ -5,7 +5,7 @@ import { PrinterJobStatus, PrismaClient } from '@prisma/client';
 import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
 import getUserFromSession from '../../utils/getUserFromSession.js';
-import { configs, formatConfig, pageSizeConfig } from '../../core/systemConfig.js';
+import { configs, formatConfig } from '../../core/systemConfig.js';
 import estimatePrintTime from '../../utils/estimatePrintTime.js';
 import printerManager from '../../core/printerManager.js';
 
@@ -105,9 +105,9 @@ export async function addPrinterJob(req, res) {
     printerId: Joi.string(),
     oneSided: Joi.boolean().default(false),
     pageSize: Joi.string(),
-    copiesNo: Joi.number().default(1),
-    startPage: Joi.number(),
-    endPage: Joi.number(),
+    copiesNo: Joi.number().integer().positive().default(1),
+    startPage: Joi.number().integer().positive(),
+    endPage: Joi.number().integer().positive(),
   });
 
   const { error, value: printerJobInfo } = schema.validate(req.body);
@@ -151,7 +151,6 @@ export async function addPrinterJob(req, res) {
   }
 
   if (printerJobInfo.startPage > printerJobInfo.endPage
-      || printerJobInfo.startPage <= 0
       || printerJobInfo.endPage > file.pageNo) {
     res.send({
       success: false,
