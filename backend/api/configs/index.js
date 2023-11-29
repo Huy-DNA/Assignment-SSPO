@@ -24,7 +24,7 @@ export async function getFormats(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function addFormats(req, res) {
-  const schema = Joi.array().items(Joi.string());
+  const schema = Joi.array().items(Joi.string().lowercase().trim());
   const { error, value: formats } = schema.validate(req.body);
 
   if (error) {
@@ -66,7 +66,7 @@ export async function getPageSizes(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function addPageSizes(req, res) {
-  const schema = Joi.array().items(Joi.string());
+  const schema = Joi.array().items(Joi.string().lowercase().trim());
   const { error, value: pageSizes } = schema.validate(req.body);
 
   if (error) {
@@ -96,7 +96,7 @@ export async function addPageSizes(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function delPageSizes(req, res) {
-  const schema = Joi.array().items(Joi.string());
+  const schema = Joi.array().items(Joi.string().lowercase().trim());
   const { error, value: pageSizes } = schema.validate(req.body);
 
   if (error) {
@@ -126,7 +126,7 @@ export async function delPageSizes(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function delFormats(req, res) {
-  const schema = Joi.array().items(Joi.string());
+  const schema = Joi.array().items(Joi.string().lowercase().trim());
   const { error, value: formats } = schema.validate(req.body);
 
   if (error) {
