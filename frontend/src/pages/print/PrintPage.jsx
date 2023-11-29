@@ -3,7 +3,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import images from "../../../assets/images/images";
 
-function PrintFile() {
+function PrintPage() {
 
   const [files, setFiles] = useState([]);
   const [printers, setPrinters] = useState([]);
@@ -12,7 +12,7 @@ function PrintFile() {
     fileId: '',
     printerId: '',
     pageSize: '',
-    copiesNo: 0,
+    copiesNo: '',
     startPage: '',
     endPage: ''
   });
@@ -32,15 +32,12 @@ function PrintFile() {
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/files').then((data) => {
-      console.log(data)
-      setFiles(data.data.value);
+    axios.get('http://localhost:3000/api/printers').then((response) => {
+      setPrinters(response.data.value);
     })
       .catch((error) => {
         console.log(error)
       });
-
-    getFiles();
   }, []);
 
   useEffect(() => {
@@ -128,8 +125,8 @@ function PrintFile() {
               }}
             >
               <option style={{ fontSize: '18px', padding: '6px' }}>Chọn khổ giấy in</option>
-              <option value="A4" style={{ fontSize: '18px', padding: '6px' }}>A4</option>
-              <option value="A3" style={{ fontSize: '18px', padding: '6px' }}>A3</option>
+              <option value="a4" style={{ fontSize: '18px', padding: '6px' }}>A4</option>
+              <option value="a3" style={{ fontSize: '18px', padding: '6px' }}>A3</option>
             </select>
           </div>
           <div className="w-2/5 mr-8">
@@ -160,6 +157,13 @@ function PrintFile() {
               value={fileToPrint.startPage}
               onChange={(e) => setFileToPrint({ ...fileToPrint, startPage: e.target.value })}
             />
+            {
+              fileSelected && fileSelected.pageNo && fileToPrint.startPage && (fileSelected.pageNo < fileToPrint.startPage || fileSelected.startPage < 0) ? (
+                <div className="font-normal text-base">Giá trị bạn nhập vào không hợp lệ</div>
+              ) : (
+                <></>
+              )
+            }
           </div>
           <div className="w-2/5 h-16 mr-8">
             <div className="font-medium mb-1 text-xl">Nhập trang kết thúc</div>
@@ -189,7 +193,7 @@ function PrintFile() {
                 setFileToPrint({ ...fileToPrint, copiesNo: e.target.value })
               }}
             >
-              <option value="0" style={{ fontSize: '18px', padding: '6px' }}>Chọn số bảng copy</option>
+              <option value="0" style={{ fontSize: '18px', padding: '6px' }}>Chọn số bản copy</option>
               <option value="1" style={{ fontSize: '18px', padding: '6px' }}>1</option>
               <option value="2" style={{ fontSize: '18px', padding: '6px' }}>2</option>
               <option value="3" style={{ fontSize: '18px', padding: '6px' }}>3</option>
@@ -200,11 +204,11 @@ function PrintFile() {
             <div className="font-medium mb-1 text-base">
               Số trang giấy in:
               {
-                fileToPrint.fileId && fileToPrint.pageSize === 'A4' ? (
-                  (fileToPrint.endPage - fileToPrint.startPage)
+                fileToPrint.fileId && fileToPrint.endPage && fileToPrint.startPage && fileToPrint.pageSize === 'a4' ? (
+                  (fileToPrint.endPage - fileToPrint.startPage + 1) * ( fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
                 ) : (
-                  fileToPrint.fileId && fileToPrint.pageSize === 'A3' ? (
-                    (fileToPrint.endPage - fileToPrint.startPage) * 2
+                  fileToPrint.fileId && fileToPrint.endPage && fileToPrint.startPage && fileToPrint.pageSize === 'a3' ? (
+                    (fileToPrint.endPage - fileToPrint.startPage + 1) * 2 * ( fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
                   ) : (
                     <></>
                   )
@@ -232,4 +236,4 @@ function PrintFile() {
   );
 }
 
-export default PrintFile;
+export default PrintPage;

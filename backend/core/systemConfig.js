@@ -5,7 +5,7 @@ export const configs = {
 
 export const formatConfig = {
   isAllowed(format) {
-    return format.toLowerCase().trim() in configs.allowedFormats;
+    return configs.allowedFormats.includes(format.toLowerCase().trim());
   },
   addFormat(format) {
     if (formatConfig.isAllowed(format)) {
@@ -22,13 +22,13 @@ export const formatConfig = {
 
 export const pageSizeConfig = {
   isAllowed(pageSize) {
-    return pageSize.toLowerCase().trim() in configs.allowedFormats;
+    return configs.allowedPageSize.includes(pageSize.toLowerCase().trim());
   },
   addFormat(pageSize) {
     if (pageSizeConfig.isAllowed(pageSize)) {
       return;
     }
-    configs.allowedFormats.push(pageSize.toLowerCase().trim());
+    configs.allowedPageSize.push(pageSize.toLowerCase().trim());
   },
   rmFormat(pageSize) {
     const normalizedPageSize = pageSize.toLowerCase().trim();

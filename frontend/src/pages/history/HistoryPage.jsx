@@ -18,12 +18,15 @@ export default function HistoryPage() {
         <Tab label="Printer Jobs"/>
         <Tab label="Transactions"/>
       </Tabs>
-      <div hidden={tab !== 0}>
-        <PrinterJobGrid />
-      </div>
-      <div hidden={tab !== 1}>
-        <TransactionGrid />
-      </div>
+      {
+        tab === 1 ?
+          <div>
+            <PrinterJobGrid />
+          </div> :
+          <div>
+            <TransactionGrid />
+          </div>
+      }
     </div>
   )
 }
