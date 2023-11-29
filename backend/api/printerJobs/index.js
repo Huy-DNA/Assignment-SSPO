@@ -132,25 +132,6 @@ export async function addPrinterJob(req, res) {
 
   const userInfo = await getUserFromSession(SESSION_ID);
 
-  const student = await client.student.findFirst({
-    where: {
-      id: userInfo.id,
-    },
-  });
-
-  if (student.paperNo < (
-    printerJobInfo.endPage - printerJobInfo.startPage + 1
-  ) * printerJobInfo.copiesNo) {
-    res.send({
-      success: false,
-      error: {
-        code: ErrorCode.NOT_ENOUGH_PAPER,
-        message: 'Not enough paper',
-      },
-    });
-    return;
-  }
-
   const file = await client.file.findFirst({
     select: {
       name: true,
@@ -169,6 +150,19 @@ export async function addPrinterJob(req, res) {
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
         message: 'File not found',
+      },
+    });
+    return;
+  }
+
+  if (printerJobInfo.startPage > printerJobInfo.endPage
+      || printerJobInfo.startPage <= 0
+      || printerJobInfo.endPage > file.pageNo) {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Invalid page range',
       },
     });
     return;
@@ -208,6 +202,25 @@ export async function addPrinterJob(req, res) {
   }
 
   try {
+    const student = await client.student.findFirst({
+      where: {
+        id: userInfo.id,
+      },
+    });
+
+    if (student.paperNo < (
+      printerJobInfo.endPage - printerJobInfo.startPage + 1
+    ) * printerJobInfo.copiesNo) {
+      res.send({
+        success: false,
+        error: {
+          code: ErrorCode.NOT_ENOUGH_PAPER,
+          message: 'Not enough paper',
+        },
+      });
+      return;
+    }
+
     const printerJob = await client.printerJob.create({
       data: {
         building: printer.building,
@@ -223,6 +236,17 @@ export async function addPrinterJob(req, res) {
         userId: userInfo.id,
         estimatedTime: estimatePrintTime(file.pageNo),
         printerId: printerJobInfo.printerId,
+      },
+    });
+
+    // Possible concurrency issues due to restriction in expressiveness when describing transactions
+    await client.student.update({
+      data: {
+        paperNo: student.paperNo
+          - (printerJobInfo.endPage - printerJobInfo.startPage + 1) * printerJobInfo.copiesNo,
+      },
+      where: {
+        id: userInfo.id,
       },
     });
     printerManager.pushJob(printerJob, printerJob.printerId);
