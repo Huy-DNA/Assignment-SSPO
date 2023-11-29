@@ -24,6 +24,7 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
   const notify = useNotification();
   const handleAddRows = async () => {
     try {
+      notify(NotificationStatus.WAITING);
       const newRow = await createNewRow();
       setRows((oldRows) => [newRow, ...oldRows]);
       setRowModesModel((oldModel) => ({
@@ -38,6 +39,7 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
 
   const handleDeleteRows = async () => {
     try {
+      notify(NotificationStatus.WAITING);
       await deleteRows(checkedIds);
       setRows((oldRows) => oldRows.filter((row) => !checkedIds.includes(row.id)));
       setRowModesModel({});
@@ -94,6 +96,7 @@ export default function Grid({
   React.useEffect(() => {
     loadRows().then((rows) => setRows((oldRows) => [...oldRows, ...rows]))
               .then(() => setLoading(false))
+              .then(() => NotificationStatus.OK)
               .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
