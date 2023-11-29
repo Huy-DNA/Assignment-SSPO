@@ -5,7 +5,7 @@ import { PrinterJobStatus, PrismaClient } from '@prisma/client';
 import { authStudent, authUser } from '../../middleware/auth.js';
 import ErrorCode from '../../../errorcodes.js';
 import getUserFromSession from '../../utils/getUserFromSession.js';
-import { formatConfig, pageSizeConfig } from '../../core/systemConfig.js';
+import { configs, formatConfig, pageSizeConfig } from '../../core/systemConfig.js';
 import estimatePrintTime from '../../utils/estimatePrintTime.js';
 import printerManager from '../../core/printerManager.js';
 
@@ -104,12 +104,7 @@ export async function addPrinterJob(req, res) {
     fileId: Joi.string(),
     printerId: Joi.string(),
     oneSided: Joi.boolean().default(false),
-    pageSize: Joi.string().default('a4').custom((value, helpers) => {
-      if (!pageSizeConfig.isAllowed(value)) {
-        return helpers.error('Page size not allowed');
-      }
-      return true;
-    }),
+    pageSize: Joi.string(),
     copiesNo: Joi.number().default(1),
     startPage: Joi.number(),
     endPage: Joi.number(),
@@ -208,9 +203,22 @@ export async function addPrinterJob(req, res) {
       },
     });
 
+    const equivPages = configs.allowedPageSize.get(printerJobInfo.pageSize);
+
+    if (equivPages === undefined) {
+      res.send({
+        success: false,
+        error: {
+          code: ErrorCode.PAGESIZE_NOT_ALLOWED,
+          message: 'Invalid page size',
+        },
+      });
+      return;
+    }
+
     if (student.paperNo < (
       printerJobInfo.endPage - printerJobInfo.startPage + 1
-    ) * printerJobInfo.copiesNo) {
+    ) * printerJobInfo.copiesNo * equivPages) {
       res.send({
         success: false,
         error: {
@@ -243,7 +251,8 @@ export async function addPrinterJob(req, res) {
     await client.student.update({
       data: {
         paperNo: student.paperNo
-          - (printerJobInfo.endPage - printerJobInfo.startPage + 1) * printerJobInfo.copiesNo,
+          - (printerJobInfo.endPage - printerJobInfo.startPage + 1)
+          * printerJobInfo.copiesNo * equivPages,
       },
       where: {
         id: userInfo.id,

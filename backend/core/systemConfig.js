@@ -2,10 +2,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const configs = {
   allowedFormats: ['docx', 'pptx', 'odt', 'pdf', 'png', 'svg', 'jpg', 'jpeg'],
-  allowedPageSize: [
+  allowedPageSize: new Map([
     { name: 'a3', equiv: 2, id: uuidv4() },
     { name: 'a4', equiv: 1, id: uuidv4() },
-  ],
+  ].map((e) => [e.id, e])),
 };
 
 export const formatConfig = {
@@ -27,17 +27,17 @@ export const formatConfig = {
 
 export const pageSizeConfig = {
   isAllowed(id) {
-    return configs.allowedPageSize.find(({ id: _id }) => _id === id);
+    return configs.allowedPageSize.has(id);
   },
   addPageSize({ name, equiv, id }) {
     if (pageSizeConfig.isAllowed(id)) {
       return;
     }
-    configs.allowedPageSize.push({ name, equiv, id });
+    configs.allowedPageSize.set(id, { name, equiv, id });
   },
   updatePageSize({ name, equiv, id }) {
     if (pageSizeConfig.isAllowed(id)) {
-      const pageSize = configs.allowedPageSize.find(({ id: _id }) => _id === id);
+      const pageSize = configs.allowedPageSize.get(id);
       pageSize.name = name || pageSize.name;
       pageSize.equiv = equiv || pageSize.equiv;
 
@@ -46,7 +46,6 @@ export const pageSizeConfig = {
     pageSizeConfig.addPageSize({ name, equiv, id });
   },
   rmPageSize(id) {
-    const index = configs.allowedPageSize.find(({ id: _id }) => _id === id);
-    configs.allowedPageSize.splice(index, 1);
+    configs.allowedPageSize.delete(id);
   },
 };
