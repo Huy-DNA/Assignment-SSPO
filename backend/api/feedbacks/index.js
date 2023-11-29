@@ -42,6 +42,11 @@ async function getFeedbacks(req, res) {
     },
     skip: Number.isNaN(startNum) && startNum >= 0 ? undefined : startNum,
     take: Number.isNaN(endNum) && endNum > startNum ? undefined : endNum - startNum,
+    orderBy: [
+      {
+        postedAt: 'desc',
+      },
+    ],
   });
 
   res.send({
