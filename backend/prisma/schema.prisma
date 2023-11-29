@@ -124,6 +124,7 @@ model PaperPackage {
   id           String        @id @default(uuid())
   createdAt    DateTime      @default(now())
   name         String
+  thumbnailUrl String?
   description  String        @default("")
   isDeleted    Boolean       @default(false)
   price        Float

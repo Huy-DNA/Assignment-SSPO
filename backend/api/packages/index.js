@@ -21,6 +21,7 @@ export async function getPackages(req, res) {
         id: true,
         createdAt: true,
         description: true,
+        thumbnailUrl: true,
         name: true,
         paperNo: true,
         price: true,
@@ -64,14 +65,16 @@ export async function getPackage(req, res) {
       name: true,
       paperNo: true,
       price: true,
-      transactions: user.isManager ? {
+      thumbnailUrl: true,
+      transactions: {
         select: {
           id: true,
         },
         where: {
           success: true,
+          userId: user.isManager ? undefined : user.id,
         },
-      } : false,
+      },
     },
     where: {
       id,
@@ -104,6 +107,7 @@ async function addPackages(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string(),
     name: Joi.string(),
+    thumbnailUrl: Joi.string().optional(),
     description: Joi.string().optional().default(''),
     price: Joi.number().positive(),
     paperNo: Joi.number().integer().positive(),
