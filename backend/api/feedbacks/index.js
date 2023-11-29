@@ -122,7 +122,7 @@ async function getFeedback(req, res) {
  */
 async function uploadFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.object({
-    content: Joi.string(),
+    content: Joi.string().required(),
   }));
 
   const { error, value: feedbackInfos } = schema.validate(req.body);
@@ -194,7 +194,7 @@ async function deleteFeedbacks(req, res) {
  */
 async function modifyFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.object({
-    id: Joi.string(),
+    id: Joi.string().required(),
     content: Joi.string().optional(),
   }));
 

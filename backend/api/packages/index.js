@@ -104,14 +104,13 @@ export async function getPackage(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 async function addPackages(req, res) {
-  const schema = Joi.array().items(Joi.object({
-    id: Joi.string(),
-    name: Joi.string(),
+  const schema = Joi.array().items({
+    name: Joi.string().required(),
     thumbnailUrl: Joi.string().optional(),
     description: Joi.string().optional().default(''),
-    price: Joi.number().positive(),
-    paperNo: Joi.number().integer().positive(),
-  }));
+    price: Joi.number().positive().required(),
+    paperNo: Joi.number().integer().positive().required(),
+  });
 
   const { error, value: packagesInfo } = schema.validate(req.body);
 

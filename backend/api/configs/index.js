@@ -162,7 +162,7 @@ export async function updatePageSizes(req, res) {
       }
       return true;
     }).optional(),
-    id: Joi.string(),
+    id: Joi.string().required(),
   }));
   const { error, value: pageSizes } = schema.validate(req.body);
 
@@ -194,14 +194,14 @@ export async function updatePageSizes(req, res) {
  */
 export async function addPageSizes(req, res) {
   const schema = Joi.array().items(Joi.object({
-    name: Joi.string(),
+    name: Joi.string().required(),
     equiv: Joi.number().custom((value, helpers) => {
       if (value <= 0 || Math.floor(value) !== value) {
         return helpers.error('Equivalent page units must be a positive integer');
       }
       return true;
-    }),
-    id: Joi.string(),
+    }).required(),
+    id: Joi.string().required(),
   }));
   const { error, value: pageSizes } = schema.validate(req.body);
 

@@ -100,15 +100,15 @@ export async function getPrinterJob(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function addPrinterJob(req, res) {
-  const schema = Joi.object({
-    fileId: Joi.string(),
-    printerId: Joi.string(),
+  const schema = Joi.object(Joi.object({
+    fileId: Joi.string().required(),
+    printerId: Joi.string().required(),
     oneSided: Joi.boolean().default(false),
-    pageSize: Joi.string(),
+    pageSize: Joi.string().required(),
     copiesNo: Joi.number().integer().positive().default(1),
-    startPage: Joi.number().integer().positive(),
-    endPage: Joi.number().integer().positive(),
-  });
+    startPage: Joi.number().integer().positive().required(),
+    endPage: Joi.number().integer().positive().required(),
+  }));
 
   const { error, value: printerJobInfo } = schema.validate(req.body);
 

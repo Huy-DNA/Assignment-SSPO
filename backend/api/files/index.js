@@ -125,8 +125,8 @@ async function getFile(req, res) {
 async function uploadFiles(req, res) {
   const schema = Joi.array().items(Joi.object({
     id: Joi.string().optional(),
-    name: Joi.string().allow(''),
-    content: Joi.string().allow(''),
+    name: Joi.string().allow('').required(),
+    content: Joi.string().allow('').required(),
     uploadedAt: Joi.date().optional(),
   }));
 
