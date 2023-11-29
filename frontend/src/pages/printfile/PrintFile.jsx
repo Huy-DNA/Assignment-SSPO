@@ -32,8 +32,21 @@ function PrintFile() {
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/printers').then((response) => {
+    axios.get('http://localhost:3000/api/files').then((data) => {
+      console.log(data)
+      setFiles(data.data.value);
+    })
+      .catch((error) => {
+        console.log(error)
+      });
+
+    getFiles();
+  }, []);
+
+  useEffect(() => {
+    const getPrinters = async () => axios.get('http://localhost:3000/api/printers').then((response) => {
       setPrinters(response.data.value);
+      console.log(response.data.value);
     })
       .catch((error) => {
         console.log(error)
