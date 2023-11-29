@@ -125,7 +125,7 @@ model PaperPackage {
   createdAt    DateTime      @default(now())
   name         String
   description  String        @default("")
-  isDeleted    Boolean
+  isDeleted    Boolean       @default(false)
   price        Float
   paperNo      Int
   transactions Transaction[]
