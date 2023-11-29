@@ -7,6 +7,7 @@ import FeedbacksAPI from './feedbacks/index.js';
 import UsersAPI from './users/index.js';
 import TransactionsAPI from './transactions/index.js';
 import ConfigsAPI from './configs/index.js';
+import PackagesAPI from './packages/index.js';
 
 const router = Router();
 
@@ -18,4 +19,5 @@ router.use('/feedbacks', FeedbacksAPI);
 router.use('/users', UsersAPI);
 router.use('/transactions', TransactionsAPI);
 router.use('/configs', ConfigsAPI);
+router.use('/packages', PackagesAPI);
 export default router;
