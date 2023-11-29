@@ -28,7 +28,7 @@ function DefaultLayout({ children }) {
           onClose={onClose}
         />
       }
-      <div className="bg-gray-50 p-0 m-0">
+      <div className="bg-gray-100 p-0 m-0">
         <Header />
         <div>
           {children}

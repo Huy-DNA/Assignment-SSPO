@@ -18,7 +18,6 @@ import {
 import { Toolbar } from '@mui/material';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
-import { useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
 
 function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
@@ -49,7 +48,7 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
   };
 
   return (
-    <div>
+    <div className="overflow-auto">
       <GridToolbarContainer>
         <Toolbar>
           <div className="flex flex-row gap-2">
@@ -88,7 +87,6 @@ export default function Grid({
   showToolBar,
 }) {
   const notify = useNotification();
-  const navigate = useNavigate();
   const [rowModesModel, setRowModesModel] = React.useState({});
   const [loading, setLoading] = React.useState(true);
   const [checkedIds, setCheckedIds] = React.useState([]);
@@ -132,7 +130,9 @@ export default function Grid({
       field: 'actions',
       type: 'actions',
       headerName: '',
-      width: 100,
+      align: 'right',
+      headerAlign: 'right',
+      flex: 1,
       cellClassName: 'actions',
       getActions: ({ id }) => {
         const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
@@ -180,7 +180,7 @@ export default function Grid({
             ] : []
           ),
           ...(
-            (showActions || showActions.showEdit) ? [
+            (showActions === true || showActions.showEdit) ? [
               <GridActionsCellItem
                 icon={<ViewIcon />}
                 label="View"

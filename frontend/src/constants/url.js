@@ -23,3 +23,6 @@ export const GET_FEEDBACKS_URL = '/api/feedbacks';
 export const UPLOAD_FEEDBACKS_URL = '/api/feedbacks/upload';
 export const UPDATE_FEEDBACKS_URL = '/api/feedbacks/update';
 export const DELETE_FEEDBACKS_URL = '/api/feedbacks/delete';
+
+export const GET_CONFIGS_URL = '/api/configs';
+
