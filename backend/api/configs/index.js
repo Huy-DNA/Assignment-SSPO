@@ -150,8 +150,8 @@ export async function delFormats(req, res) {
   });
 }
 
-router.get('/formats', authManager, getFormats);
-router.get('/pageSizes', authManager, getPageSizes);
+router.get('/formats', getFormats);
+router.get('/pageSizes', getPageSizes);
 router.post('/formats', authManager, addFormats);
 router.post('/pageSizes', authManager, addPageSizes);
 router.delete('/formats', authManager, delFormats);
