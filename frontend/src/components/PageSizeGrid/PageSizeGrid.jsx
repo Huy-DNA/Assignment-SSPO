@@ -7,7 +7,6 @@ import Grid from '../Grid/Grid';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../constants/loginStatus';
-import { v4 as uuidv4 } from 'uuid';
 
 export default function PageSizeGrid() {
   const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;

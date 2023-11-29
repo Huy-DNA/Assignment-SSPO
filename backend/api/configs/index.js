@@ -57,7 +57,7 @@ export async function addFormats(req, res) {
 export async function getPageSizes(req, res) {
   res.send({
     success: true,
-    value: configs.allowedPageSize,
+    value: Array.from(configs.allowedPageSize, ([, value]) => value),
   });
 }
 
