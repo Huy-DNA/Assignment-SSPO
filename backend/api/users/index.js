@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, UserRole } from '@prisma/client';
 import ErrorCode from '../../../errorcodes.js';
 
 const router = Router();
@@ -35,7 +35,7 @@ export async function getUser(req, res) {
     return;
   }
 
-  const userInfo = await client.user.findFirst({
+  let userInfo = await client.user.findFirst({
     where: {
       id,
     },
@@ -50,6 +50,26 @@ export async function getUser(req, res) {
       },
     });
     return;
+  }
+
+  if (userInfo.role === UserRole.Student) {
+    const studentInfo = await client.student.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    if (!studentInfo) {
+      res.send({
+        success: false,
+        error: {
+          code: ErrorCode.INTERNAL_SERVER_ERROR,
+          message: 'Internal error',
+        },
+      });
+      return;
+    }
+    userInfo = { ...userInfo, ...studentInfo };
   }
 
   res.send({
