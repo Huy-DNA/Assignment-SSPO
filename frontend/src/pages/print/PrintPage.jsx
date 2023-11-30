@@ -184,7 +184,7 @@ function PrintPage() {
         </div>
         <div className="flex justify-between">
           <div className="w-2/5 ml-8">
-            <label className="font-medium mb-1 text-xl">Chọn số bảng copy</label>
+            <label className="font-medium mb-1 text-xl">Chọn số bản copy</label>
             <select
               id="role"
               className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
