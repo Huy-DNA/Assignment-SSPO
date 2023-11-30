@@ -106,7 +106,7 @@ export default function FeedbacksPage() {
                     <p> 
                       <span className="font-light text-sm">{ formatDate(new Date(feedback.postedAt)) }</span>
                     </p>
-                    <p className="min-h-[60px] whitespace-pre-wrap">{ feedback.content }</p>
+                    <p className="min-h-[60px] max-h-[100px] overflow-y-auto whitespace-pre-wrap">{ feedback.content }</p>
                   </div>
                 </div>
               ))
