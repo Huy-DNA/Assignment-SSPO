@@ -74,7 +74,7 @@ export default function PackagesPage() {
                       }
                       <img src={item.thumbnailUrl || images.paper} alt="Paper" className="block w-[30%]" />
                       <div>
-                        <h2 className="text-lg">{item.name}</h2>
+                        <h2 className="text-sm text-blue-900 font-light">{item.name}</h2>
                         <p className="mb-2">Số giấy: {item.paperNo}</p>
                         <p className="font-bold text-blue-800 text-lg">₫ {item.price}</p>
                       </div>
