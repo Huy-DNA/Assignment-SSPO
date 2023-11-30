@@ -86,7 +86,7 @@ export default function FeedbacksPage() {
         </div>
       }
       {
-        feedbacks && 
+        feedbacks && (totalFeedbacks === 0 ? <p>Không có đánh giá nào</p> :
         <div>
           { totalFeedbacks > 0 && <Pagination count={Math.ceil(totalFeedbacks / paginationSize)} onChange={(e, page) => setPage(page - 1) } /> }
           <div className="flex flex-col [&>*:nth-child(odd)]:bg-blue-100 [&>*:nth-child(even)]:bg-slate-200">
@@ -112,7 +112,7 @@ export default function FeedbacksPage() {
               ))
             }
           </div>
-        </div>
+        </div>)
       }
     </div>
   )
