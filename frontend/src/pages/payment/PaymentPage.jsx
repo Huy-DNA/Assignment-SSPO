@@ -1,13 +1,16 @@
 import React from 'react';
 import { useState } from 'react';
-function PaymentMethod() {
+
+export default function PaymentMethod() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [authen, setAuthen] = useState("");
 
   return (
     <div className="w-full mx-8">
-      <h1 className="text-3xl font-semibold w-[46rem] mx-auto mb-2">THANH TOÁN</h1>
+      <h1 className="text-blue-900 my-6 font-bold text-3xl">
+        THANH TOÁN
+      </h1>
       <div className="w-[46rem] h-[30rem] mx-auto bg-blue-200 rounded-3xl">
         <div className="w-full flex justify-between">
           <div className="w-full flex justify-start flex-col mt-4 mb-3 ml-8">
@@ -75,5 +78,3 @@ function PaymentMethod() {
     </div>
   );
 }
-
-export default PaymentMethod;

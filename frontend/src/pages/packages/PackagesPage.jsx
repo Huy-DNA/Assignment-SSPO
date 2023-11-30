@@ -12,9 +12,11 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
 import getId from '../../utils/getId';
 import useNotification from '../../hooks/useNotification';
+import { useNavigate } from 'react-router';
 
 export default function PackagesPage() {
   const notify = useNotification();
+  const navigate = useNavigate();
   const [cart, setCart] = useSessionStorage(getId(), []);
 
   const [packages, setPackages] = useState(null);
@@ -71,7 +73,7 @@ export default function PackagesPage() {
   }
 
   const handlePaymentClick = () => {
-
+    navigate('/payment');
   };
 
   useEffect(() => {
