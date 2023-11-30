@@ -8,6 +8,7 @@ import UsersAPI from './users/index.js';
 import TransactionsAPI from './transactions/index.js';
 import ConfigsAPI from './configs/index.js';
 import PackagesAPI from './packages/index.js';
+import PaymentAPI from './payment/index.js';
 
 const router = Router();
 
@@ -20,4 +21,5 @@ router.use('/users', UsersAPI);
 router.use('/transactions', TransactionsAPI);
 router.use('/configs', ConfigsAPI);
 router.use('/packages', PackagesAPI);
+router.use('/payment', PaymentAPI);
 export default router;
