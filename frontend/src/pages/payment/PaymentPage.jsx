@@ -14,7 +14,7 @@ export default function PaymentPage() {
       </h1>
       
       <div className="flex flex-col lg:flex-row gap-10 items-start">
-        <div className="bg-white rounded-lg p-5">
+        <div className="bg-white rounded-lg p-5 w-full">
           <Cart cart={cart} setCart={setCart} />
         </div>
 

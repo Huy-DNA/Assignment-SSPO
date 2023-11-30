@@ -19,7 +19,7 @@ export default function HistoryPage() {
         <Tab label="Transactions"/>
       </Tabs>
       {
-        tab === 1 ?
+        tab !== 1 ?
           <div>
             <PrinterJobGrid />
           </div> :

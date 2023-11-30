@@ -91,17 +91,26 @@ model PrinterJob {
 }
 
 model Transaction {
-  id           String       @id @default(uuid())
-  userId       String
-  user         Student      @relation(fields: [userId], references: [id])
-  paperNo      Int
-  price        Float
-  createdAt    DateTime
-  report       Report?      @relation(fields: [reportId], references: [id])
-  reportId     String?
-  success      Boolean
-  packageId    String?
-  PaperPackage PaperPackage @relation(fields: [id], references: [id])
+  id                 String               @id @default(uuid())
+  userId             String
+  user               Student              @relation(fields: [userId], references: [id])
+  paperNo            Int
+  price              Float
+  createdAt          DateTime             @default(now())
+  report             Report?              @relation(fields: [reportId], references: [id])
+  reportId           String?
+  success            Boolean
+  TransactionPackage TransactionPackage[]
+}
+
+model TransactionPackage {
+  transaction_id String
+  package_id     String
+  Transaction    Transaction  @relation(fields: [transaction_id], references: [id])
+  Package        PaperPackage @relation(fields: [package_id], references: [id])
+  quantity       Int
+
+  @@id([transaction_id, package_id])
 }
 
 model Report {
@@ -121,15 +130,15 @@ model Feedback {
 }
 
 model PaperPackage {
-  id           String        @id @default(uuid())
-  createdAt    DateTime      @default(now())
-  name         String
-  thumbnailUrl String?
-  description  String        @default("")
-  isDeleted    Boolean       @default(false)
-  price        Float
-  paperNo      Int
-  transactions Transaction[]
+  id                 String               @id @default(uuid())
+  createdAt          DateTime             @default(now())
+  name               String
+  thumbnailUrl       String?
+  description        String               @default("")
+  isDeleted          Boolean              @default(false)
+  price              Float
+  paperNo            Int
+  TransactionPackage TransactionPackage[]
 }
 
 enum UserRole {

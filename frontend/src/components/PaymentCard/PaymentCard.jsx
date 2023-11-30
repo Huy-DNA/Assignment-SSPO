@@ -2,20 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+import useNotification from '../../hooks/useNotification';
+import { NotificationStatus } from '../../constants/notification';
 
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
 export default function PaymentCard({ items }) {
   const [clientSecret, setClientSecret] = useState("");
+  const notify = useNotification();
 
   useEffect(() => {
     fetch("/api/payment/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ items }),
+      body: JSON.stringify(items),
     })
       .then((res) => res.json())
-      .then((data) => setClientSecret(data.clientSecret));
+      .then(extractAPIResponse)
+      .then((data) => setClientSecret(data.clientSecret))
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   const appearance = {
