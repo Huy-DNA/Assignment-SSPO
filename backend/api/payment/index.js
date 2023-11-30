@@ -2,6 +2,7 @@ import _stripe from 'stripe';
 import Joi from 'joi';
 import { Router } from 'express';
 import { PrismaClient } from '@prisma/client';
+import CC from 'currency-converter-lt';
 import ErrorCode from '../../../errorcodes.js';
 import { authStudent } from '../../middleware/auth.js';
 import getUserFromSession from '../../utils/getUserFromSession.js';
@@ -94,8 +95,8 @@ async function createPaymentIntent(req, res) {
 
   // Create a PaymentIntent with the order amount and currency
   const paymentIntent = await stripe.paymentIntents.create({
-    amount,
-    currency: 'vnd',
+    amount: Math.ceil(await (new CC({ from: 'VND', to: 'USD', amount })).convert() * 100),
+    currency: 'usd',
     automatic_payment_methods: {
       enabled: true,
     },

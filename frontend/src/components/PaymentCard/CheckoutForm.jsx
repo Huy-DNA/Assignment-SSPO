@@ -4,9 +4,8 @@ import {
   useStripe,
   useElements,
 } from '@stripe/react-stripe-js';
-import useNotification from '../../hooks/useNotification';
 
-export default function CheckoutForm() {
+export default function CheckoutForm({ handlePaymentClick }) {
   const stripe = useStripe();
   const elements = useElements();
 
@@ -85,7 +84,7 @@ export default function CheckoutForm() {
     <form onSubmit={handleSubmit}>
 
       <PaymentElement id="payment-element" options={paymentElementOptions} />
-      <button className="text-white bg-blue-500 active:bg-blue-700 rounded-lg p-1 mt-5" disabled={isLoading || !stripe || !elements} id="submit">
+      <button onClick={handlePaymentClick} className="text-white bg-blue-500 active:bg-blue-700 rounded-lg p-1 mt-5" disabled={isLoading || !stripe || !elements} id="submit">
         <span>
           {isLoading ? <div className="spinner" id="spinner"></div> : "Thanh toán"}
         </span>

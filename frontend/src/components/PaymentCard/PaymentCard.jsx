@@ -8,7 +8,7 @@ import { NotificationStatus } from '../../constants/notification';
 
 const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
 
-export default function PaymentCard({ items }) {
+export default function PaymentCard({ items, clearCart }) {
   const [clientSecret, setClientSecret] = useState("");
   const notify = useNotification();
 
@@ -36,7 +36,7 @@ export default function PaymentCard({ items }) {
     <div>
       {clientSecret && (
         <Elements options={options} stripe={stripePromise}>
-          <CheckoutForm />
+          <CheckoutForm handlePaymentClick={clearCart} />
         </Elements>
       )}
     </div>

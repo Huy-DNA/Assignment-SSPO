@@ -22,7 +22,7 @@ export default function PaymentPage() {
           <PaymentCard items={cart.map((cartItem) => ({
             quantity: cartItem.quantity,
             id: cartItem.item.id,
-          }))} />
+          }))} clearCart={() => setCart([])}/>
         </div>
       </div>
     </div>
