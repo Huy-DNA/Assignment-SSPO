@@ -63,11 +63,14 @@ This is also the first time I use `Tailwind`, and I like it, although I strongly
     * I was/am not reading `Joi` documentation properly so I was using its payload validation utilities incorrectly.
       **Try it next time**: `Typebox`, which seems more predictable & user-friendly?
     * Sometimes I don't know why I neglected to perform backend validation properly, although I know it's extremely crucial.
+    * Some APIs are not well designed.
+    * Slowly changing dimensions are not placed much focus on.
 
 At least out of all the mess that I've made, I appreciated that I've learnt:
 
 * My idea of what possible was actually feasible (backend js delegates control to frontend js).
 * Some experience in storing and transmitting files, especially binary files.
+* Aware of slowly changing dimensions.
 * No compromise when it comes to developer's experience.
 * Hand-crafted stuff should be for experimentation only, well-built tools next time.
 * I'm so bad at coding front-end.
