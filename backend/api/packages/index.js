@@ -16,7 +16,7 @@ const client = new PrismaClient();
 export async function getPackages(req, res) {
   res.send({
     success: true,
-    value: await client.paperPackage.findMany({
+    value: (await client.paperPackage.findMany({
       select: {
         id: true,
         createdAt: true,
@@ -25,12 +25,11 @@ export async function getPackages(req, res) {
         name: true,
         paperNo: true,
         price: true,
-        _count: true,
       },
       where: {
         isDeleted: false,
       },
-    }),
+    })).map((pkg) => ({ ...pkg, thumbnailUrl: pkg.thumbnailUrl || undefined })),
   });
 }
 
@@ -94,7 +93,10 @@ export async function getPackage(req, res) {
 
   res.send({
     success: true,
-    value: packageInfo,
+    value: {
+      ...packageInfo,
+      thumbnailUrl: packageInfo.thumbnailUrl || '',
+    },
   });
 }
 
@@ -103,11 +105,11 @@ export async function getPackage(req, res) {
  * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
-async function addPackages(req, res) {
-  const schema = Joi.array().items({
+async function addPackage(req, res) {
+  const schema = Joi.object({
     name: Joi.string().required(),
-    thumbnailUrl: Joi.string().optional(),
-    description: Joi.string().optional().default(''),
+    thumbnailUrl: Joi.string().allow('').optional(),
+    description: Joi.string().allow('').optional(),
     price: Joi.number().positive().required(),
     paperNo: Joi.number().integer().positive().required(),
   });
@@ -127,10 +129,90 @@ async function addPackages(req, res) {
 
   res.send({
     success: true,
-    data: await client.paperPackage.createMany({
-      data: packagesInfo,
+    value: await client.paperPackage.create({
+      data: {
+        ...packagesInfo,
+        description: packagesInfo.description || '',
+      },
     }),
   });
+}
+
+/**
+ * Modify a package
+ * @param {Request<{}, any, any, QueryString.ParsedQs, Record<string, any>>} req - Express request
+ * @param {Response<any, Record<string, any>, number>} res - Express response
+ */
+async function modifyPackage(req, res) {
+  const schema = Joi.object({
+    id: Joi.string().required(),
+    name: Joi.string().optional(),
+    thumbnailUrl: Joi.string().allow('').optional(),
+    price: Joi.number().positive().optional(),
+    paperNo: Joi.number().integer().positive().optional(),
+    description: Joi.string().allow('').optional(),
+  });
+
+  const { error, value: packageModifier } = schema.validate(req.body);
+
+  if (error) {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.BAD_PAYLOAD,
+        message: error.details[0].message,
+      },
+    });
+    return;
+  }
+
+  try {
+    if (packageModifier.price || packageModifier.paperNo) {
+      const pkg = await client.paperPackage.update({
+        data: {
+          isDeleted: true,
+        },
+        where: {
+          id: packageModifier.id,
+        },
+      });
+      const newPkg = await client.paperPackage.create({
+        data: {
+          ...pkg,
+          ...packageModifier,
+          isDeleted: false,
+          id: undefined,
+        },
+      });
+      res.send({
+        success: true,
+        value: newPkg,
+      });
+      return;
+    }
+
+    const pkg = await client.paperPackage.update({
+      data: {
+        ...packageModifier,
+      },
+      where: {
+        id: packageModifier.id,
+      },
+    });
+
+    res.send({
+      success: true,
+      value: pkg,
+    });
+  } catch (e) {
+    res.send({
+      success: false,
+      error: {
+        code: ErrorCode.BAD_REQUEST,
+        message: 'Bad request',
+      },
+    });
+  }
 }
 
 /**
@@ -155,7 +237,7 @@ async function deletePackages(req, res) {
 
   res.send({
     success: true,
-    data: await client.paperPackage.updateMany({
+    value: await client.paperPackage.updateMany({
       data: {
         isDeleted: true,
       },
@@ -169,7 +251,8 @@ async function deletePackages(req, res) {
 }
 
 router.get('/', getPackages);
-router.post('/add', authManager, addPackages);
+router.post('/add', authManager, addPackage);
+router.post('/update', authManager, modifyPackage);
 router.post('/delete', authManager, deletePackages);
 router.get('/info/:id', getPackage);
 
