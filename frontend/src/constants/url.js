@@ -30,3 +30,5 @@ export const GET_PACKAGES_URL = '/api/packages';
 export const UPLOAD_PACKAGES_URL = '/api/packages/add';
 export const DELETE_PACKAGES_URL = '/api/packages/delete';
 export const UPDATE_PACKAGES_URL = '/api/packages/update';
+
+export const AWARD_PAPER_URL = '/api/grant/paper';
