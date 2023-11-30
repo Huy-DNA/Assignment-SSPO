@@ -17,5 +17,9 @@
         "no-restricted-syntax": "off",
         "no-unused-vars": "warn",
         "import/extensions": "off"
+    },
+    "env": {
+      "browser": true,
+      "node": true
     }
 }

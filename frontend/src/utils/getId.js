@@ -1,5 +1,5 @@
 /**
- *
+ * @returns { string } - The current SESSION_ID
  */
 export default function getId() {
   const cookiesString = document.cookie;

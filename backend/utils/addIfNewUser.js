@@ -5,7 +5,7 @@ const client = new PrismaClient();
 /**
  * Inspect the userInfo to see if it's already in the database
  * If not, add it to the database
- * @param {{ name: string, isManager: boolean, id: string }} userInfo
+ * @param {{ name: string, isManager: boolean, id: string }} userInfo - user information
  */
 export default async function addIfNewUser(userInfo) {
   const isInDb = (await client.user.findFirst({
