@@ -102,7 +102,7 @@ function Header() {
           lg:hover:border-b-4  hover:border-blue-400 hover:bg-blue-900
           my-1 lg:my-0
           hover:cursor-pointer
-          transition ease-in-out px-6 py-6 text-lg
+          transition ease-in-out px-6 py-3 text-lg
         `}
         onClick={() => setIsMenuOpen(false)}
       >
