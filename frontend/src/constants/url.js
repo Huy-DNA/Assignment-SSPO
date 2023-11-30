@@ -26,3 +26,6 @@ export const DELETE_FEEDBACKS_URL = '/api/feedbacks/delete';
 
 export const GET_CONFIGS_URL = '/api/configs';
 
+export const GET_PACKAGES_URL = '/api/packages';
+export const UPLOAD_PACKAGES_URL = '/api/packages/add';
+export const DELETE_PACKAGES_URL = '/api/packages/delete';

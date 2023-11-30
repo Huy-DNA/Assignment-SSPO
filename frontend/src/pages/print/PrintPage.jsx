@@ -1,7 +1,7 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
-import images from "../../../assets/images/images";
+import images from '../../../assets/images/images';
 
 export default function PrintPage() {
   let fileIndex;

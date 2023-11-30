@@ -1,7 +1,7 @@
-import { Tab, Tabs } from "@mui/material";
-import React, { useState } from "react";
-import PrinterJobGrid from "../../components/PrinterJobGrid/PrinterJobGrid";
-import TransactionGrid from "../../components/TransactionGrid/TransactionGrid";
+import { Tab, Tabs } from '@mui/material';
+import React, { useState } from 'react';
+import PrinterJobGrid from '../../components/PrinterJobGrid/PrinterJobGrid';
+import TransactionGrid from '../../components/TransactionGrid/TransactionGrid';
 
 export default function HistoryPage() {
   const [tab, setTab] = useState(0);

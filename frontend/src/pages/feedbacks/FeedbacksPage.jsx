@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { DELETE_FEEDBACKS_URL, GET_FEEDBACKS_URL, UPLOAD_FEEDBACKS_URL } from "../../constants/url";
-import { Button, CircularProgress, Pagination } from "@mui/material";
-import extractAPIResponse from "../../utils/extractAPIResponse";
-import { NotificationStatus } from "../../constants/notification";
-import axios from "axios";
-import useNotification from "../../hooks/useNotification";
-import { useSelector } from "react-redux";
-import { LoginStatus } from "../../constants/loginStatus";
+import React, { useEffect, useState } from 'react';
+import { DELETE_FEEDBACKS_URL, GET_FEEDBACKS_URL, UPLOAD_FEEDBACKS_URL } from '../../constants/url';
+import { Button, CircularProgress, Pagination } from '@mui/material';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+import { NotificationStatus } from '../../constants/notification';
+import axios from 'axios';
+import useNotification from '../../hooks/useNotification';
+import { useSelector } from 'react-redux';
+import { LoginStatus } from '../../constants/loginStatus';
 import images from '../../../assets/images/images';
-import formatDate from "../../utils/formatDate";
-import getId from "../../utils/getId";
+import formatDate from '../../utils/formatDate';
+import getId from '../../utils/getId';
 
 const paginationSize = 5;
 
@@ -101,7 +101,7 @@ export default function FeedbacksPage() {
                   <div className="flex-auto">
                     <p className="flex flex-row items-center gap-2">
                       <span className="font-bold text-lg">{ feedback.user.user.name }</span>
-                      { feedback.userId === userId && <button onClick={() => handleDeleteButton(feedback.id)} className="rounded-lg bg-red-500 active:bg-red-700 font-bold text-white p-1 text-sm"> Delete </button> }
+                      { feedback.userId === userId && <button onClick={() => handleDeleteButton(feedback.id)} className="rounded-lg bg-red-500 active:bg-red-700 font-bold text-white p-1 text-sm"> Thu hồi </button> }
                     </p>
                     <p> 
                       <span className="font-light text-sm">{ formatDate(new Date(feedback.postedAt)) }</span>

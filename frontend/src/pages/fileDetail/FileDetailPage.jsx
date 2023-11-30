@@ -31,7 +31,7 @@ export default function FileDetailPage() {
       .catch((e) => notify(NotificationStatus.ERR, e.message))
   }, []);
   return (
-    <div className="h-screen">
+    <div className="min-h-screen">
       <h1 className="text-blue-900 my-6 font-bold text-3xl">
         CHI TIẾT TÀI LIỆU
       </h1>

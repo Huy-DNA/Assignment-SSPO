@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React from 'react';
+import { useState } from 'react';
 function PaymentMethod() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");

@@ -1,11 +1,11 @@
-import React from "react";
-import { useParams } from "react-router";
-import useNotification from "../../hooks/useNotification";
-import { useEffect, useState } from "react";
-import extractAPIResponse from "../../utils/extractAPIResponse";
-import axios from "axios";
-import { GET_REPORTS_URL } from "../../constants/url";
-import { NotificationStatus } from "../../constants/notification";
+import React from 'react';
+import { useParams } from 'react-router';
+import useNotification from '../../hooks/useNotification';
+import { useEffect, useState } from 'react';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+import axios from 'axios';
+import { GET_REPORTS_URL } from '../../constants/url';
+import { NotificationStatus } from '../../constants/notification';
 
 export default function ReportDetailPage() {
   const notify = useNotification();

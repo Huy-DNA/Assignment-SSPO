@@ -1,5 +1,5 @@
 import React from 'react';
-import UserGrid from "../../components/UserGrid/UserGrid";
+import UserGrid from '../../components/UserGrid/UserGrid';
 
 export default function UsersPage() {
   return (

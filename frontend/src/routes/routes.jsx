@@ -17,7 +17,6 @@ export const guestRoutes = [
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
   { path: '/feedbacks', component: FeedbacksPage },
-  { path: '/packages', component: PackagesPage },
 ];
 
 export const managerRoutes = [
@@ -29,7 +28,6 @@ export const managerRoutes = [
   { path: '/reports', component: ReportsPage },
   { path: '/reports/:id', component: ReportDetailPage },
   { path: '/feedbacks', component: FeedbacksPage },
-  { path: '/packages', component: PackagesPage },
 ];
 
 export const userRoutes = [
