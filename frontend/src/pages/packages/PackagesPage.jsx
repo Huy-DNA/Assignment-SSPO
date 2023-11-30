@@ -78,7 +78,14 @@ export default function PackagesPage() {
     axios.get(GET_PACKAGES_URL)
       .then(({ data }) => extractAPIResponse(data))
       .then((res) => {
-
+        const ids = res.map(({ id }) => id);
+        const availableItems = [];
+        for (const cartItem of cart) {
+          if (ids.includes(cartItem.item.id)) {
+            availableItems.push(cartItem);
+          }
+        }
+        setCart(availableItems);
         return res;
       })
       .then(setPackages)
@@ -90,14 +97,14 @@ export default function PackagesPage() {
       <h1 className="text-blue-900 my-6 font-bold text-3xl">
         GÓI GIẤY IN
       </h1>
-      <div className="lg:flex lg:flex-row items-stretch lg:gap-10 lg:min-h-[90vh]">
+      <div className="lg:flex lg:flex-row items-stretch lg:gap-10">
         <div className="flex-1">
           {
             packages === null ? 
             <div className="flex flex-row justify-center items-center">
               <CircularProgress size={80}/>
             </div> :
-            <div className="bg-white rounded-lg p-10 scroll-auto lg:min-h-screen max-h-screen">
+            <div className="bg-white rounded-lg p-10 scroll-auto lg:min-h-[50vh] imax-h-screen">
               <Grid container rowSpacing={4} columnSpacing={4}>
                 { packages && packages.map((item, index) => (
                   <Grid item key={index} xs={12} sm={6}>
