@@ -1,13 +1,13 @@
-import { Router } from "express";
-import Joi from "joi";
-import _ from "lodash";
-import { PrinterJobStatus, PrismaClient } from "@prisma/client";
-import { authStudent, authUser } from "../../middleware/auth.js";
-import ErrorCode from "../../../errorcodes.js";
-import getUserFromSession from "../../utils/getUserFromSession.js";
-import { configs, formatConfig } from "../../core/systemConfig.js";
-import estimatePrintTime from "../../utils/estimatePrintTime.js";
-import printerManager from "../../core/printerManager.js";
+import { Router } from 'express';
+import Joi from 'joi';
+import _ from 'lodash';
+import { PrinterJobStatus, PrismaClient } from '@prisma/client';
+import { authStudent, authUser } from '../../middleware/auth.js';
+import ErrorCode from '../../../errorcodes.js';
+import getUserFromSession from '../../utils/getUserFromSession.js';
+import { configs, formatConfig } from '../../core/systemConfig.js';
+import estimatePrintTime from '../../utils/estimatePrintTime.js';
+import printerManager from '../../core/printerManager.js';
 
 const router = Router();
 const client = new PrismaClient();
@@ -55,12 +55,12 @@ export async function getPrinterJobs(req, res) {
  */
 export async function getPrinterJob(req, res) {
   const { id } = req.params;
-  if (typeof id !== "string") {
+  if (typeof id !== 'string') {
     res.send({
       success: false,
       error: {
         code: ErrorCode.BAD_REQUEST,
-        message: "Bad id",
+        message: 'Bad id',
       },
     });
     return;
@@ -82,7 +82,7 @@ export async function getPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: "Printer job not found",
+        message: 'Printer job not found',
       },
     });
     return;
@@ -144,32 +144,32 @@ export async function addPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: "File not found",
+        message: 'File not found',
       },
     });
     return;
   }
 
   if (
-    printerJobInfo.startPage > printerJobInfo.endPage ||
-    printerJobInfo.endPage > file.pageNo
+    printerJobInfo.startPage > printerJobInfo.endPage
+    || printerJobInfo.endPage > file.pageNo
   ) {
     res.send({
       success: false,
       error: {
         code: ErrorCode.BAD_REQUEST,
-        message: "Invalid page range",
+        message: 'Invalid page range',
       },
     });
     return;
   }
 
-  if (!formatConfig.isAllowed(_.last(file.name.split(".")) || "")) {
+  if (!formatConfig.isAllowed(_.last(file.name.split('.')) || '')) {
     res.send({
       success: false,
       error: {
         code: ErrorCode.FORMAT_NOT_ALLOWED,
-        message: "Format not allowed",
+        message: 'Format not allowed',
       },
     });
     return;
@@ -191,7 +191,7 @@ export async function addPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: "Printer not found",
+        message: 'Printer not found',
       },
     });
     return;
@@ -211,23 +211,23 @@ export async function addPrinterJob(req, res) {
         success: false,
         error: {
           code: ErrorCode.PAGESIZE_NOT_ALLOWED,
-          message: "Invalid page size",
+          message: 'Invalid page size',
         },
       });
       return;
     }
 
     if (
-      student.paperNo <
-      (printerJobInfo.endPage - printerJobInfo.startPage + 1) *
-        printerJobInfo.copiesNo *
-        equivPages
+      student.paperNo
+      < (printerJobInfo.endPage - printerJobInfo.startPage + 1)
+        * printerJobInfo.copiesNo
+        * equivPages
     ) {
       res.send({
         success: false,
         error: {
           code: ErrorCode.NOT_ENOUGH_PAPER,
-          message: "Not enough paper",
+          message: 'Not enough paper',
         },
       });
       return;
@@ -273,7 +273,7 @@ export async function addPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.UNKNOWN,
-        message: "Failed to create printer job",
+        message: 'Failed to create printer job',
       },
     });
   }
