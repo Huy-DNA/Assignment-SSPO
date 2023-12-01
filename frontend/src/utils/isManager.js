@@ -1,5 +1,5 @@
 /**
- *
+ * @returns { boolean } - whether the current user is a manager
  */
 export default function isManager() {
   const cookiesString = document.cookie;

@@ -108,14 +108,14 @@ export async function generatePrinter(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 async function addPrinters(req, res) {
-  const schema = Joi.array().items(Joi.object({
+  const schema = Joi.array(Joi.object({
     id: Joi.string().optional(),
-    campus: Joi.string().uppercase().valid('BK1', 'BK2'),
-    building: Joi.string().uppercase(),
-    room: Joi.number(),
+    campus: Joi.string().uppercase().valid('BK1', 'BK2').required(),
+    building: Joi.string().uppercase().required(),
+    room: Joi.number().required(),
     brand: Joi.string().optional(),
     description: Joi.string().optional(),
-    name: Joi.string(),
+    name: Joi.string().required(),
     enabled: Joi.boolean().default(true),
   }));
 
@@ -182,7 +182,7 @@ async function deletePrinters(req, res) {
  */
 async function modifyPrinters(req, res) {
   const schema = Joi.array().items(Joi.object({
-    id: Joi.string(),
+    id: Joi.string().required(),
     campus: Joi.string().uppercase().valid('BK1', 'BK2').optional(),
     building: Joi.string().uppercase().optional(),
     room: Joi.number().optional(),

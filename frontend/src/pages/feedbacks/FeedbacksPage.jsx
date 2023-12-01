@@ -1,19 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { GET_FEEDBACKS_URL, UPLOAD_FEEDBACKS_URL } from "../../constants/url";
-import { Button, CircularProgress, Pagination } from "@mui/material";
-import extractAPIResponse from "../../utils/extractAPIResponse";
-import { NotificationStatus } from "../../constants/notification";
-import axios from "axios";
-import useNotification from "../../hooks/useNotification";
-import { useSelector } from "react-redux";
-import { LoginStatus } from "../../constants/loginStatus";
+import React, { useEffect, useState } from 'react';
+import { DELETE_FEEDBACKS_URL, GET_FEEDBACKS_URL, UPLOAD_FEEDBACKS_URL } from '../../constants/url';
+import { Button, CircularProgress, Pagination } from '@mui/material';
+import extractAPIResponse from '../../utils/extractAPIResponse';
+import { NotificationStatus } from '../../constants/notification';
+import axios from 'axios';
+import useNotification from '../../hooks/useNotification';
+import { useSelector } from 'react-redux';
+import { LoginStatus } from '../../constants/loginStatus';
 import images from '../../../assets/images/images';
-import formatDate from "../../utils/formatDate";
+import formatDate from '../../utils/formatDate';
+import getId from '../../utils/getId';
 
 const paginationSize = 5;
 
 export default function FeedbacksPage() {
   const notify = useNotification();
+  const userId = getId();
   const [feedbacks, setFeedbacks] = useState(null);
   const [totalFeedbacks, setTotalFeedbacks] = useState(null);
   const [typedFeedback, setTypedFeedback] = useState('');
@@ -42,14 +44,24 @@ export default function FeedbacksPage() {
   } 
   const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;
 
-  const refreshFeedbacks = () => {
+  const refreshFeedbacks = () =>
     axios.get(`${GET_FEEDBACKS_URL}?start=${startFeedbackId}&end=${endFeedbackId}`)
       .then(({ data }) => extractAPIResponse(data))
       .then(({ feedbacks, total }) => { setFeedbacks(feedbacks); setTotalFeedbacks(total); })
-      .catch((e) => notify(NotificationStatus.ERR, e.message))
-  };
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
 
-  useEffect(refreshFeedbacks, [page]);
+  useEffect(() => { refreshFeedbacks(); }, [page]);
+
+  const handleDeleteButton = async (id) => {
+    notify(NotificationStatus.WAITING);
+    await axios.post(DELETE_FEEDBACKS_URL, [id]);
+    try {
+      await refreshFeedbacks();
+      notify(NotificationStatus.OK);
+    } catch (e) {
+      notify(NotificationStatus.ERR);
+    }
+  }
 
   return (
     <div className="w-full h-full">
@@ -74,9 +86,9 @@ export default function FeedbacksPage() {
         </div>
       }
       {
-        feedbacks && 
+        feedbacks && (totalFeedbacks === 0 ? <p>Không có đánh giá nào</p> :
         <div>
-          <Pagination count={Math.ceil(totalFeedbacks / paginationSize)} onChange={(e, page) => setPage(page - 1) } />
+          { totalFeedbacks > 0 && <Pagination count={Math.ceil(totalFeedbacks / paginationSize)} onChange={(e, page) => setPage(page - 1) } /> }
           <div className="flex flex-col [&>*:nth-child(odd)]:bg-blue-100 [&>*:nth-child(even)]:bg-slate-200">
             {
               feedbacks.map((feedback) => (
@@ -87,19 +99,20 @@ export default function FeedbacksPage() {
                     />
                   </div>
                   <div className="flex-auto">
-                    <p>
-                      <span className="font-bold">{ feedback.user.user.name }</span>
+                    <p className="flex flex-row items-center gap-2">
+                      <span className="font-bold text-lg">{ feedback.user.user.name }</span>
+                      { feedback.userId === userId && <button onClick={() => handleDeleteButton(feedback.id)} className="rounded-lg bg-red-500 active:bg-red-700 font-bold text-white p-1 text-sm"> Thu hồi </button> }
                     </p>
                     <p> 
                       <span className="font-light text-sm">{ formatDate(new Date(feedback.postedAt)) }</span>
                     </p>
-                    <p className="min-h-[60px]">{ feedback.content }</p>
+                    <p className="min-h-[60px] max-h-[100px] overflow-y-auto whitespace-pre-wrap">{ feedback.content }</p>
                   </div>
                 </div>
               ))
             }
           </div>
-        </div>
+        </div>)
       }
     </div>
   )

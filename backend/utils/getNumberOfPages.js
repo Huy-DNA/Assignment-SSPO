@@ -61,7 +61,7 @@ export async function getNumberOfPptxPages(base64Content) {
 
 /**
  * @param { string } name - the name of the file
- * @param { content } base64Content - the content of the file encoded in Base64
+ * @param { string } base64Content - the content of the file encoded in Base64
  * @returns { number | undefined } the number of pages
  */
 export default function getNumberOfPages(name, base64Content) {

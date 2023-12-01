@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import React from 'react';
 import { guestRoutes, managerRoutes, userRoutes } from './src/routes/routes';
@@ -6,8 +6,6 @@ import DefaultLayout from './src/layout/DefaultLayout/DefaultLayout';
 import './styles.css';
 import Breadcrumbs from './src/components/Breadcrumbs/Breadcrumbs';
 import { LoginStatus } from './src/constants/loginStatus';
-import FilesPage from './src/pages/files/FilesPage';
-import FileDetailPage from './src/pages/fileDetail/FileDetailPage';
 
 function App() {
   const loginStatus = useSelector(state => state.loginStatus.value);
@@ -42,6 +40,7 @@ function App() {
               />
             );
           })}
+          <Route path='*' exact={true} element={<Navigate to={{ pathname: '/' }}/>} />
         </Routes>
       </div>
     </BrowserRouter>

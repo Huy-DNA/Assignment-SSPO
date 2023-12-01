@@ -23,3 +23,12 @@ export const GET_FEEDBACKS_URL = '/api/feedbacks';
 export const UPLOAD_FEEDBACKS_URL = '/api/feedbacks/upload';
 export const UPDATE_FEEDBACKS_URL = '/api/feedbacks/update';
 export const DELETE_FEEDBACKS_URL = '/api/feedbacks/delete';
+
+export const GET_CONFIGS_URL = '/api/configs';
+
+export const GET_PACKAGES_URL = '/api/packages';
+export const UPLOAD_PACKAGES_URL = '/api/packages/add';
+export const DELETE_PACKAGES_URL = '/api/packages/delete';
+export const UPDATE_PACKAGES_URL = '/api/packages/update';
+
+export const AWARD_PAPER_URL = '/api/grant/paper';

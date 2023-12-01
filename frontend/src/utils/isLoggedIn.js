@@ -1,5 +1,5 @@
 /**
- *
+ * @returns { boolean } - whether the user is logged in
  */
 export default function isLoggedIn() {
   const cookiesString = document.cookie;

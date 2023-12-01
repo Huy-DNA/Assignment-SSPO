@@ -7,6 +7,7 @@ function PrintPage() {
 
   const [files, setFiles] = useState([]);
   const [printers, setPrinters] = useState([]);
+  const [pageSize, setPageSize] = useState();
   const [fileSelected, setFileSelected] = useState();
   const [fileToPrint, setFileToPrint] = useState({
     fileId: '',
@@ -25,6 +26,15 @@ function PrintPage() {
   useEffect(() => {
     axios.get('http://localhost:3000/api/files').then((response) => {
       setFiles(response.data.value);
+    })
+      .catch((error) => {
+        console.log(error)
+      });
+  }, []);
+
+  useEffect(() => {
+    axios.get('http://localhost:3000/api/configs/pageSizes').then((response) => {
+      setPageSize(response.data.value);
     })
       .catch((error) => {
         console.log(error)
@@ -125,8 +135,11 @@ function PrintPage() {
               }}
             >
               <option style={{ fontSize: '18px', padding: '6px' }}>Chọn khổ giấy in</option>
-              <option value="a4" style={{ fontSize: '18px', padding: '6px' }}>A4</option>
-              <option value="a3" style={{ fontSize: '18px', padding: '6px' }}>A3</option>
+              {
+                pageSize && pageSize.map((item, index) => (
+                  <option value={item.id} key={item.id} style={{ fontSize: '18px', padding: '6px' }}>{item.name}</option>
+                ))
+              }
             </select>
           </div>
           <div className="w-2/5 mr-8">
@@ -205,10 +218,10 @@ function PrintPage() {
               Số trang giấy in:
               {
                 fileToPrint.fileId && fileToPrint.endPage && fileToPrint.startPage && fileToPrint.pageSize === 'a4' ? (
-                  (fileToPrint.endPage - fileToPrint.startPage + 1) * ( fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
+                  (fileToPrint.endPage - fileToPrint.startPage + 1) * (fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
                 ) : (
                   fileToPrint.fileId && fileToPrint.endPage && fileToPrint.startPage && fileToPrint.pageSize === 'a3' ? (
-                    (fileToPrint.endPage - fileToPrint.startPage + 1) * 2 * ( fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
+                    (fileToPrint.endPage - fileToPrint.startPage + 1) * 2 * (fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
                   ) : (
                     <></>
                   )

@@ -1,13 +1,13 @@
-import { Router } from 'express';
-import Joi from 'joi';
-import _ from 'lodash';
-import { PrinterJobStatus, PrismaClient } from '@prisma/client';
-import { authStudent, authUser } from '../../middleware/auth.js';
-import ErrorCode from '../../../errorcodes.js';
-import getUserFromSession from '../../utils/getUserFromSession.js';
-import { formatConfig, pageSizeConfig } from '../../core/systemConfig.js';
-import estimatePrintTime from '../../utils/estimatePrintTime.js';
-import printerManager from '../../core/printerManager.js';
+import { Router } from "express";
+import Joi from "joi";
+import _ from "lodash";
+import { PrinterJobStatus, PrismaClient } from "@prisma/client";
+import { authStudent, authUser } from "../../middleware/auth.js";
+import ErrorCode from "../../../errorcodes.js";
+import getUserFromSession from "../../utils/getUserFromSession.js";
+import { configs, formatConfig } from "../../core/systemConfig.js";
+import estimatePrintTime from "../../utils/estimatePrintTime.js";
+import printerManager from "../../core/printerManager.js";
 
 const router = Router();
 const client = new PrismaClient();
@@ -55,12 +55,12 @@ export async function getPrinterJobs(req, res) {
  */
 export async function getPrinterJob(req, res) {
   const { id } = req.params;
-  if (typeof id !== 'string') {
+  if (typeof id !== "string") {
     res.send({
       success: false,
       error: {
         code: ErrorCode.BAD_REQUEST,
-        message: 'Bad id',
+        message: "Bad id",
       },
     });
     return;
@@ -82,7 +82,7 @@ export async function getPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: 'Printer job not found',
+        message: "Printer job not found",
       },
     });
     return;
@@ -100,19 +100,23 @@ export async function getPrinterJob(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function addPrinterJob(req, res) {
+  // const schema = Joi.object(Joi.object({
+  //   fileId: Joi.string().required(),
+  //   printerId: Joi.string().required(),
+  //   oneSided: Joi.boolean().default(false),
+  //   pageSize: Joi.string().required(),
+  //   copiesNo: Joi.number().integer().positive().default(1),
+  //   startPage: Joi.number().integer().positive().required(),
+  //   endPage: Joi.number().integer().positive().required(),
+  // }));
   const schema = Joi.object({
-    fileId: Joi.string(),
-    printerId: Joi.string(),
+    fileId: Joi.string().required(),
+    printerId: Joi.string().required(),
     oneSided: Joi.boolean().default(false),
-    pageSize: Joi.string().default('a4').custom((value, helpers) => {
-      if (!pageSizeConfig.isAllowed(value)) {
-        return helpers.error('Page size not allowed');
-      }
-      return true;
-    }),
-    copiesNo: Joi.number().default(1),
-    startPage: Joi.number(),
-    endPage: Joi.number(),
+    pageSize: Joi.string().required(),
+    copiesNo: Joi.number().integer().positive().default(1),
+    startPage: Joi.number().integer().positive().required(),
+    endPage: Joi.number().integer().positive().required(),
   });
 
   const { error, value: printerJobInfo } = schema.validate(req.body);
@@ -149,31 +153,32 @@ export async function addPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: 'File not found',
+        message: "File not found",
       },
     });
     return;
   }
 
-  if (printerJobInfo.startPage > printerJobInfo.endPage
-      || printerJobInfo.startPage <= 0
-      || printerJobInfo.endPage > file.pageNo) {
+  if (
+    printerJobInfo.startPage > printerJobInfo.endPage ||
+    printerJobInfo.endPage > file.pageNo
+  ) {
     res.send({
       success: false,
       error: {
         code: ErrorCode.BAD_REQUEST,
-        message: 'Invalid page range',
+        message: "Invalid page range",
       },
     });
     return;
   }
 
-  if (!formatConfig.isAllowed(_.last(file.name.split('.')) || '')) {
+  if (!formatConfig.isAllowed(_.last(file.name.split(".")) || "")) {
     res.send({
       success: false,
       error: {
         code: ErrorCode.FORMAT_NOT_ALLOWED,
-        message: 'Format not allowed',
+        message: "Format not allowed",
       },
     });
     return;
@@ -195,7 +200,7 @@ export async function addPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.RESOURCE_NOT_FOUND,
-        message: 'Printer not found',
+        message: "Printer not found",
       },
     });
     return;
@@ -208,14 +213,30 @@ export async function addPrinterJob(req, res) {
       },
     });
 
-    if (student.paperNo < (
-      printerJobInfo.endPage - printerJobInfo.startPage + 1
-    ) * printerJobInfo.copiesNo) {
+    const equivPages = configs.allowedPageSize.get(printerJobInfo.pageSize);
+
+    if (equivPages === undefined) {
+      res.send({
+        success: false,
+        error: {
+          code: ErrorCode.PAGESIZE_NOT_ALLOWED,
+          message: "Invalid page size",
+        },
+      });
+      return;
+    }
+
+    if (
+      student.paperNo <
+      (printerJobInfo.endPage - printerJobInfo.startPage + 1) *
+        printerJobInfo.copiesNo *
+        equivPages
+    ) {
       res.send({
         success: false,
         error: {
           code: ErrorCode.NOT_ENOUGH_PAPER,
-          message: 'Not enough paper',
+          message: "Not enough paper",
         },
       });
       return;
@@ -242,8 +263,11 @@ export async function addPrinterJob(req, res) {
     // Possible concurrency issues due to restriction in expressiveness when describing transactions
     await client.student.update({
       data: {
-        paperNo: student.paperNo
-          - (printerJobInfo.endPage - printerJobInfo.startPage + 1) * printerJobInfo.copiesNo,
+        paperNo:
+          student.paperNo -
+          (printerJobInfo.endPage - printerJobInfo.startPage + 1) *
+            printerJobInfo.copiesNo *
+            equivPages,
       },
       where: {
         id: userInfo.id,
@@ -259,14 +283,14 @@ export async function addPrinterJob(req, res) {
       success: false,
       error: {
         code: ErrorCode.UNKNOWN,
-        message: 'Failed to create printer job',
+        message: "Failed to create printer job",
       },
     });
   }
 }
 
-router.get('/', authUser, getPrinterJobs);
-router.get('/info/:id', authUser, getPrinterJob);
-router.post('/', authStudent, addPrinterJob);
+router.get("/", authUser, getPrinterJobs);
+router.get("/info/:id", authUser, getPrinterJob);
+router.post("/", authStudent, addPrinterJob);
 
 export default router;

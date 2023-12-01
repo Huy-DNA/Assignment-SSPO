@@ -10,14 +10,13 @@ import ReportsPage from '../pages/reports/ReportsPage';
 import ReportDetailPage from '../pages/reportDetail/ReportDetailPage';
 import FeedbacksPage from '../pages/feedbacks/FeedbacksPage';
 import PackagesPage from '../pages/packages/PackagesPage';
-import PaymentMethod from '../pages/payment/Payment';
+import PaymentPage from '../pages/payment/PaymentPage';
 
 export const guestRoutes = [
   { path: '/', component: HomePage },
   { path: '/printers', component: PrintersPage },
   { path: '/printers/:id', component: PrinterDetailPage },
   { path: '/feedbacks', component: FeedbacksPage },
-  { path: '/packages', component: PackagesPage },
 ];
 
 export const managerRoutes = [
@@ -29,7 +28,6 @@ export const managerRoutes = [
   { path: '/reports', component: ReportsPage },
   { path: '/reports/:id', component: ReportDetailPage },
   { path: '/feedbacks', component: FeedbacksPage },
-  { path: '/packages', component: PackagesPage },
 ];
 
 export const userRoutes = [
@@ -41,6 +39,6 @@ export const userRoutes = [
   { path: '/files/:id', component: FileDetailPage },
   { path: '/history', component: HistoryPage },
   { path: '/feedbacks', component: FeedbacksPage },
-  { path: '/payment', component: PaymentMethod},
+  { path: '/payment', component: PaymentPage },
   { path: '/packages', component: PackagesPage },
 ];

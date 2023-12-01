@@ -31,7 +31,7 @@ export default function FileDetailPage() {
       .catch((e) => notify(NotificationStatus.ERR, e.message))
   }, []);
   return (
-    <div className="h-screen">
+    <div className="min-h-screen">
       <h1 className="text-blue-900 my-6 font-bold text-3xl">
         CHI TIẾT TÀI LIỆU
       </h1>
@@ -41,10 +41,10 @@ export default function FileDetailPage() {
         </h1>
         <p>{ detail.uploadedAt && <span>Upload vào: { formatDate(new Date(detail.uploadedAt)) }</span> }</p>
         
-        <div className="h-full m-2">
+        <div className="min-h-screen m-2">
           { 
             detail.content ?
-              <iframe className="border-dashed border-3 w-full h-4/6 sm:h-5/6 sm:w-5/6 m-auto"
+              <iframe className="border-3 w-full h-screen sm:w-5/6 m-auto"
                 src={`data:${mime.lookUpType(ext)};base64,${detail.content}`}
               /> :
               <div className="h-full flex items-center justify-center">

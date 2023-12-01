@@ -1,7 +1,7 @@
-import React from "react";
-import { NotificationStatus } from "../../constants/notification";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faClose } from "@fortawesome/free-solid-svg-icons";
+import React from 'react';
+import { NotificationStatus } from '../../constants/notification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faClose } from '@fortawesome/free-solid-svg-icons';
 
 export default function NotificationBox({ status, message, onClose }) {
   return (

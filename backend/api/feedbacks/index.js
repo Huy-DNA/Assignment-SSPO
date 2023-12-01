@@ -42,6 +42,11 @@ async function getFeedbacks(req, res) {
     },
     skip: Number.isNaN(startNum) && startNum >= 0 ? undefined : startNum,
     take: Number.isNaN(endNum) && endNum > startNum ? undefined : endNum - startNum,
+    orderBy: [
+      {
+        postedAt: 'desc',
+      },
+    ],
   });
 
   res.send({
@@ -117,7 +122,7 @@ async function getFeedback(req, res) {
  */
 async function uploadFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.object({
-    content: Joi.string(),
+    content: Joi.string().required(),
   }));
 
   const { error, value: feedbackInfos } = schema.validate(req.body);
@@ -189,7 +194,7 @@ async function deleteFeedbacks(req, res) {
  */
 async function modifyFeedbacks(req, res) {
   const schema = Joi.array().items(Joi.object({
-    id: Joi.string(),
+    id: Joi.string().required(),
     content: Joi.string().optional(),
   }));
 
