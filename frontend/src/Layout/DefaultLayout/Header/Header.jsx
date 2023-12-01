@@ -4,11 +4,11 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import MenuIcon from '@mui/icons-material/Menu';
 import { Popover } from '@mui/material';
 import { faBell } from '@fortawesome/free-solid-svg-icons';
-import images from '../../../../assets/images/images';
 import '../../../../styles.css';
 import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../../constants/loginStatus';
 import { useLocation } from 'react-router-dom';
+import images from '../../../../assets/images/images';
 
 const MANAGER_ITEMS = [
   {

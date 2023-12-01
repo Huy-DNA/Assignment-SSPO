@@ -150,8 +150,10 @@ export async function addPrinterJob(req, res) {
     return;
   }
 
-  if (printerJobInfo.startPage > printerJobInfo.endPage
-      || printerJobInfo.endPage > file.pageNo) {
+  if (
+    printerJobInfo.startPage > printerJobInfo.endPage
+    || printerJobInfo.endPage > file.pageNo
+  ) {
     res.send({
       success: false,
       error: {
@@ -215,9 +217,12 @@ export async function addPrinterJob(req, res) {
       return;
     }
 
-    if (student.paperNo < (
-      printerJobInfo.endPage - printerJobInfo.startPage + 1
-    ) * printerJobInfo.copiesNo * equivPages) {
+    if (
+      student.paperNo
+      < (printerJobInfo.endPage - printerJobInfo.startPage + 1)
+        * printerJobInfo.copiesNo
+        * equivPages
+    ) {
       res.send({
         success: false,
         error: {
