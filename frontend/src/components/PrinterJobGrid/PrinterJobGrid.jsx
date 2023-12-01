@@ -7,10 +7,11 @@ import extractAPIResponse from '../../utils/extractAPIResponse';
 export default function PrinterJobGrid() {
   const [printerJobs, setPrinterJobs] = React.useState([]);
   const loadPrinterJobs = () => axios.get(GET_PRINTERJOBS_URL)
-    .then(({ data }) => extractAPIResponse(data));
-  const deletePrinterJobs = (ids) => { throw new Error('Not supported') };
-  const updatePrinterJobs = (rows) => { throw new Error('Not supported') };
-  const createNewPrinterJob = () => { throw new Error('Not supported') };
+    .then(({ data }) => extractAPIResponse(data))
+    .then((rows) => rows.map((row) => ({ ...row, createdAt: new Date(row.createdAt) })));
+  const deletePrinterJobs = (ids) => { throw new Error('Not supported'); };
+  const updatePrinterJobs = (rows) => { throw new Error('Not supported'); };
+  const createNewPrinterJob = () => { throw new Error('Not supported'); };
   const showActions = {
     showView: true,
   };
@@ -92,7 +93,7 @@ export default function PrinterJobGrid() {
       type: 'dateTime',
       hideable: true,
       flex: 1,
-    }
+    },
   ];
 
   return (
