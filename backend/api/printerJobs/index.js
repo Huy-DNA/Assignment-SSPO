@@ -100,15 +100,6 @@ export async function getPrinterJob(req, res) {
  * @param {Response<any, Record<string, any>, number>} res - Express response
  */
 export async function addPrinterJob(req, res) {
-  // const schema = Joi.object(Joi.object({
-  //   fileId: Joi.string().required(),
-  //   printerId: Joi.string().required(),
-  //   oneSided: Joi.boolean().default(false),
-  //   pageSize: Joi.string().required(),
-  //   copiesNo: Joi.number().integer().positive().default(1),
-  //   startPage: Joi.number().integer().positive().required(),
-  //   endPage: Joi.number().integer().positive().required(),
-  // }));
   const schema = Joi.object({
     fileId: Joi.string().required(),
     printerId: Joi.string().required(),
@@ -213,7 +204,7 @@ export async function addPrinterJob(req, res) {
       },
     });
 
-    const equivPages = configs.allowedPageSize.get(printerJobInfo.pageSize);
+    const { equiv: equivPages } = configs.allowedPageSize.get(printerJobInfo.pageSize);
 
     if (equivPages === undefined) {
       res.send({
@@ -242,6 +233,9 @@ export async function addPrinterJob(req, res) {
       return;
     }
 
+    const pageUsed = (printerJobInfo.endPage - printerJobInfo.startPage + 1)
+      * printerJobInfo.copiesNo * equivPages;
+
     const printerJob = await client.printerJob.create({
       data: {
         building: printer.building,
@@ -255,7 +249,7 @@ export async function addPrinterJob(req, res) {
         endPage: printerJobInfo.endPage,
         fileId: printerJobInfo.fileId,
         userId: userInfo.id,
-        estimatedTime: estimatePrintTime(file.pageNo),
+        estimatedTime: estimatePrintTime(pageUsed),
         printerId: printerJobInfo.printerId,
       },
     });
@@ -263,11 +257,7 @@ export async function addPrinterJob(req, res) {
     // Possible concurrency issues due to restriction in expressiveness when describing transactions
     await client.student.update({
       data: {
-        paperNo:
-          student.paperNo -
-          (printerJobInfo.endPage - printerJobInfo.startPage + 1) *
-            printerJobInfo.copiesNo *
-            equivPages,
+        paperNo: student.paperNo - pageUsed,
       },
       where: {
         id: userInfo.id,
@@ -289,8 +279,8 @@ export async function addPrinterJob(req, res) {
   }
 }
 
-router.get("/", authUser, getPrinterJobs);
-router.get("/info/:id", authUser, getPrinterJob);
-router.post("/", authStudent, addPrinterJob);
+router.get('/', authUser, getPrinterJobs);
+router.get('/info/:id', authUser, getPrinterJob);
+router.post('/', authStudent, addPrinterJob);
 
 export default router;

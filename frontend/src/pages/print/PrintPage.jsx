@@ -2,11 +2,14 @@ import React, { useState, useEffect } from "react";
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import images from "../../../assets/images/images";
+import useNotification from '../../hooks/useNotification';
+import { NotificationStatus } from '../../constants/notification';
 
 function PrintPage() {
-
+  const notify = useNotification();
   const [files, setFiles] = useState([]);
   const [printers, setPrinters] = useState([]);
+  const [infoUser, setInfoUser] = useState();
   const [pageSize, setPageSize] = useState();
   const [fileSelected, setFileSelected] = useState();
   const [fileToPrint, setFileToPrint] = useState({
@@ -20,7 +23,12 @@ function PrintPage() {
 
   useEffect(() => {
     const cookieValue = Cookies.get('id');
-    console.log('Giá trị từ cookie:', cookieValue);
+    axios.get(`http://localhost:3000/api/users/info/${cookieValue}`).then((response) => {
+      setInfoUser(response.data.value);
+    })
+      .catch((error) => {
+        console.log(error)
+      });
   }, []);
 
   useEffect(() => {
@@ -50,30 +58,25 @@ function PrintPage() {
       });
   }, []);
 
-  useEffect(() => {
-    const getPrinters = async () => axios.get('http://localhost:3000/api/printers').then((response) => {
-      setPrinters(response.data.value);
-      console.log(response.data.value);
-    })
-      .catch((error) => {
-        console.log(error)
-      });
-  }, []);
-
   const getInfoFile = (fileId) => {
     const index = files.findIndex((value) => value.id === fileId);
     setFileSelected(files[index]);
   }
 
   const handleRequestPrintFile = () => {
-    console.log(fileToPrint);
     axios.post('http://localhost:3000/api/printerJobs', fileToPrint).then((response) => {
-      console.log(response);
+      notify(NotificationStatus.OK, "Successfully queue the printed file!.")
     })
       .catch((error) => {
-        console.log(error)
+        notify(NotificationStatus.ERR, "Successfully queue the printed file!.")
       });
   }
+
+  const handleReloadPrintPage = () => {
+    setTimeout(() => {
+      window.location.reload();
+    }, 2000);
+  };
 
   return (
     <div className="w-full">
@@ -131,7 +134,6 @@ function PrintPage() {
               style={{ fontSize: '18px', padding: '6px' }}
               onChange={(e) => {
                 setFileToPrint({ ...fileToPrint, pageSize: e.target.value });
-                console.log('render-render');
               }}
             >
               <option style={{ fontSize: '18px', padding: '6px' }}>Chọn khổ giấy in</option>
@@ -187,7 +189,7 @@ function PrintPage() {
               onChange={(e) => setFileToPrint({ ...fileToPrint, endPage: e.target.value })}
             />
             {
-              fileSelected && fileSelected.pageNo && fileToPrint.endPage && fileSelected.pageNo < fileToPrint.endPage ? (
+              fileSelected && fileSelected.pageNo && fileToPrint.endPage && (fileSelected.pageNo < fileToPrint.endPage || fileToPrint.endPage < fileToPrint.startPage) ? (
                 <div className="font-normal text-base">Giá trị bạn nhập vào không hợp lệ</div>
               ) : (
                 <></>
@@ -206,30 +208,25 @@ function PrintPage() {
                 setFileToPrint({ ...fileToPrint, copiesNo: e.target.value })
               }}
             >
-              <option value="0" style={{ fontSize: '18px', padding: '6px' }}>Chọn số bản copy</option>
+              <option style={{ fontSize: '18px', padding: '6px' }}>Chọn số bản copy</option>
               <option value="1" style={{ fontSize: '18px', padding: '6px' }}>1</option>
               <option value="2" style={{ fontSize: '18px', padding: '6px' }}>2</option>
               <option value="3" style={{ fontSize: '18px', padding: '6px' }}>3</option>
               <option value="4" style={{ fontSize: '18px', padding: '6px' }}>4</option>
             </select>
           </div>
-          <div className="w-2/5 mt-6 mr-8">
-            <div className="font-medium mb-1 text-base">
-              Số trang giấy in:
+          <div className="w-2/5 mt-6 pt-2 mr-8 items-center flex">
+            <div className="font-semibold">
+              Số trang hiện có:
+            </div>
+            <div className="pl-1">
               {
-                fileToPrint.fileId && fileToPrint.endPage && fileToPrint.startPage && fileToPrint.pageSize === 'a4' ? (
-                  (fileToPrint.endPage - fileToPrint.startPage + 1) * (fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
+                infoUser && infoUser.paperNo ? (
+                  infoUser.paperNo
                 ) : (
-                  fileToPrint.fileId && fileToPrint.endPage && fileToPrint.startPage && fileToPrint.pageSize === 'a3' ? (
-                    (fileToPrint.endPage - fileToPrint.startPage + 1) * 2 * (fileSelected.copiesNo ? parseInt(fileSelected.copiesNo, 10) : 1)
-                  ) : (
-                    <></>
-                  )
+                  <></>
                 )
               }
-            </div>
-            <div className="font-medium mb-1 text-base">
-              Số trang còn lại: 200
             </div>
           </div>
         </div>
@@ -239,7 +236,10 @@ function PrintPage() {
           </button>
           <button
             className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-white text-xl rounded-lg"
-            onClick={() => handleRequestPrintFile()}
+            onClick={() => {
+              handleRequestPrintFile();
+              handleReloadPrintPage();
+            }}
           >
             Xác nhận
           </button>

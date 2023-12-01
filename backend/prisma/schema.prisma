@@ -84,7 +84,7 @@ model PrinterJob {
   pageSize      String
   estimatedTime Float
   startAt       DateTime?
-  createdAt     DateTime
+  createdAt     DateTime         @default(now())
   copiesNo      Int
   startPage     Int
   endPage       Int
