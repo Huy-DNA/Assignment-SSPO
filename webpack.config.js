@@ -10,7 +10,7 @@ export default [
     },
     mode: 'development',
     resolve: {
-      extensions: ['*', '.js', '.jsx'],
+      extensions: ['.*', '.js', '.jsx'],
     },
     module: {
       rules: [
