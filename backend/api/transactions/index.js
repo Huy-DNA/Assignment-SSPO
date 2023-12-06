@@ -31,9 +31,6 @@ export async function getTransactions(req, res) {
       where: {
         userId: user.isManager ? undefined : user.id,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
     }),
   });
 }

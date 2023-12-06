@@ -44,9 +44,6 @@ export async function getPrinterJobs(req, res) {
       where: {
         userId: user.isManager ? undefined : user.id,
       },
-      orderBy: {
-        createdAt: 'desc',
-      },
     }),
   });
 }
