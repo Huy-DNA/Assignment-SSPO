@@ -12,7 +12,7 @@ import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../constants/loginStatus';
 
 export default function PrinterGrid() {
-  const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;
+  const isManager = useSelector((state) => state.loginStatus.value) === LoginStatus.MANAGER;
   const [printers, setPrinters] = React.useState([]);
   const loadPrinters = () => axios.get(GET_PRINTERS_URL)
     .then(({ data }) => extractAPIResponse(data));
