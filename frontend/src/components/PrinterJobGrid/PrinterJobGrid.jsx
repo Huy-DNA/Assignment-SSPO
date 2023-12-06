@@ -3,11 +3,8 @@ import { GET_PRINTERJOBS_URL } from '../../constants/url';
 import Grid from '../Grid/Grid';
 import axios from 'axios';
 import extractAPIResponse from '../../utils/extractAPIResponse';
-import { useSelector } from 'react-redux';
-import { LoginStatus } from '../../constants/loginStatus';
 
 export default function PrinterJobGrid() {
-  const isManager = useSelector((state) => state.loginStatus.value) === LoginStatus.MANAGER;
   const [printerJobs, setPrinterJobs] = React.useState([]);
   const loadPrinterJobs = () => axios.get(GET_PRINTERJOBS_URL)
     .then(({ data }) => extractAPIResponse(data))
@@ -30,14 +27,14 @@ export default function PrinterJobGrid() {
       hideable: true,
       flex: 1,
     },
-  ] + (isManager ? [{
-    field: 'userId',
-    headerName: 'User Id',
-    align: 'right',
-    headerAlign: 'right',
-    hideable: true,
-    flex: 1,
-  }] : []) + [
+    {
+      field: 'userId',
+      headerName: 'User Id',
+      align: 'right',
+      headerAlign: 'right',
+      hideable: true,
+      flex: 1,
+    },
     {
       field: 'campus',
       headerName: 'Campus',
