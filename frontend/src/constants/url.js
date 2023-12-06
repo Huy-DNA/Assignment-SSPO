@@ -32,3 +32,5 @@ export const DELETE_PACKAGES_URL = '/api/packages/delete';
 export const UPDATE_PACKAGES_URL = '/api/packages/update';
 
 export const AWARD_PAPER_URL = '/api/grant/paper';
+
+export const CREATE_PRINTERJOB_URL = 'api/printerjobs';

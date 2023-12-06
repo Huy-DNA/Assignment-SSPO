@@ -217,11 +217,12 @@ export async function addPrinterJob(req, res) {
       return;
     }
 
+    const pageUsed = Math.ceil((printerJobInfo.endPage - printerJobInfo.startPage + 1)
+      * printerJobInfo.copiesNo * equivPages * (printerJobInfo.oneSided ? 1 : 1 / 2));
+
     if (
       student.paperNo
-      < (printerJobInfo.endPage - printerJobInfo.startPage + 1)
-        * printerJobInfo.copiesNo
-        * equivPages
+      < pageUsed
     ) {
       res.send({
         success: false,
@@ -233,8 +234,7 @@ export async function addPrinterJob(req, res) {
       return;
     }
 
-    const pageUsed = (printerJobInfo.endPage - printerJobInfo.startPage + 1)
-      * printerJobInfo.copiesNo * equivPages;
+    const pageSizeName = configs.allowedPageSize.get(printerJobInfo.pageSize)?.name;
 
     const printerJob = await client.printerJob.create({
       data: {
@@ -244,7 +244,7 @@ export async function addPrinterJob(req, res) {
         copiesNo: printerJobInfo.copiesNo,
         oneSided: printerJobInfo.oneSided,
         status: PrinterJobStatus.Waiting,
-        pageSize: printerJobInfo.pageSize,
+        pageSize: pageSizeName,
         startPage: printerJobInfo.startPage,
         endPage: printerJobInfo.endPage,
         fileId: printerJobInfo.fileId,

@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import images from "../../../assets/images/images";
+import images from '../../../assets/images/images';
 import useNotification from '../../hooks/useNotification';
 import { NotificationStatus } from '../../constants/notification';
+import {
+  CREATE_PRINTERJOB_URL, GET_CONFIGS_URL, GET_FILES_URL, GET_PRINTERS_URL, GET_USERS_URL,
+} from '../../constants/url';
+import extractAPIResponse from '../../utils/extractAPIResponse';
 
-function PrintPage() {
+export default function PrintPage() {
   const notify = useNotification();
   const [files, setFiles] = useState([]);
   const [printers, setPrinters] = useState([]);
@@ -18,74 +22,75 @@ function PrintPage() {
     pageSize: '',
     copiesNo: '',
     startPage: '',
-    endPage: ''
+    endPage: '',
+    oneSided: false,
   });
 
   useEffect(() => {
     const cookieValue = Cookies.get('id');
-    axios.get(`http://localhost:3000/api/users/info/${cookieValue}`).then((response) => {
-      setInfoUser(response.data.value);
-    })
-      .catch((error) => {
-        console.log(error)
-      });
+    axios.get(`${GET_USERS_URL}/info/${cookieValue}`)
+      .then(({ data }) => extractAPIResponse(data))
+      .then(setInfoUser)
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/files').then((response) => {
-      setFiles(response.data.value);
-    })
-      .catch((error) => {
-        console.log(error)
-      });
+    axios.get(GET_FILES_URL)
+      .then(({ data }) => extractAPIResponse(data))
+      .then(setFiles)
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/configs/pageSizes').then((response) => {
-      setPageSize(response.data.value);
-    })
-      .catch((error) => {
-        console.log(error)
-      });
+    axios.get(`${GET_CONFIGS_URL}/pageSizes`)
+      .then(({ data }) => extractAPIResponse(data))
+      .then(setPageSize)
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   useEffect(() => {
-    axios.get('http://localhost:3000/api/printers').then((response) => {
-      setPrinters(response.data.value);
-    })
-      .catch((error) => {
-        console.log(error)
-      });
+    axios.get(GET_PRINTERS_URL)
+      .then(({ data }) => extractAPIResponse(data))
+      .then(setPrinters)
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   const getInfoFile = (fileId) => {
     const index = files.findIndex((value) => value.id === fileId);
     setFileSelected(files[index]);
-  }
+  };
 
   const handleRequestPrintFile = () => {
-    axios.post('http://localhost:3000/api/printerJobs', fileToPrint).then((response) => {
-      notify(NotificationStatus.OK, "Successfully queue the printed file!.")
-    })
-      .catch((error) => {
-        notify(NotificationStatus.ERR, "Successfully queue the printed file!.")
-      });
-  }
-
-  const handleReloadPrintPage = () => {
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    notify(NotificationStatus.WAITING);
+    axios.post(CREATE_PRINTERJOB_URL, fileToPrint)
+      .then(({ data }) => extractAPIResponse(data))
+      .then(() => notify(NotificationStatus.OK, 'Successfully queue the printed file!.'))
+      .then(() => {
+        setFileToPrint({
+          fileId: '',
+          printerId: '',
+          pageSize: '',
+          copiesNo: '',
+          startPage: '',
+          endPage: '',
+          oneSided: false,
+        });
+      })
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   };
 
   return (
     <div className="w-full">
-      <h1 className="text-3xl font-medium pl-80 pb-4">IN TÀI LIỆU</h1>
-      <div className="w-[50rem] h-[41rem] mx-auto bg-blue-200 rounded-3xl">
+      <h1 className="text-blue-900 my-6 font-bold text-3xl">
+        IN TÀI LIỆU
+      </h1>
+      <div className="w-[50rem] mx-auto bg-blue-200 rounded-3xl p-5">
         <div className="w-full flex justify-between">
           <div className="w-full flex justify-start flex-col mt-4 mb-3 mx-8">
             <div>
-              <label className="font-medium mb-1 text-xl">Chọn file để in</label>
+              <p className="font-medium mb-1 text-xl">
+                Chọn file để in
+              </p>
               <select
                 id="file"
                 className="input w-full min-w-[30rem] min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
@@ -97,7 +102,7 @@ function PrintPage() {
               >
                 <option value="" style={{ fontSize: '18px', padding: '6px' }}>Chọn file đã tải lên</option>
                 {
-                  files && files.map((file, index) => (
+                  files && files.map((file) => (
                     <option value={file.id} key={file.id} style={{ fontSize: '18px', padding: '6px' }}>{file.name}</option>
                   ))
                 }
@@ -111,12 +116,13 @@ function PrintPage() {
               <div className="mt-2 ml-2 flex">
                 <img src={images.file} className="w-24 h-24 mr-4" alt="" />
                 <div className="">
-                  <h2 className="font-medium text-2xl">{fileSelected && fileSelected.name}</h2>
-                  <h2 className="font-normal text-xl">
-                    Loại file:
-                    {fileSelected && fileSelected.name.split('.').pop()}
-                  </h2>
-                  <h2 className="font-normal text-xl">Số trang: {fileSelected && fileSelected.pageNo}</h2>
+                  <p className="font-medium text-2xl">{fileSelected && fileSelected.name}</p>
+                  <p className="font-normal text-xl">
+                    {`Loại file: ${fileSelected && fileSelected.name.split('.').pop()}`}
+                  </p>
+                  <p className="font-normal text-xl">
+                    {`Số trang: ${fileSelected && fileSelected.pageNo}`}
+                  </p>
                 </div>
               </div>
             ) : (
@@ -127,7 +133,9 @@ function PrintPage() {
         </div>
         <div className="flex justify-between items-center">
           <div className="w-2/5 ml-8">
-            <label className="font-medium mb-1 text-xl">Chọn khổ giấy in</label>
+            <p className="font-medium mb-1 text-xl">
+              Chọn khổ giấy in
+            </p>
             <select
               id="role"
               className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
@@ -138,26 +146,30 @@ function PrintPage() {
             >
               <option style={{ fontSize: '18px', padding: '6px' }}>Chọn khổ giấy in</option>
               {
-                pageSize && pageSize.map((item, index) => (
-                  <option value={item.id} key={item.id} style={{ fontSize: '18px', padding: '6px' }}>{item.name}</option>
+                pageSize && pageSize.map((item) => (
+                  <option value={item.id} key={item.id} style={{ fontSize: '18px', padding: '6px' }}>{item.name.toUpperCase()}</option>
                 ))
               }
             </select>
           </div>
           <div className="w-2/5 mr-8">
-            <label className="font-medium mb-1 text-xl">Chọn máy in</label>
+            <p className="font-medium mb-1 text-xl">Chọn máy in</p>
             <select
               id="role"
               className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
               style={{ fontSize: '18px', padding: '6px' }}
               onChange={(e) => {
-                setFileToPrint({ ...fileToPrint, printerId: e.target.value })
+                setFileToPrint({ ...fileToPrint, printerId: e.target.value });
               }}
             >
               <option value="" style={{ fontSize: '18px', padding: '6px' }}>Chọn máy in</option>
               {
-                printers && printers.map((printer, index) => (
-                  <option value={printer.id} key={printer.id} style={{ fontSize: '18px', padding: '6px' }}>{printer.campus} {printer.building} {printer.room}</option>
+                printers && printers.map((printer) => (
+                  <option value={printer.id} key={printer.id} style={{ fontSize: '18px', padding: '6px' }}>
+                    {
+                      `Máy in số ${printer.code} - ${printer.campus}-${printer.building}-${printer.room}`
+                    }
+                  </option>
                 ))
               }
             </select>
@@ -171,12 +183,17 @@ function PrintPage() {
               placeholder="Trang bắt đầu"
               value={fileToPrint.startPage}
               onChange={(e) => setFileToPrint({ ...fileToPrint, startPage: e.target.value })}
+              type="number"
             />
             {
-              fileSelected && fileSelected.pageNo && fileToPrint.startPage && (fileSelected.pageNo < fileToPrint.startPage || fileSelected.startPage < 0) ? (
-                <div className="font-normal text-base">Giá trị bạn nhập vào không hợp lệ</div>
-              ) : (
-                <></>
+              fileSelected
+              && fileSelected.pageNo
+              && fileToPrint.startPage
+              && (fileSelected.pageNo < fileToPrint.startPage
+                || fileToPrint.startPage < 1
+              )
+              && (
+                <div className="font-normal text-base text-red-500">Giá trị bạn nhập vào không hợp lệ</div>
               )
             }
           </div>
@@ -187,33 +204,41 @@ function PrintPage() {
               placeholder="Trang kết thúc"
               value={fileToPrint.endPage}
               onChange={(e) => setFileToPrint({ ...fileToPrint, endPage: e.target.value })}
+              type="number"
             />
             {
-              fileSelected && fileSelected.pageNo && fileToPrint.endPage && (fileSelected.pageNo < fileToPrint.endPage || fileToPrint.endPage < fileToPrint.startPage) ? (
-                <div className="font-normal text-base">Giá trị bạn nhập vào không hợp lệ</div>
-              ) : (
-                <></>
+              fileSelected
+              && fileSelected.pageNo
+              && fileToPrint.endPage
+              && (fileSelected.pageNo < fileToPrint.endPage
+                || fileToPrint.endPage < fileToPrint.startPage
+                || fileToPrint.endPage < 0)
+              && (
+                <div className="font-normal text-base text-red-500">Giá trị bạn nhập vào không hợp lệ</div>
               )
             }
           </div>
         </div>
-        <div className="flex justify-between">
+        <div className="flex justify-between my-8">
           <div className="w-2/5 ml-8">
-            <label className="font-medium mb-1 text-xl">Chọn số bản copy</label>
-            <select
+            <p className="font-medium mb-1 text-xl">Chọn số bản copy</p>
+            <input
               id="role"
               className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
               style={{ fontSize: '18px', padding: '6px' }}
               onChange={(e) => {
-                setFileToPrint({ ...fileToPrint, copiesNo: e.target.value })
+                setFileToPrint({ ...fileToPrint, copiesNo: e.target.value });
               }}
-            >
-              <option style={{ fontSize: '18px', padding: '6px' }}>Chọn số bản copy</option>
-              <option value="1" style={{ fontSize: '18px', padding: '6px' }}>1</option>
-              <option value="2" style={{ fontSize: '18px', padding: '6px' }}>2</option>
-              <option value="3" style={{ fontSize: '18px', padding: '6px' }}>3</option>
-              <option value="4" style={{ fontSize: '18px', padding: '6px' }}>4</option>
-            </select>
+              type="number"
+            />
+            {
+              fileToPrint
+              && fileToPrint.copiesNo
+              && fileToPrint.copiesNo < 1
+              && (
+                <div className="font-normal text-base text-red-500">Giá trị bạn nhập vào không hợp lệ</div>
+              )
+            }
           </div>
           <div className="w-2/5 mt-6 pt-2 mr-8 items-center flex">
             <div className="font-semibold">
@@ -221,25 +246,41 @@ function PrintPage() {
             </div>
             <div className="pl-1">
               {
-                infoUser && infoUser.paperNo ? (
+                infoUser && infoUser.paperNo && (
                   infoUser.paperNo
-                ) : (
-                  <></>
                 )
               }
             </div>
           </div>
         </div>
+        <div className="my-8">
+          <div className="ml-8">
+            <p className="font-medium mb-1 text-xl">Chọn số mặt</p>
+            <select
+              id="sideNo"
+              className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
+              style={{ fontSize: '18px', padding: '6px' }}
+              value={fileToPrint.oneSided}
+              onChange={(e) => setFileToPrint({ ...fileToPrint, oneSided: e.target.value })}
+            >
+              <option
+                value={!false}
+              >
+                Một mặt
+              </option>
+              <option
+                value={false}
+              >
+                Hai mặt
+              </option>
+            </select>
+          </div>
+        </div>
         <div className="mx-8 mt-8 flex justify-between">
-          <button className="w-32 h-10 bg-red-500 hover:cursor-pointer hover:bg-red-800 text-white text-xl rounded-lg">
-            Hủy
-          </button>
           <button
+            type="button"
             className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-white text-xl rounded-lg"
-            onClick={() => {
-              handleRequestPrintFile();
-              handleReloadPrintPage();
-            }}
+            onClick={handleRequestPrintFile}
           >
             Xác nhận
           </button>
@@ -248,5 +289,3 @@ function PrintPage() {
     </div>
   );
 }
-
-export default PrintPage;

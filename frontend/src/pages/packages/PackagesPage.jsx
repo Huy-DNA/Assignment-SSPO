@@ -61,7 +61,7 @@ export default function PackagesPage() {
             <div className="flex flex-row justify-center items-center">
               <CircularProgress size={80}/>
             </div> :
-            <div className="bg-white rounded-lg p-10 scroll-auto lg:min-h-[50vh] imax-h-screen">
+            <div className="bg-white rounded-lg p-10 scroll-auto lg:min-h-[50vh] max-h-screen">
               <Grid container rowSpacing={4} columnSpacing={4}>
                 { packages && packages.map((item, index) => (
                   <Grid item key={index} xs={12} sm={6}>
