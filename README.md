@@ -62,7 +62,7 @@ This is also the first time I use `Tailwind`, and I like it, although I strongly
     * Tailwind styling is not consistent & arbitrary.
   * Backend code is better but there are some issues that need to be addressed:
     * Payment logic isn't being handled properly (Noted in `/backend/apis/payment/index.js`).
-    * Concurrency issues in database update (Noted in `/backend/apis/printerjobs/index.js`). This is mainly due to the expressiveness power of prisma in describing transactions.
+    * ~~Concurrency issues in database update (Noted in `/backend/apis/printerjobs/index.js`). This is mainly due to the expressiveness power of prisma in describing transactions.~~ (solved)
     * I was/am not reading `Joi` documentation properly so I was using its payload validation utilities incorrectly.
       **Try it next time**: `Typebox`, which seems more predictable & user-friendly?
     * Sometimes I don't know why I neglected to perform backend validation properly, although I know it's extremely crucial.
