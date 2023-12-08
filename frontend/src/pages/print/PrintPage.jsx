@@ -14,7 +14,7 @@ export default function PrintPage() {
   const [files, setFiles] = useState([]);
   const [printers, setPrinters] = useState([]);
   const [infoUser, setInfoUser] = useState();
-  const [pageSize, setPageSize] = useState();
+  const [pageSizes, setPageSizes] = useState();
   const [fileSelected, setFileSelected] = useState();
   const [fileToPrint, setFileToPrint] = useState({
     fileId: '',
@@ -40,6 +40,14 @@ export default function PrintPage() {
         || fileToPrint.endPage < 0));
   const isCopiesNoInvalid = fileToPrint.copiesNo === '' || fileToPrint.copiesNo < 1;
 
+  const pageUsed = !isStartPageInvalid && !isEndPageInvalid
+  && !isCopiesNoInvalid && fileToPrint.pageSize && pageSizes
+    ? Math.ceil((fileToPrint.endPage - fileToPrint.startPage + 1)
+      * fileToPrint.copiesNo
+      * pageSizes.find(({ id }) => id === fileToPrint.pageSize).equiv
+      * (fileToPrint.oneSided ? 1 : 1 / 2))
+    : NaN;
+
   useEffect(() => {
     const cookieValue = Cookies.get('id');
     axios.get(`${GET_USERS_URL}/info/${cookieValue}`)
@@ -58,7 +66,7 @@ export default function PrintPage() {
   useEffect(() => {
     axios.get(`${GET_CONFIGS_URL}/pageSizes`)
       .then(({ data }) => extractAPIResponse(data))
-      .then(setPageSize)
+      .then(setPageSizes)
       .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
@@ -164,7 +172,7 @@ export default function PrintPage() {
             >
               <option style={{ fontSize: '18px', padding: '6px' }}>Chọn khổ giấy in</option>
               {
-                pageSize && pageSize.map((item) => (
+                pageSizes && pageSizes.map((item) => (
                   <option value={item.id} key={item.id} style={{ fontSize: '18px', padding: '6px' }}>{item.name.toUpperCase()}</option>
                 ))
               }
@@ -280,26 +288,36 @@ export default function PrintPage() {
             </select>
           </div>
         </div>
-        <div className="flex justify-between my-8">
-          <div className="w-2/5 mt-6 pt-2 ml-8 items-center flex">
-            <div className="font-semibold">
-              Số trang hiện có:
-            </div>
-            <div className="pl-1">
+        <div className="ml-8">
+          <p className="font-semibold">
+            Số trang cần dùng: &nbsp;
+            <span className={`font-light ${pageUsed > infoUser?.paperNo || Number.isNaN(pageUsed) ? 'text-red-500' : 'text-green-600'}`}>
               {
-                infoUser && infoUser.paperNo && (
-                  infoUser.paperNo
-                )
+                Number.isNaN(pageUsed) ? 'Giá trị nhập không hợp lệ' : pageUsed
               }
-            </div>
-          </div>
+            </span>
+          </p>
+        </div>
+        <div className="ml-8">
+          <p className="font-semibold">
+            Số trang hiện có: &nbsp;
+            <span className="font-light">
+              {
+                infoUser && infoUser.paperNo
+              }
+            </span>
+          </p>
         </div>
         <div className="mx-8 mt-8 flex justify-between">
           <button
             type="button"
             className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-white text-xl rounded-lg disabled:bg-blue-950 disabled:hover:cursor-default"
             onClick={handleRequestPrintFile}
-            disabled={!fileSelected || isEndPageInvalid || isStartPageInvalid || isCopiesNoInvalid}
+            disabled={
+              !fileSelected || isEndPageInvalid
+              || isStartPageInvalid || isCopiesNoInvalid
+              || pageUsed > infoUser?.paperNo
+            }
           >
             Xác nhận
           </button>
