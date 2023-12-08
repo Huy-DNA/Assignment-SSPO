@@ -1,6 +1,9 @@
 import { useContext } from 'react';
 import { NotificationContext } from '../layout/DefaultLayout/DefaultLayout';
 
+/**
+ *
+ */
 export default function useNotification() {
   const setNotification = useContext(NotificationContext);
   return (status, message) => {

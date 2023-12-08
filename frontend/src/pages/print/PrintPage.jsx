@@ -9,6 +9,9 @@ import {
 } from '../../constants/url';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 
+/**
+ *
+ */
 export default function PrintPage() {
   const notify = useNotification();
   const [files, setFiles] = useState([]);

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import {
   DELETE_PRINTERS_URL,
   GEN_PRINTER_URL,
@@ -8,11 +9,13 @@ import {
 } from '../../constants/url';
 import Grid from '../Grid/Grid';
 import extractAPIResponse from '../../utils/extractAPIResponse';
-import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../constants/loginStatus';
 
+/**
+ *
+ */
 export default function PrinterGrid() {
-  const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;
+  const isManager = useSelector((state) => state.loginStatus.value) === LoginStatus.MANAGER;
   const [printers, setPrinters] = React.useState([]);
   const loadPrinters = () => axios.get(GET_PRINTERS_URL)
     .then(({ data }) => extractAPIResponse(data));

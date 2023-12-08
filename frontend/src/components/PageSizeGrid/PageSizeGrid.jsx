@@ -1,24 +1,27 @@
 import * as React from 'react';
 import axios from 'axios';
+import { useSelector } from 'react-redux';
 import {
   GET_CONFIGS_URL,
 } from '../../constants/url';
 import Grid from '../Grid/Grid';
 import extractAPIResponse from '../../utils/extractAPIResponse';
-import { useSelector } from 'react-redux';
 import { LoginStatus } from '../../constants/loginStatus';
 
+/**
+ *
+ */
 export default function PageSizeGrid() {
-  const isManager = useSelector(state => state.loginStatus.value) === LoginStatus.MANAGER;
+  const isManager = useSelector((state) => state.loginStatus.value) === LoginStatus.MANAGER;
   const [pageSizes, setPageSizes] = React.useState([]);
   const loadPageSizes = () => axios.get(`${GET_CONFIGS_URL}/pageSizes`)
-    .then(({ data }) => extractAPIResponse(data))
+    .then(({ data }) => extractAPIResponse(data));
   const deletePageSizes = (ids) => axios.post(`${GET_CONFIGS_URL}/pageSizes/delete`, ids)
     .then(({ data }) => extractAPIResponse(data));
   const updatePageSizes = (rows) => axios.post(`${GET_CONFIGS_URL}/pageSizes/update`, rows)
     .then(({ data }) => extractAPIResponse(data));
   const createNewPageSize = () => axios.post(`${GET_CONFIGS_URL}/pageSizes/gen`)
-    .then(({ data }) => extractAPIResponse(data))
+    .then(({ data }) => extractAPIResponse(data));
 
   const showActions = {
     showEdit: isManager,

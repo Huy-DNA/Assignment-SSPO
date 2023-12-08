@@ -8,6 +8,9 @@ import
 import images from '../../../../assets/images/images';
 import '../../../../styles.css';
 
+/**
+ *
+ */
 function Footer() {
   return (
     <div className="flex lg:flex-row flex-col justify-between p-5 bg-blue-950">
@@ -31,7 +34,7 @@ function Footer() {
         </div>
         <div className="flex items-center font-medium text-white hover:cursor-pointer m-2">
           <img src={images.logo} alt="logo-web" className="w-24 h-24 m-2" />
-          <span className='lg:text-2xl text-xl font-medium ml-4'>BK PRINTERS SERVICES</span>
+          <span className="lg:text-2xl text-xl font-medium ml-4">BK PRINTERS SERVICES</span>
         </div>
       </div>
       <div className="mt-8 pr-24">

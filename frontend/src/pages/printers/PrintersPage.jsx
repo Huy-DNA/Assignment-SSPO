@@ -1,6 +1,9 @@
 import React from 'react';
 import PrinterGrid from '../../components/PrinterGrid/PrinterGrid';
 
+/**
+ *
+ */
 function PrintersPage() {
   return (
     <div>

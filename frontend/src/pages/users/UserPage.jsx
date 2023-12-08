@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
-import UserGrid from '../../components/UserGrid/UserGrid';
 import axios from 'axios';
+import UserGrid from '../../components/UserGrid/UserGrid';
 import { AWARD_PAPER_URL } from '../../constants/url';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 import useNotification from '../../hooks/useNotification';
 import { NotificationStatus } from '../../constants/notification';
 
+/**
+ *
+ */
 export default function UsersPage() {
   const [awardedPaperNo, setAwardedPaperNo] = useState(0);
   const notify = useNotification();
@@ -27,7 +30,7 @@ export default function UsersPage() {
         QUẢN LÍ TÀI KHOẢN
       </h1>
       <UserGrid />
-      <div className="bg-white rounded-lg mt-5 p-5"> 
+      <div className="bg-white rounded-lg mt-5 p-5">
         <h2 className="text-blue-900 font-bold text-xl">
           Tặng giấy
         </h2>

@@ -5,6 +5,11 @@ import {
   useElements,
 } from '@stripe/react-stripe-js';
 
+/**
+ *
+ * @param root0
+ * @param root0.handlePaymentClick
+ */
 export default function CheckoutForm({ handlePaymentClick }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -18,7 +23,7 @@ export default function CheckoutForm({ handlePaymentClick }) {
     }
 
     const clientSecret = new URLSearchParams(window.location.search).get(
-      "payment_intent_client_secret"
+      'payment_intent_client_secret',
     );
 
     if (!clientSecret) {
@@ -27,17 +32,17 @@ export default function CheckoutForm({ handlePaymentClick }) {
 
     stripe.retrievePaymentIntent(clientSecret).then(({ paymentIntent }) => {
       switch (paymentIntent.status) {
-        case "succeeded":
-          setMessage("Payment succeeded!");
+        case 'succeeded':
+          setMessage('Payment succeeded!');
           break;
-        case "processing":
-          setMessage("Your payment is processing.");
+        case 'processing':
+          setMessage('Your payment is processing.');
           break;
-        case "requires_payment_method":
-          setMessage("Your payment was not successful, please try again.");
+        case 'requires_payment_method':
+          setMessage('Your payment was not successful, please try again.');
           break;
         default:
-          setMessage("Something went wrong.");
+          setMessage('Something went wrong.');
           break;
       }
     });
@@ -58,7 +63,7 @@ export default function CheckoutForm({ handlePaymentClick }) {
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: "http://localhost:3000",
+        return_url: 'http://localhost:3000',
       },
     });
 
@@ -67,18 +72,18 @@ export default function CheckoutForm({ handlePaymentClick }) {
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === "card_error" || error.type === "validation_error") {
+    if (error.type === 'card_error' || error.type === 'validation_error') {
       setMessage(error.message);
     } else {
-      setMessage("An unexpected error occurred.");
+      setMessage('An unexpected error occurred.');
     }
 
     setIsLoading(false);
   };
 
   const paymentElementOptions = {
-    layout: "tabs"
-  }
+    layout: 'tabs',
+  };
 
   return (
     <form onSubmit={handleSubmit}>
@@ -86,7 +91,7 @@ export default function CheckoutForm({ handlePaymentClick }) {
       <PaymentElement id="payment-element" options={paymentElementOptions} />
       <button onClick={handlePaymentClick} className="text-white bg-blue-500 active:bg-blue-700 rounded-lg p-1 mt-5" disabled={isLoading || !stripe || !elements} id="submit">
         <span>
-          {isLoading ? <div className="spinner" id="spinner"></div> : "Thanh toán"}
+          {isLoading ? <div className="spinner" id="spinner" /> : 'Thanh toán'}
         </span>
       </button>
       {/* Show any error or success messages */}

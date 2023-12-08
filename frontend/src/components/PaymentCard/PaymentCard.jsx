@@ -6,16 +6,22 @@ import extractAPIResponse from '../../utils/extractAPIResponse';
 import useNotification from '../../hooks/useNotification';
 import { NotificationStatus } from '../../constants/notification';
 
-const stripePromise = loadStripe("pk_test_TYooMQauvdEDq54NiTphI7jx");
+const stripePromise = loadStripe('pk_test_TYooMQauvdEDq54NiTphI7jx');
 
+/**
+ *
+ * @param root0
+ * @param root0.items
+ * @param root0.clearCart
+ */
 export default function PaymentCard({ items, clearCart }) {
-  const [clientSecret, setClientSecret] = useState("");
+  const [clientSecret, setClientSecret] = useState('');
   const notify = useNotification();
 
   useEffect(() => {
-    fetch("/api/payment/create-payment-intent", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
+    fetch('/api/payment/create-payment-intent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(items),
     })
       .then((res) => res.json())
@@ -42,4 +48,3 @@ export default function PaymentCard({ items, clearCart }) {
     </div>
   );
 }
-

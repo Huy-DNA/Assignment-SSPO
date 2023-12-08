@@ -6,6 +6,11 @@ import NotificationBox from '../../components/Notification/NotificationBox';
 
 export const NotificationContext = createContext(() => {});
 
+/**
+ *
+ * @param root0
+ * @param root0.children
+ */
 function DefaultLayout({ children }) {
   const [notification, setNotification] = useState({
     status: undefined,
@@ -18,16 +23,17 @@ function DefaultLayout({ children }) {
       message: undefined,
       visible: false,
     });
-  }
+  };
   return (
     <NotificationContext.Provider value={setNotification}>
-      { notification.visible &&
+      { notification.visible
+        && (
         <NotificationBox
           status={notification.status}
           message={notification.message}
           onClose={onClose}
         />
-      }
+        )}
       <div className="bg-gray-100 p-0 m-0">
         <Header />
         <div>

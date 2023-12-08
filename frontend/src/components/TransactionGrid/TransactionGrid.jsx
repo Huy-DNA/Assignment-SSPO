@@ -1,17 +1,20 @@
 import React from 'react';
+import axios from 'axios';
 import { GET_TRANSACTIONS_URL } from '../../constants/url';
 import Grid from '../Grid/Grid';
-import axios from 'axios';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 
+/**
+ *
+ */
 export default function TransactionGrid() {
   const [transactions, setTransactions] = React.useState([]);
   const loadTransactions = () => axios.get(GET_TRANSACTIONS_URL)
     .then(({ data }) => extractAPIResponse(data))
     .then((rows) => rows.map((row) => ({ ...row, createdAt: new Date(row.createdAt) })));
-  const deleteTransactions = (ids) => { throw new Error('Not supported') };
-  const updateTransactions = (rows) => { throw new Error('Not supported') };
-  const createNewTransaction = () => { throw new Error('Not supported') };
+  const deleteTransactions = (ids) => { throw new Error('Not supported'); };
+  const updateTransactions = (rows) => { throw new Error('Not supported'); };
+  const createNewTransaction = () => { throw new Error('Not supported'); };
   const showActions = {
     showView: true,
   };
@@ -49,7 +52,7 @@ export default function TransactionGrid() {
       headerName: 'Status',
       align: 'right',
       headerAlign: 'right',
-      valueGetter: ({ value }) => value ? 'Success' : 'Failed',
+      valueGetter: ({ value }) => (value ? 'Success' : 'Failed'),
       hideable: true,
       flex: 1,
     },

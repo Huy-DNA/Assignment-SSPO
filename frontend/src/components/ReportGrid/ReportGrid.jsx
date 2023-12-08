@@ -1,16 +1,19 @@
 import React from 'react';
+import axios from 'axios';
 import { GET_REPORTS_URL } from '../../constants/url';
 import Grid from '../Grid/Grid';
-import axios from 'axios';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 
+/**
+ *
+ */
 export default function ReportGrid() {
   const [reports, setReports] = React.useState([]);
   const loadReports = () => axios.get(GET_REPORTS_URL)
     .then(({ data }) => extractAPIResponse(data));
-  const deleteReports = (ids) => { throw new Error('Not supported') };
-  const updateReports = (rows) => { throw new Error('Not supported') };
-  const createNewReport = () => { throw new Error('Not supported') };
+  const deleteReports = (ids) => { throw new Error('Not supported'); };
+  const updateReports = (rows) => { throw new Error('Not supported'); };
+  const createNewReport = () => { throw new Error('Not supported'); };
   const showActions = {
     showView: true,
   };

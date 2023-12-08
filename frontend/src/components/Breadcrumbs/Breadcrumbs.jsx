@@ -2,10 +2,17 @@ import React from 'react';
 import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 
+/**
+ *
+ * @param str
+ */
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
+/**
+ *
+ */
 export default function Breadcrumbs() {
   const { pathname } = useLocation();
   const subpaths = pathname.split('/');

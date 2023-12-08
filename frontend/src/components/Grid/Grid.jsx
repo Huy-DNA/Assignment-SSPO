@@ -16,11 +16,24 @@ import {
   GridToolbarQuickFilter,
 } from '@mui/x-data-grid';
 import { Toolbar } from '@mui/material';
+import { Link } from 'react-router-dom';
 import { NotificationStatus } from '../../constants/notification';
 import useNotification from '../../hooks/useNotification';
-import { Link } from 'react-router-dom';
 
-function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar }) {
+/**
+ *
+ * @param root0
+ * @param root0.setRows
+ * @param root0.setRowModesModel
+ * @param root0.checkedIds
+ * @param root0.createNewRow
+ * @param root0.deleteRows
+ * @param root0.columns
+ * @param root0.showToolBar
+ */
+function EditToolbar({
+  setRows, setRowModesModel, checkedIds, createNewRow, deleteRows, columns, showToolBar,
+}) {
   const notify = useNotification();
   const handleAddRows = async () => {
     try {
@@ -34,7 +47,7 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
       notify(NotificationStatus.OK, '');
     } catch (e) {
       notify(NotificationStatus.ERR, e.message);
-    } 
+    }
   };
 
   const handleDeleteRows = async () => {
@@ -55,20 +68,24 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
         <Toolbar>
           <div className="flex flex-row gap-2">
             {
-              (showToolBar === true || showToolBar.showAdd) && 
+              (showToolBar === true || showToolBar.showAdd)
+                && (
                 <Button color="primary" startIcon={<AddIcon />} onClick={handleAddRows}>
                   Thêm
                 </Button>
+                )
             }
             {
-              (showToolBar === true || showToolBar.showDel) &&
+              (showToolBar === true || showToolBar.showDel)
+              && (
               <Button color="primary" startIcon={<RemoveCircleOutlineIcon />} onClick={handleDeleteRows}>
                 Xoá
               </Button>
+              )
             }
             {
-              (showToolBar === true || showToolBar.showSearch) &&
-              <GridToolbarQuickFilter />
+              (showToolBar === true || showToolBar.showSearch)
+              && <GridToolbarQuickFilter />
             }
           </div>
         </Toolbar>
@@ -77,6 +94,19 @@ function EditToolbar({ setRows, setRowModesModel, checkedIds, createNewRow, dele
   );
 }
 
+/**
+ *
+ * @param root0
+ * @param root0.columns
+ * @param root0.rows
+ * @param root0.setRows
+ * @param root0.loadRows
+ * @param root0.deleteRows
+ * @param root0.updateRows
+ * @param root0.createNewRow
+ * @param root0.showActions
+ * @param root0.showToolBar
+ */
 export default function Grid({
   columns,
   rows,
@@ -94,10 +124,10 @@ export default function Grid({
   const [checkedIds, setCheckedIds] = React.useState([]);
 
   React.useEffect(() => {
-    loadRows().then((rows) => setRows((oldRows) => [...oldRows, ...rows]))
-              .then(() => setLoading(false))
-              .then(() => NotificationStatus.OK)
-              .catch((e) => notify(NotificationStatus.ERR, e.message));
+    loadRows().then((newRows) => setRows((oldRows) => [...oldRows, ...newRows]))
+      .then(() => setLoading(false))
+      .then(() => NotificationStatus.OK)
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
 
   const handleEditClick = (id) => () => {
@@ -111,13 +141,13 @@ export default function Grid({
   const handleDeleteClick = (id) => () => {
     setRows(rows.filter((row) => row.id !== id));
     deleteRows([id]).then(() => notify(
-                      NotificationStatus.OK,
-                      '',
-                    ))
-                    .catch((e) => notify(
-                      NotificationStatus.ERR,
-                      e.message,
-                    ));
+      NotificationStatus.OK,
+      '',
+    ))
+      .catch((e) => notify(
+        NotificationStatus.ERR,
+        e.message,
+      ));
   };
 
   const handleCancelClick = (id) => () => {
@@ -169,7 +199,7 @@ export default function Grid({
                 className="textPrimary"
                 onClick={handleEditClick(id)}
                 color="inherit"
-              />
+              />,
             ] : []
           ),
           ...(
@@ -179,7 +209,7 @@ export default function Grid({
                 label="Delete"
                 onClick={handleDeleteClick(id)}
                 color="inherit"
-              />
+              />,
             ] : []
           ),
           ...(
@@ -190,10 +220,10 @@ export default function Grid({
                 color="inherit"
                 component={Link}
                 to={`./${id}`}
-                target="_blank" 
-              />
+                target="_blank"
+              />,
             ] : []
-          ), 
+          ),
         ];
       },
     },
@@ -209,19 +239,18 @@ export default function Grid({
         NotificationStatus.OK,
         '',
       ))
-      .then(() =>
-        setRows((oldRows) => {
-          const newRows = [...oldRows];
-          const updatedRowId = newRows.findIndex((row) => row.id === updatedRow.id);
-          if (updatedRowId >= 0) {
-            newRows[updatedRowId] = updatedRow;
-          }
-          return newRows;
+      .then(() => setRows((oldRows) => {
+        const newRows = [...oldRows];
+        const updatedRowId = newRows.findIndex((row) => row.id === updatedRow.id);
+        if (updatedRowId >= 0) {
+          newRows[updatedRowId] = updatedRow;
+        }
+        return newRows;
       }))
       .catch((e) => notify(
         NotificationStatus.ERR,
         e.message,
-      ))
+      ));
     return originalRow;
   };
 

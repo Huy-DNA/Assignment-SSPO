@@ -1,6 +1,9 @@
 import React from 'react';
 import ReportGrid from '../../components/ReportGrid/ReportGrid';
 
+/**
+ *
+ */
 export default function ReportsPage() {
   return (
     <div>

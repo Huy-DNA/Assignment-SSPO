@@ -12,7 +12,7 @@
     "start:cas": "node ./__mock-cas__/server.js",
     "start": "concurrently \"npx yarn start:cas\" \"node ./.dist/backend/bin/www.js\"",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint . --ext jsx --ext js --fix",
     "watch:backend": "nodemon --watch ./backend --exec \"copyfiles backend/**/* .dist\"",
     "watch:frontend": "webpack --watch",
     "watch:start": "nodemon --watch .dist --exec \"npx yarn start\"",

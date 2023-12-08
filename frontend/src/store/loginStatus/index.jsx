@@ -3,6 +3,9 @@ import { LoginStatus } from '../../constants/loginStatus';
 import isLoggedIn from '../../utils/isLoggedIn';
 import isManager from '../../utils/isManager';
 
+/**
+ *
+ */
 function getStatus() {
   if (!isLoggedIn()) {
     return LoginStatus.NOT_LOGGED_IN;
@@ -20,11 +23,12 @@ export const loginStatusSlice = createSlice({
   },
   reducers: {
     updateStatus: (state) => {
+    // eslint-disable-next-line no-param-reassign
       state.value = getStatus();
     },
   },
 });
 
-export const { updateStatus } = loginStatusSlice.actions
+export const { updateStatus } = loginStatusSlice.actions;
 
-export default loginStatusSlice.reducer
+export default loginStatusSlice.reducer;

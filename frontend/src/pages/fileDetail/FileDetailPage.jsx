@@ -1,19 +1,22 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import mime from 'node-mime';
+import _ from 'lodash';
+import { CircularProgress } from '@mui/material';
 import { GET_FILES_URL } from '../../constants/url';
 import extractAPIResponse from '../../utils/extractAPIResponse';
 import useNotification from '../../hooks/useNotification';
 import { NotificationStatus } from '../../constants/notification';
-import mime from 'node-mime';
-import _ from 'lodash';
 import formatDate from '../../utils/formatDate';
-import { CircularProgress } from '@mui/material';
 
+/**
+ *
+ */
 export default function FileDetailPage() {
   const notify = useNotification();
   const { id } = useParams();
-  const [ detail, setDetail ] = useState({
+  const [detail, setDetail] = useState({
     name: undefined,
     content: undefined,
     uploadedAt: undefined,
@@ -26,9 +29,9 @@ export default function FileDetailPage() {
       .then(({ name, content, uploadedAt }) => setDetail({
         name,
         content,
-        uploadedAt
+        uploadedAt,
       }))
-      .catch((e) => notify(NotificationStatus.ERR, e.message))
+      .catch((e) => notify(NotificationStatus.ERR, e.message));
   }, []);
   return (
     <div className="min-h-screen">
@@ -39,20 +42,33 @@ export default function FileDetailPage() {
         <h1 className="font-semibold text-2xl my-2">
           { detail.name }
         </h1>
-        <p>{ detail.uploadedAt && <span>Upload vào: { formatDate(new Date(detail.uploadedAt)) }</span> }</p>
-        
+        <p>
+          { detail.uploadedAt && (
+          <span>
+            Upload vào:
+            { formatDate(new Date(detail.uploadedAt)) }
+          </span>
+          ) }
+        </p>
+
         <div className="min-h-screen m-2">
-          { 
-            detail.content ?
-              <iframe className="border-3 w-full h-screen sm:w-5/6 m-auto"
-                src={`data:${mime.lookUpType(ext)};base64,${detail.content}`}
-              /> :
-              <div className="h-full flex items-center justify-center">
-                <CircularProgress size="4rem" title="Loading"/>
-              </div>
+          {
+            detail.content
+              ? (
+                <iframe
+                  title={detail.name}
+                  className="border-3 w-full h-screen sm:w-5/6 m-auto"
+                  src={`data:${mime.lookUpType(ext)};base64,${detail.content}`}
+                />
+              )
+              : (
+                <div className="h-full flex items-center justify-center">
+                  <CircularProgress size="4rem" title="Loading" />
+                </div>
+              )
           }
         </div>
       </div>
     </div>
-  )
+  );
 }
