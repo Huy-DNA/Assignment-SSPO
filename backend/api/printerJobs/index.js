@@ -201,13 +201,10 @@ export async function addPrinterJob(req, res) {
   }
 
   try {
-    const student = await client.student.findFirst({
-      where: {
-        id: userInfo.id,
-      },
-    });
-
-    const { equiv: equivPages } = configs.allowedPageSize.get(printerJobInfo.pageSize);
+    const {
+      equiv: equivPages,
+      name: pageSizeName,
+    } = configs.allowedPageSize.get(printerJobInfo.pageSize);
 
     if (equivPages === undefined) {
       res.send({
@@ -223,50 +220,41 @@ export async function addPrinterJob(req, res) {
     const pageUsed = Math.ceil((printerJobInfo.endPage - printerJobInfo.startPage + 1)
       * printerJobInfo.copiesNo * equivPages * (printerJobInfo.oneSided ? 1 : 1 / 2));
 
-    if (
-      student.paperNo
-      < pageUsed
-    ) {
-      res.send({
-        success: false,
-        error: {
-          code: ErrorCode.NOT_ENOUGH_PAPER,
-          message: 'Not enough paper',
+    const [, printerJob] = await client.$transaction([
+      client.student.update({
+        data: {
+          paperNo: {
+            decrement: pageUsed,
+          },
         },
-      });
-      return;
-    }
+        where: {
+          id: userInfo.id,
+          paperNo: {
+            gte: pageUsed,
+          },
+        },
+      }),
+      client.printerJob.create({
+        data: {
+          building: printer.building,
+          campus: printer.campus,
+          room: printer.room,
+          copiesNo: printerJobInfo.copiesNo,
+          oneSided: printerJobInfo.oneSided,
+          status: PrinterJobStatus.Waiting,
+          pageSize: pageSizeName,
+          startPage: printerJobInfo.startPage,
+          endPage: printerJobInfo.endPage,
+          fileId: printerJobInfo.fileId,
+          userId: userInfo.id,
+          estimatedTime: estimatePrintTime(pageUsed),
+          printerId: printerJobInfo.printerId,
+        },
+      }),
+    ]);
 
-    const pageSizeName = configs.allowedPageSize.get(printerJobInfo.pageSize)?.name;
-
-    const printerJob = await client.printerJob.create({
-      data: {
-        building: printer.building,
-        campus: printer.campus,
-        room: printer.room,
-        copiesNo: printerJobInfo.copiesNo,
-        oneSided: printerJobInfo.oneSided,
-        status: PrinterJobStatus.Waiting,
-        pageSize: pageSizeName,
-        startPage: printerJobInfo.startPage,
-        endPage: printerJobInfo.endPage,
-        fileId: printerJobInfo.fileId,
-        userId: userInfo.id,
-        estimatedTime: estimatePrintTime(pageUsed),
-        printerId: printerJobInfo.printerId,
-      },
-    });
-
-    // Possible concurrency issues due to restriction in expressiveness when describing transactions
-    await client.student.update({
-      data: {
-        paperNo: student.paperNo - pageUsed,
-      },
-      where: {
-        id: userInfo.id,
-      },
-    });
     printerManager.pushJob(printerJob, printerJob.printerId);
+
     res.send({
       success: true,
       value: printerJob,
@@ -275,8 +263,8 @@ export async function addPrinterJob(req, res) {
     res.send({
       success: false,
       error: {
-        code: ErrorCode.UNKNOWN,
-        message: 'Failed to create printer job',
+        code: ErrorCode.NOT_ENOUGH_PAPER,
+        message: 'Not enough paper',
       },
     });
   }
