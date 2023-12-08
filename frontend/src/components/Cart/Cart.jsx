@@ -144,7 +144,7 @@ export default function Cart({ cart, setCart, modifiable }) {
                         .toLocaleString()
                     }
                   </td>
-                  <td className="text-right">{ cart.reduce((acc, { quantity }) => acc + quantity, 0).toLocaleString() }</td>
+                  <td className="text-right">{ cart.reduce((acc, { quantity, item }) => acc + quantity * item.paperNo, 0).toLocaleString() }</td>
                   <td />
                 </tr>
               </tfoot>
