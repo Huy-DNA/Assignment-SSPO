@@ -135,12 +135,10 @@ function UserDashboard() {
             <>
               <div className="p-5 bg-white rounded-lg mb-10">
                 <p className="font-bold text-lg text-blue-600">
-                  Tên người dùng:
-                  { user.name }
+                  { `Tên người dùng: ${user.name}` }
                 </p>
                 <p className="font-bold">
-                  Mã số:
-                  { user.id }
+                  { `Mã số: ${user.id}` }
                 </p>
               </div>
               <div className="p-5 bg-white rounded-lg mb-10">
