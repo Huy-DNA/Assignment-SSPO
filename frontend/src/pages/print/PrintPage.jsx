@@ -20,11 +20,25 @@ export default function PrintPage() {
     fileId: '',
     printerId: '',
     pageSize: '',
-    copiesNo: '',
+    copiesNo: 1,
     startPage: '',
     endPage: '',
     oneSided: false,
   });
+
+  const isStartPageInvalid = fileSelected
+    && fileSelected.pageNo
+    && (fileToPrint.startPage === ''
+      || (fileSelected.pageNo < fileToPrint.startPage
+        || fileToPrint.startPage < 1
+      ));
+  const isEndPageInvalid = fileSelected
+    && fileSelected.pageNo
+    && (fileToPrint.endPage === ''
+      || (fileSelected.pageNo < fileToPrint.endPage
+        || fileToPrint.endPage < fileToPrint.startPage
+        || fileToPrint.endPage < 0));
+  const isCopiesNoInvalid = fileToPrint.copiesNo === '' || fileToPrint.copiesNo < 1;
 
   useEffect(() => {
     const cookieValue = Cookies.get('id');
@@ -57,7 +71,10 @@ export default function PrintPage() {
 
   const getInfoFile = (fileId) => {
     const index = files.findIndex((value) => value.id === fileId);
-    setFileSelected(files[index]);
+    if (index !== -1) {
+      const file = files[index];
+      setFileSelected(file);
+    }
   };
 
   const handleRequestPrintFile = () => {
@@ -66,11 +83,12 @@ export default function PrintPage() {
       .then(({ data }) => extractAPIResponse(data))
       .then(() => notify(NotificationStatus.OK, 'Successfully queue the printed file!.'))
       .then(() => {
+        setFileSelected();
         setFileToPrint({
           fileId: '',
           printerId: '',
           pageSize: '',
-          copiesNo: '',
+          copiesNo: 1,
           startPage: '',
           endPage: '',
           oneSided: false,
@@ -182,16 +200,15 @@ export default function PrintPage() {
               className="w-full h-[2.5rem] rounded-lg py-[1px] pl-2"
               placeholder="Trang bắt đầu"
               value={fileToPrint.startPage}
-              onChange={(e) => setFileToPrint({ ...fileToPrint, startPage: e.target.value })}
+              onChange={(e) => setFileToPrint({
+                ...fileToPrint,
+                startPage: e.target.value === '' ? '' : Number.parseInt(e.target.value || 0, 10),
+              })}
               type="number"
+              disabled={!fileSelected}
             />
             {
-              fileSelected
-              && fileSelected.pageNo
-              && fileToPrint.startPage
-              && (fileSelected.pageNo < fileToPrint.startPage
-                || fileToPrint.startPage < 1
-              )
+              isStartPageInvalid
               && (
                 <div className="font-normal text-base text-red-500">Giá trị bạn nhập vào không hợp lệ</div>
               )
@@ -203,16 +220,15 @@ export default function PrintPage() {
               className="w-full h-[2.5rem] rounded-lg py-[1px] pl-2"
               placeholder="Trang kết thúc"
               value={fileToPrint.endPage}
-              onChange={(e) => setFileToPrint({ ...fileToPrint, endPage: e.target.value })}
+              onChange={(e) => setFileToPrint({
+                ...fileToPrint,
+                endPage: e.target.value === '' ? '' : Number.parseInt(e.target.value, 10),
+              })}
               type="number"
+              disabled={!fileSelected}
             />
             {
-              fileSelected
-              && fileSelected.pageNo
-              && fileToPrint.endPage
-              && (fileSelected.pageNo < fileToPrint.endPage
-                || fileToPrint.endPage < fileToPrint.startPage
-                || fileToPrint.endPage < 0)
+              isEndPageInvalid
               && (
                 <div className="font-normal text-base text-red-500">Giá trị bạn nhập vào không hợp lệ</div>
               )
@@ -226,36 +242,24 @@ export default function PrintPage() {
               id="role"
               className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
               style={{ fontSize: '18px', padding: '6px' }}
+              value={fileToPrint.copiesNo}
               onChange={(e) => {
-                setFileToPrint({ ...fileToPrint, copiesNo: e.target.value });
+                setFileToPrint({
+                  ...fileToPrint,
+                  copiesNo: e.target.value === '' ? '' : Number.parseInt(e.target.value || 0, 10),
+                });
               }}
               type="number"
             />
             {
-              fileToPrint
-              && fileToPrint.copiesNo
-              && fileToPrint.copiesNo < 1
+              isCopiesNoInvalid
               && (
                 <div className="font-normal text-base text-red-500">Giá trị bạn nhập vào không hợp lệ</div>
               )
             }
           </div>
-          <div className="w-2/5 mt-6 pt-2 mr-8 items-center flex">
-            <div className="font-semibold">
-              Số trang hiện có:
-            </div>
-            <div className="pl-1">
-              {
-                infoUser && infoUser.paperNo && (
-                  infoUser.paperNo
-                )
-              }
-            </div>
-          </div>
-        </div>
-        <div className="my-8">
-          <div className="ml-8">
-            <p className="font-medium mb-1 text-xl">Chọn số mặt</p>
+          <div className="w-2/5 mr-8">
+            <div className="font-medium mb-1 text-xl">Chọn số mặt</div>
             <select
               id="sideNo"
               className="input w-full min-h-[2.5rem] text-sm text-slate-500 rounded-lg"
@@ -276,11 +280,26 @@ export default function PrintPage() {
             </select>
           </div>
         </div>
+        <div className="flex justify-between my-8">
+          <div className="w-2/5 mt-6 pt-2 ml-8 items-center flex">
+            <div className="font-semibold">
+              Số trang hiện có:
+            </div>
+            <div className="pl-1">
+              {
+                infoUser && infoUser.paperNo && (
+                  infoUser.paperNo
+                )
+              }
+            </div>
+          </div>
+        </div>
         <div className="mx-8 mt-8 flex justify-between">
           <button
             type="button"
-            className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-white text-xl rounded-lg"
+            className="w-32 h-10 bg-blue-600 hover:cursor:pointer hover:bg-blue-800 text-white text-xl rounded-lg disabled:bg-blue-950 disabled:hover:cursor-default"
             onClick={handleRequestPrintFile}
+            disabled={!fileSelected || isEndPageInvalid || isStartPageInvalid || isCopiesNoInvalid}
           >
             Xác nhận
           </button>
